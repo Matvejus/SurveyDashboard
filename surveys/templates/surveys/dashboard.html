@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    {% for survey, responses in survey_responses.items %}
+        <h2>{{ survey.survey_name }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Respondent</th>
+                    <th>Response</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for response in responses %}
+                    <tr>
+                        <td>{{ response.respondent }}</td>
+                        <td>{{ response.id }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock %}

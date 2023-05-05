@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView
-from .forms import SurveyForm, ContactForm
-from .models import OrgProfile, Survey
+from .forms import ContactForm
+from .models import OrgProfile
+from surveys.models import Survey
 from django.db.models import Avg, Q, Count, F
 from users.models import CustomUser
  
@@ -69,22 +70,6 @@ def orgpage(request, org_id):
     
     return render(request, 'organization/org_page.html', context)
 
-
-def survey(request):
-    if request.method != 'POST':
-        form = SurveyForm()
-    else:
-        #Post data submitted, process data.
-        form = SurveyForm(data = request.POST)
-        if form.is_valid():
-            new_survey = form.save(commit = False)
-            new_survey.participant = request.user
-            new_survey.save()
-            return redirect('organization:profile')
-        
-    #Display form.
-    context = {'form': form}
-    return render(request, 'organization/survey.html', context)
 
 def profile(request):
     user = CustomUser.objects.get(id=request.user.id) #Returns user info

@@ -1,0 +1,19 @@
+{%extends 'organization/base.html'%}
+
+{% block content %}
+    <h1>{{ survey.survey_name }}</h1>
+    <p>{{ survey.description }}</p>
+    <form method="post">
+        {% csrf_token %}
+        {% for question in questions %}
+            <div class="question">
+                <label for="{{ question.id }}">{{ question.question_text }}</label>
+                {# Render question input fields based on question type #}
+            </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
+
+
+

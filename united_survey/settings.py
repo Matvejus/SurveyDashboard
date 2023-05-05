@@ -23,6 +23,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
 
     #my apps:
+    'surveys',
     'organization',
     'info_pages',
     'users',

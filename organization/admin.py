@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import OrgProfile, Survey
+from .models import OrgProfile
 
 # Register your models here.
 
 admin.site.register(OrgProfile)
-admin.site.register(Survey)
