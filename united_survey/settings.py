@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'organization',
     'info_pages',
     'users',
+    'Survey',
+
 
     # apps:
     'jquery',
@@ -89,9 +91,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "survey",
         "USER": "root",
-        "PASSWORD": "Password@123",
         "HOST": "127.0.0.1",
         "PORT": 3306,
+        "PASSWORD": "Password@123",
     }
 }
 
