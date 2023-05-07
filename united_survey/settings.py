@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     'organization',
     'info_pages',
     'users',
+    'Survey',
+
 
     #apps:
     'jquery',

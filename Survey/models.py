@@ -8,10 +8,6 @@ class SurveyStatus(models.Model):
     survey_status_id = models.AutoField(primary_key=True)
     survey_status = models.CharField(max_length=100, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "Survey_Status"
-
     def __str__(self):
         return f"{self.survey_status}"
 
@@ -26,11 +22,6 @@ class Survey(models.Model):
     max_responses = models.IntegerField(blank=True, null=True)
     survey_status = models.ForeignKey("SurveyStatus", models.DO_NOTHING)
 
-    class Meta:
-        verbose_name_plural = 'Surveys'
-        managed = False
-        db_table = "Survey"
-
     def __str__(self):
         return f"{self.survey_name}"
 
@@ -38,10 +29,6 @@ class Survey(models.Model):
 class QuestionType(models.Model):
     question_type_id = models.AutoField(primary_key=True)
     question_type = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = "Question_Type"
 
     def __str__(self):
         return f"{self.question_type}"
@@ -55,10 +42,6 @@ class Question(models.Model):
         blank=True, null=True
     )  # This field type is a guess.
     question_type = models.ForeignKey("QuestionType", models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = "Question"
 
     def __str__(self):
         return f"{self.question_text}"
@@ -74,9 +57,6 @@ class QuestionOption(models.Model):
     )  # Field name made lowercase.
     question = models.ForeignKey(Question, models.DO_NOTHING)
 
-    class Meta:
-        managed = False
-        db_table = "Question_Option"
 
 
 class Respondent(models.Model):
@@ -97,9 +77,8 @@ class Response(models.Model):
     begin_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "Response"
+    def __str__(self):
+        return f"{self.survey} - {self.respondent}"
 
 
 class Answer(models.Model):
@@ -107,10 +86,6 @@ class Answer(models.Model):
     response = models.ForeignKey("Response", models.DO_NOTHING)
     question = models.ForeignKey("Question", models.DO_NOTHING)
     answer = models.CharField(max_length=6000, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = "Answer"
 
     def __str__(self):
         return f"{self.answer}"
@@ -120,7 +95,3 @@ class AnswerOption(models.Model):
     answer_option_id = models.AutoField(primary_key=True)
     answer = models.ForeignKey(Answer, models.DO_NOTHING)
     question_option = models.ForeignKey("QuestionOption", models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = "Answer_Option"
