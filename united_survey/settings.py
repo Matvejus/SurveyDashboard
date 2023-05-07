@@ -1,8 +1,9 @@
+import django_heroku
 from pathlib import Path
-from dotenv import load_dotenv #in production .env file will be used to keep valuable params.
+# in production .env file will be used to keep valuable params.
+from dotenv import load_dotenv
 import os
 load_dotenv()
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +23,12 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
 
-    #my apps:
+    # my apps:
     'organization',
     'info_pages',
     'users',
 
-    #apps:
+    # apps:
     'jquery',
     'bootstrap5',
     'chartjs',
@@ -61,7 +62,7 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR / "organization" / "templates" / "organization",
             BASE_DIR / "organization" / "static" / "organization",
-            BASE_DIR / "info_pages" / "templates"/ "static",
+            BASE_DIR / "info_pages" / "templates" / "static",
 
         ],
         'APP_DIRS': True,
@@ -84,9 +85,13 @@ WSGI_APPLICATION = 'united_survey.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "survey",
+        "USER": "root",
+        "HOST": "127.0.0.1",
+        "PORT": 3306,
+        "PASSWORD": "Password@123",
     }
 }
 
@@ -133,7 +138,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / "uploads/"
-MEDIA_URL =    "/user-media/"
+MEDIA_URL = "/user-media/"
 
-import django_heroku
 django_heroku.settings(locals())
