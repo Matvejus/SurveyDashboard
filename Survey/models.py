@@ -9,7 +9,6 @@ class SurveyStatus(models.Model):
     survey_status = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "Survey_Status"
 
     def __str__(self):
@@ -28,7 +27,6 @@ class Survey(models.Model):
 
     class Meta:
         verbose_name_plural = 'Surveys'
-        managed = False
         db_table = "Survey"
 
     def __str__(self):
@@ -40,7 +38,6 @@ class QuestionType(models.Model):
     question_type = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "Question_Type"
 
     def __str__(self):
@@ -57,7 +54,6 @@ class Question(models.Model):
     question_type = models.ForeignKey("QuestionType", models.DO_NOTHING)
 
     class Meta:
-        managed = False
         db_table = "Question"
 
     def __str__(self):
@@ -75,7 +71,6 @@ class QuestionOption(models.Model):
     question = models.ForeignKey(Question, models.DO_NOTHING)
 
     class Meta:
-        managed = False
         db_table = "Question_Option"
 
 
@@ -86,7 +81,6 @@ class Respondent(models.Model):
     email = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "Respondent"
 
 
@@ -98,7 +92,6 @@ class Response(models.Model):
     end_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "Response"
 
 
@@ -109,7 +102,6 @@ class Answer(models.Model):
     answer = models.CharField(max_length=6000, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "Answer"
 
     def __str__(self):
@@ -122,5 +114,4 @@ class AnswerOption(models.Model):
     question_option = models.ForeignKey("QuestionOption", models.DO_NOTHING)
 
     class Meta:
-        managed = False
         db_table = "Answer_Option"
