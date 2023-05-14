@@ -8,5 +8,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("organization.urls")),
     path("", include("info_pages.urls")),
+    path("", include("Survey.urls")),
     path('users/', include('users.urls')),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

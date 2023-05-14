@@ -17,7 +17,7 @@ class OrgProfile(models.Model):
         return f"{self.title}"
 
 #Basic survey model. It now stores both questions and answers, this is a simple solution that needs to be rebuild.
-class Survey(models.Model):
+class TestSurvey(models.Model):
     STUDENT = 'STUD'
     EMPLOYEE = 'EMP'
     POSITION_CHOICE = [
@@ -45,4 +45,4 @@ class Contact(models.Model):
     def __str__(self):
         return f"{self.name} {self.organization}-{self.role}"
 
-   
+
