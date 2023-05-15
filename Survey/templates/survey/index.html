@@ -1,0 +1,9 @@
+{% extends 'Survey/base.html' %}
+{% block content %}
+<h1>Page Title</h1>
+<ul class="ml-1">
+{% for update in updates %}
+<li>{{ update.text}} - {{ update.user.username }}</li>
+{% endfor %}
+</ul>
+{% endblock%}
