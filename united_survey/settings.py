@@ -28,11 +28,6 @@ INSTALLED_APPS = [
     'info_pages',
     'users',
     'Survey',
-<<<<<<< HEAD
-=======
-
->>>>>>> c9bff927515eaf38c6dbdd4f40bbea2530d91fbc
-
 
     # apps:
     'jquery',
