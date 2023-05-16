@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import OrgProfile, Survey
+from .models import OrgProfile, TestSurvey
 
 # Register your models here.
 
 admin.site.register(OrgProfile)
-admin.site.register(Survey)
+admin.site.register(TestSurvey)

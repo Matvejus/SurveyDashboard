@@ -1,117 +1,114 @@
 from django.db import models
-import datetime
+from users.models import CustomUser
+from organization.models import OrgProfile
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.utils import timezone
+from django.core.validators import RegexValidator
+from django.utils.text import slugify
+from django.contrib.auth import get_user_model
 
-# Models for Survey
-
-
-class SurveyStatus(models.Model):
-    survey_status_id = models.AutoField(primary_key=True)
-    survey_status = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        db_table = "Survey_Status"
-
-    def __str__(self):
-        return f"{self.survey_status}"
-
+# Assuming CustomUser is your user model
+CustomUser = get_user_model()
 
 class Survey(models.Model):
-    survey_id = models.AutoField(primary_key=True)
-    survey_name = models.CharField(max_length=100)
+    SURVEY_STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+        ('finished', 'Finished'),
+        ('unstarted', 'Unstarted'),
+    ]
+    survey_name = models.CharField(
+        max_length=100,
+        validators=[
+            RegexValidator(
+                r'^[a-zA-Z0-9_]*$',
+                'Only letters, numbers, and underscores are allowed.'
+            ),
+        ]
+    )
+    survey_name_slug = models.SlugField(max_length=100, unique=True, editable=False)
     description = models.CharField(max_length=8000)
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
-    min_responses = models.IntegerField(blank=True, null=True)
-    max_responses = models.IntegerField(blank=True, null=True)
-    survey_status = models.ForeignKey("SurveyStatus", models.DO_NOTHING)
+    survey_status = models.CharField(max_length=10, choices=SURVEY_STATUS_CHOICES, default='unstarted')
+    org_profiles = models.ManyToManyField('organization.OrgProfile', blank=True)
 
-    class Meta:
-        verbose_name_plural = 'Surveys'
-        db_table = "Survey"
+    def save(self, *args, **kwargs):
+        self.survey_name_slug = slugify(self.survey_name)
+        super().save(*args, **kwargs)
 
-    def __str__(self):
-        return f"{self.survey_name}"
+
+@receiver(pre_save, sender=Survey)
+def update_survey_status(sender, instance, **kwargs):
+    if instance.end_date and instance.end_date < timezone.now():
+        instance.survey_status = 'finished'
+
+
+class Respondent(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    organization = models.ForeignKey(OrgProfile, on_delete=models.CASCADE)
+
+class Response(models.Model):
+    respondent = models.ForeignKey(Respondent, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def completion_time(self):
+        if self.end_time:
+            return self.end_time - self.start_time
+        return None
 
 
 class QuestionType(models.Model):
-    question_type_id = models.AutoField(primary_key=True)
-    question_type = models.CharField(max_length=100, blank=True, null=True)
+    TYPE_CHOICES = [
+        ('MC', 'Multiple Choice'),
+        ('OE', 'Open Ended'),
+        ('S', 'Short Answer'),
+        ('L', 'Long Answer'),
+        ('CB', 'Checkbox'),
+        ('DD', 'Drop Down'),
+    ]
 
-    class Meta:
-        db_table = "Question_Type"
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES)
 
     def __str__(self):
-        return f"{self.question_type}"
+        return self.get_type_display()
 
 
 class Question(models.Model):
     question_id = models.AutoField(primary_key=True)
     question_order = models.IntegerField(blank=True, null=True)
     question_text = models.CharField(max_length=2000, blank=True, null=True)
-    is_mandatory = models.TextField(
-        blank=True, null=True
-    )  # This field type is a guess.
-    question_type = models.ForeignKey("QuestionType", models.DO_NOTHING)
-
-    class Meta:
-        db_table = "Question"
+    is_mandatory = models.BooleanField(default=False)
+    question_type = models.ForeignKey("QuestionType", on_delete=models.CASCADE)
+    survey = models.ForeignKey("Survey", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.question_text}"
+        return self.question_text
 
 
 class QuestionOption(models.Model):
-    question_option_id = models.AutoField(primary_key=True)
-    qo_order = models.IntegerField(
-        db_column="QO_order", blank=True, null=True
-    )  # Field name made lowercase.
-    qo_value = models.CharField(
-        db_column="QO_value", max_length=100, blank=True, null=True
-    )  # Field name made lowercase.
-    question = models.ForeignKey(Question, models.DO_NOTHING)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    option_text = models.CharField(max_length=2000)
 
-    class Meta:
-        db_table = "Question_Option"
-
-
-class Respondent(models.Model):
-    respondent_id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    last_name = models.CharField(max_length=100, blank=True, null=True)
-    email = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        db_table = "Respondent"
-
-
-class Response(models.Model):
-    response_id = models.AutoField(primary_key=True)
-    respondent = models.ForeignKey(Respondent, models.DO_NOTHING)
-    survey = models.ForeignKey("Survey", models.DO_NOTHING)
-    begin_date = models.DateTimeField(blank=True, null=True)
-    end_date = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        db_table = "Response"
+    def __str__(self):
+        return self.option_text
 
 
 class Answer(models.Model):
-    answer_id = models.AutoField(primary_key=True)
-    response = models.ForeignKey("Response", models.DO_NOTHING)
-    question = models.ForeignKey("Question", models.DO_NOTHING)
-    answer = models.CharField(max_length=6000, blank=True, null=True)
-
-    class Meta:
-        db_table = "Answer"
-
-    def __str__(self):
-        return f"{self.answer}"
-
+    response = models.ForeignKey(Response, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.TextField()
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    organization = models.ForeignKey(OrgProfile, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
 
 class AnswerOption(models.Model):
-    answer_option_id = models.AutoField(primary_key=True)
-    answer = models.ForeignKey(Answer, models.DO_NOTHING)
-    question_option = models.ForeignKey("QuestionOption", models.DO_NOTHING)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    question_option = models.ForeignKey(QuestionOption, on_delete=models.CASCADE)  # For Multiple Choice, Checkbox and Drop Down answers
 
-    class Meta:
-        db_table = "Answer_Option"
+    def __str__(self):
+        return self.question_option.option_text

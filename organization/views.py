@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView
-from .forms import SurveyForm, ContactForm
-from .models import OrgProfile, Survey
+from .forms import TestSurveyForm, ContactForm
+from .models import OrgProfile, TestSurvey
 from django.db.models import Avg, Q, Count, F
 from users.models import CustomUser
  
@@ -36,7 +36,7 @@ def orgpage(request, org_id):
     org = OrgProfile.objects.get(id = org_id)
 
     #survey results to put into dashboard
-    survey_results = Survey.objects.filter(organization_id = org_id)
+    survey_results = TestSurvey.objects.filter(organization_id = org_id)
 
     satis_stud = survey_results.filter(occupation = "STUD").aggregate(Avg('satsified'))
     satis_emp = survey_results.filter(occupation = "EMP").aggregate(Avg('satsified'))
@@ -70,12 +70,12 @@ def orgpage(request, org_id):
     return render(request, 'organization/org_page.html', context)
 
 
-def survey(request):
+def Testsurvey(request):
     if request.method != 'POST':
-        form = SurveyForm()
+        form = TestSurveyForm()
     else:
         #Post data submitted, process data.
-        form = SurveyForm(data = request.POST)
+        form = TestSurveyForm(data = request.POST)
         if form.is_valid():
             new_survey = form.save(commit = False)
             new_survey.participant = request.user
@@ -89,7 +89,7 @@ def survey(request):
 def profile(request):
     user = CustomUser.objects.get(id=request.user.id) #Returns user info
 
-    survey = Survey.objects.all()#Returns all survey data
+    survey = TestSurvey.objects.all()#Returns all survey data
 
     survey_satisfaction = survey.aggregate(
     user_satisfaction=Avg('satsified', filter=Q(participant_id=request.user.id)),

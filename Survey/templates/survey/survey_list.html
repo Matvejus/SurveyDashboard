@@ -1,0 +1,17 @@
+<!-- survey_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+Survey List
+{% endblock %}
+
+{% block content %}
+<h1>Surveys</h1>
+<ul>
+    {% for survey in surveys %}
+    <li><a href="{% url 'survey:survey_detail' survey.survey_name_slug survey.pk %}">{{ survey.survey_name }}</a></li>
+    {% empty %}
+    <li>No surveys available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

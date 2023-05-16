@@ -1,70 +1,96 @@
-from django.shortcuts import render
-from .models import SurveyStatus
-from .models import Survey
-from .models import QuestionType
-from .models import Question
-from .models import QuestionOption
-from .models import Respondent
-from .models import Response
-from .models import Answer
-from .models import AnswerOption
+from django.shortcuts import get_object_or_404, render, redirect
+from django.views.generic import ListView, View
+from .models import Survey, Question, Answer, Response, Respondent
+from users.models import CustomUser
+from organization.models import OrgProfile
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.urls import reverse
 
-# Create your views here.
-
-
-def index(request):
-    return render(request, "index.html",)
+from Survey.models import Survey
+from Survey.forms import SurveyForm
 
 
-def index(request):
-    survey_status = SurveyStatus.objects.all()
-    context = {'survey_status': survey_status}
-    return render(request, "index.html", context)
 
 
-def index(request):
-    surveys = Survey.objects.all()
-    context = {'surveys': surveys}
-    return render(request, "index.html", context)
+# add views here
+
+class SurveyListView(LoginRequiredMixin, ListView):
+    model = Survey
+    template_name = 'survey_list.html'  # Assuming you have this template
+    context_object_name = 'surveys'  # This is the name of the list in the template
+
+    def get_queryset(self):
+        # Get the current user
+        user = self.request.user
+        # Get the surveys related to the user's organization
+        return Survey.objects.filter(org_profiles__in=[user.organization])
+
+@method_decorator(login_required, name='dispatch')
+class SurveyDetailView(View):
+    template_name = 'survey/survey_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        survey = get_object_or_404(Survey, pk=kwargs.get('pk'), survey_name_slug=kwargs.get('survey_name'))
+        questions = survey.question_set.all()
+        context = {
+            'survey': survey,
+            'questions': questions,
+        }
+        return render(request, self.template_name, context)
 
 
-def index(request):
-    question_type = QuestionType.objects.all()
-    context = {'question_type': question_type}
-    return render(request, "index.html", context)
+@method_decorator(login_required, name='dispatch')
+class SurveySubmitView(View):
+    def post(self, request, *args, **kwargs):
+        survey = get_object_or_404(Survey, pk=kwargs.get('pk'), survey_name_slug=kwargs.get('survey_name'))
+        questions = survey.question_set.all()
+
+        # Get the OrgProfile object for the currently logged in user
+        organization = request.user.organization
+
+        # Create a new Respondent object
+        respondent = Respondent(user=request.user, organization=organization)
+        respondent.save()
+
+        # Create a new Response object
+        response = Response(respondent=respondent, survey=survey)
+        response.save()
+
+        # Create Answer objects for each question
+        for question in questions:
+            answer_text = request.POST.get(f'answer-{question.pk}')
+            if answer_text:
+                answer = Answer(
+                    response=response,
+                    question=question,
+                    answer=answer_text,
+                    user=request.user,
+                    organization=organization,
+                    survey=survey,
+                )
+                answer.save()
+
+        messages.success(request, "Your answers have been submitted!")
+        return redirect('/survey_detail')
 
 
-def index(request):
-    questions = Question.objects.all()
-    context = {'questions': questions}
-    return render(request, "index.html", context)
+#Haley's view for taking a survey:
+def show_survey(request, id=None):
+    survey = get_object_or_404(Survey, pk=id)
+    post_data = request.POST if request.method == "POST" else None
+    form = SurveyForm(survey)
 
+    url = reverse("show_survey", args=(id,))
+    if form.is_bound and form.is_valid():
+        form.save()
+        messages.add_message(request, messages.INFO, "Submissions saved.")
+        return redirect(url)
 
-def index(request):
-    question_option = QuestionOption.objects.all()
-    context = {'question_option': question_option}
-    return render(request, "index.html", context)
-
-
-def index(request):
-    respondents = Respondent.objects.all()
-    context = {'respondents': respondents}
-    return render(request, "index.html", context)
-
-
-def index(request):
-    responses = Response.objects.all()
-    context = {'responses': responses}
-    return render(request, "index.html", context)
-
-
-def index(request):
-    answers = Answer.objects.all()
-    context = {'answers': answers}
-    return render(request, "index.html", context)
-
-
-def index(request):
-    answer_option = AnswerOption.objects.all()
-    context = {'answer_option': answer_option}
-    return render(request, "index.html", context)
+    context = {
+        "survey": survey,
+        "form": form,
+    }
+    return render(request, "Survey/survey.html", context)
