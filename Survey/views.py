@@ -7,6 +7,11 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.urls import reverse
+
+from Survey.models import Survey
+from Survey.forms import SurveyForm
+
 
 
 
@@ -72,3 +77,20 @@ class SurveySubmitView(View):
         return redirect('/survey_detail')
 
 
+#Haley's view for taking a survey:
+def show_survey(request, id=None):
+    survey = get_object_or_404(Survey, pk=id)
+    post_data = request.POST if request.method == "POST" else None
+    form = SurveyForm(survey)
+
+    url = reverse("show_survey", args=(id,))
+    if form.is_bound and form.is_valid():
+        form.save()
+        messages.add_message(request, messages.INFO, "Submissions saved.")
+        return redirect(url)
+
+    context = {
+        "survey": survey,
+        "form": form,
+    }
+    return render(request, "Survey/survey.html", context)
