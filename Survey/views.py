@@ -92,3 +92,10 @@ def show_survey(request, id=None):
         "form": form,
     }
     return render(request, "Survey/survey.html", context) """
+
+def survey_view(request, pk):
+    survey = Survey.objects.get(pk = pk)
+    questions = survey.question_set.all() 
+    """
+    Need to get not the id, but the value of the question type to insert it as VAR in html
+    """

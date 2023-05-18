@@ -89,7 +89,7 @@ class Question(models.Model):
     
 
 
-class QuestionOption(models.Model):#What options can question have? 
+class QuestionOption(models.Model):#to store options for answers: are you satisfied? YES/NO
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     option_text = models.CharField(max_length=2000)
 

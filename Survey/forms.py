@@ -1,6 +1,7 @@
-""" from django import forms
+from django import forms
+from . models import Answer
 
-#Haley's form for survey
+""" #Haley's form for survey
 class SurveyForm(forms.Form):
     email = forms.EmailField()
     question_1 = forms.ChoiceField(widget=forms.RadioSelect, choices=())
@@ -28,3 +29,7 @@ class SurveyForm(forms.Form):
 
         submission.save()
         return submission """
+
+class AnswerForm(forms.ModelForm):
+    model = Answer
+    fields = ["answer"]
