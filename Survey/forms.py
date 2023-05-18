@@ -1,5 +1,4 @@
-from django import forms
-from Survey.models import Submission, Choice
+""" from django import forms
 
 #Haley's form for survey
 class SurveyForm(forms.Form):
@@ -28,4 +27,4 @@ class SurveyForm(forms.Form):
             submission.answer.add(choice)
 
         submission.save()
-        return submission
+        return submission """

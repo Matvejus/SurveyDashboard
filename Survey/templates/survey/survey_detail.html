@@ -1,6 +1,14 @@
-{% extends "base.html" %}
+{% extends "organization/base.html" %}
+{% load static %}
+
+{%block css_files%}
+<link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
+{% endblock %}
 
 {% block content %}
+<div class = 'page-grid'>
+  <div>{% comment %} empty div for sidebar {% endcomment %}</div>
+  <div>
   <h2>{{ survey.survey_name }}</h2>
   <p>{{ survey.description }}</p>
 
@@ -16,3 +24,6 @@
     <input type="submit" value="Submit">
   </form>
 {% endblock %}
+
+
+

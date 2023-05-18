@@ -13,3 +13,4 @@ urlpatterns = [
     path('profile/', views.profile, name = 'profile'),
     path('info_pages/', include('info_pages.urls')),#static pages that can be accessed from landing page
 ]
+

@@ -9,8 +9,6 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 
-from Survey.models import Survey
-from Survey.forms import SurveyForm
 
 
 
@@ -77,7 +75,7 @@ class SurveySubmitView(View):
         return redirect('/survey_detail')
 
 
-#Haley's view for taking a survey:
+""" #Haley's view for taking a survey:
 def show_survey(request, id=None):
     survey = get_object_or_404(Survey, pk=id)
     post_data = request.POST if request.method == "POST" else None
@@ -93,4 +91,4 @@ def show_survey(request, id=None):
         "survey": survey,
         "form": form,
     }
-    return render(request, "Survey/survey.html", context)
+    return render(request, "Survey/survey.html", context) """

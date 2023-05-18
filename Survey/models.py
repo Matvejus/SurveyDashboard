@@ -9,8 +9,9 @@ from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 
 # Assuming CustomUser is your user model
-CustomUser = get_user_model()
+""" CustomUser = get_user_model() idk what it is"""
 
+#Main connector, 
 class Survey(models.Model):
     SURVEY_STATUS_CHOICES = [
         ('active', 'Active'),
@@ -34,6 +35,10 @@ class Survey(models.Model):
     survey_status = models.CharField(max_length=10, choices=SURVEY_STATUS_CHOICES, default='unstarted')
     org_profiles = models.ManyToManyField('organization.OrgProfile', blank=True)
 
+    def __str__(self):
+        return self.survey_name
+        
+
     def save(self, *args, **kwargs):
         self.survey_name_slug = slugify(self.survey_name)
         super().save(*args, **kwargs)
@@ -49,8 +54,9 @@ class Respondent(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     organization = models.ForeignKey(OrgProfile, on_delete=models.CASCADE)
 
+
 class Response(models.Model):
-    respondent = models.ForeignKey(Respondent, on_delete=models.CASCADE)
+    respondent = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(auto_now_add=True)
@@ -62,35 +68,28 @@ class Response(models.Model):
         return None
 
 
-class QuestionType(models.Model):
-    TYPE_CHOICES = [
-        ('MC', 'Multiple Choice'),
-        ('OE', 'Open Ended'),
-        ('S', 'Short Answer'),
-        ('L', 'Long Answer'),
-        ('CB', 'Checkbox'),
-        ('DD', 'Drop Down'),
-    ]
-
-    type = models.CharField(max_length=2, choices=TYPE_CHOICES)
-
-    def __str__(self):
-        return self.get_type_display()
-
 
 class Question(models.Model):
+
+    TYPE_CHOICES = [
+        ('checkbox', 'Multiple Choice'),
+        ('radio', 'Single Choice'),
+        ('range', 'Slider'),
+    ]
+
     question_id = models.AutoField(primary_key=True)
-    question_order = models.IntegerField(blank=True, null=True)
+    question_order = models.IntegerField(unique = True, blank=True, null=True)
     question_text = models.CharField(max_length=2000, blank=True, null=True)
     is_mandatory = models.BooleanField(default=False)
-    question_type = models.ForeignKey("QuestionType", on_delete=models.CASCADE)
+    question_type = models.CharField(max_length=10, choices=TYPE_CHOICES)
     survey = models.ForeignKey("Survey", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.question_text
+    
 
 
-class QuestionOption(models.Model):
+class QuestionOption(models.Model):#What options can question have? 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     option_text = models.CharField(max_length=2000)
 
@@ -101,12 +100,12 @@ class QuestionOption(models.Model):
 class Answer(models.Model):
     response = models.ForeignKey(Response, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    answer = models.TextField()
+    answer = models.CharField(max_length=10)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     organization = models.ForeignKey(OrgProfile, on_delete=models.CASCADE)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
 
-class AnswerOption(models.Model):
+class AnswerOption(models.Model):#??? looks like it just duplicate the annswer and question option
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     question_option = models.ForeignKey(QuestionOption, on_delete=models.CASCADE)  # For Multiple Choice, Checkbox and Drop Down answers
 

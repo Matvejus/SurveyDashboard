@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Survey, QuestionType, Question, QuestionOption, Respondent, Response, Answer, AnswerOption
+from .models import Survey, Question, QuestionOption, Respondent, Response, Answer, AnswerOption
 from organization.models import OrgProfile
 
 # to have multiple questions in a survey
@@ -19,13 +19,8 @@ class SurveyAdmin(admin.ModelAdmin):
 
 admin.site.register(Survey, SurveyAdmin)
 
-class QuestionTypeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'type']
-
-admin.site.register(QuestionType, QuestionTypeAdmin)
-
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ['question_id', 'survey', 'question_text', 'is_mandatory', 'question_type']
+    list_display = ['question_id', 'survey', 'question_text', 'is_mandatory',]
 
 admin.site.register(Question, QuestionAdmin)
 
