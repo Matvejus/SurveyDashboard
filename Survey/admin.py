@@ -19,15 +19,19 @@ class SurveyAdmin(admin.ModelAdmin):
 
 admin.site.register(Survey, SurveyAdmin)
 
+# to have multiple options for quesitons: YES/NO, checkboxes
+class QuestionOptionInline(admin.TabularInline):
+    model = QuestionOption
+
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ['question_id', 'survey', 'question_text', 'is_mandatory',]
+    list_display = ['id','survey', 'question_text', 'is_mandatory']
+    inlines = [QuestionOptionInline]
 
 admin.site.register(Question, QuestionAdmin)
 
-class QuestionOptionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'question', 'option_text']
 
-admin.site.register(QuestionOption, QuestionOptionAdmin)
+
+
 
 class RespondentAdmin(admin.ModelAdmin):
     list_display = ['id', 'get_first_name', 'get_last_name', 'get_email', 'get_organization_name']

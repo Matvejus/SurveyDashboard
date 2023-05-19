@@ -63,6 +63,7 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR / "organization" / "templates" / "organization",
             BASE_DIR / "organization" / "static" / "organization",
+            BASE_DIR / "Survey" / "static" / "Survey",
             BASE_DIR / "info_pages" / "templates" / "static",
 
         ],

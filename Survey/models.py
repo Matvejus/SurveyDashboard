@@ -76,21 +76,19 @@ class Question(models.Model):
         ('radio', 'Single Choice'),
         ('range', 'Slider'),
     ]
-
-    question_id = models.AutoField(primary_key=True)
     question_order = models.IntegerField(unique = True, blank=True, null=True)
     question_text = models.CharField(max_length=2000, blank=True, null=True)
     is_mandatory = models.BooleanField(default=False)
     question_type = models.CharField(max_length=10, choices=TYPE_CHOICES)
     survey = models.ForeignKey("Survey", on_delete=models.CASCADE)
+    
 
     def __str__(self):
         return self.question_text
     
 
-
 class QuestionOption(models.Model):#to store options for answers: are you satisfied? YES/NO
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete = models.CASCADE)
     option_text = models.CharField(max_length=2000)
 
     def __str__(self):

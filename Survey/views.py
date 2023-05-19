@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView, View
-from .models import Survey, Question, Answer, Response, Respondent
+from .models import (Survey, Question, QuestionOption, Answer, Response, Respondent)
+from .forms import AnswerForm
 from users.models import CustomUser
 from organization.models import OrgProfile
 from django.contrib import messages
@@ -93,9 +94,32 @@ def show_survey(request, id=None):
     }
     return render(request, "Survey/survey.html", context) """
 
-def survey_view(request, pk):
-    survey = Survey.objects.get(pk = pk)
-    questions = survey.question_set.all() 
-    """
-    Need to get not the id, but the value of the question type to insert it as VAR in html
-    """
+def survey_view(request):
+    survey = Survey.objects.get(pk=1)
+    questions = survey.question_set.all().values()
+
+    #to load all question options of particular survey 
+    #need to add foreign key in questionoption modled to connect to survey
+    questionoptions = QuestionOption.objects.all().values()
+
+    #to get set of of options for particular question:
+    q_full = []
+    for q in questions.values():
+        q['options'] = questionoptions.filter(question_id = q['id']).values_list('option_text', flat = True)
+        q_full.append(q)
+
+
+    context = {
+        "survey": survey,
+        "questions": q_full,
+    }
+
+    return render(request, "survey/take-survey.html", context )
+
+    
+
+    #def save: on click save answers and attach saved answers/users/org/time to response model
+
+    
+
+    
