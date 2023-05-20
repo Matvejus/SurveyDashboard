@@ -1,6 +1,7 @@
 {% load static %}
 
 {%block css_files%}
+<link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
 <link rel="stylesheet" href="{% static 'Survey/survey.css' %}" type="text/css" media="screen">
 {% endblock %}
 
@@ -15,23 +16,41 @@
     <body>
         <h2>{{survey}}</h2>
         <div>
-            {% for question in questions %} 
-            <div style = 'margin-top:15px'>
-                <h4>{{question.question_text}}</h4>
-                {% if question.question_type == 'checkbox' or question.question_type == 'radio' %}
-                    {% for option in question.options  %}
-                    <div>
-                        <label>{{ option }}</label>
-                        <input id="answer-{{ question.pk }}" name="answer-{{ question.pk }}" type="{{question.question_type}}">
+            <form action="." method="post" class="form-horizontal">
+                {% for question in questions %} 
+                <div style = 'margin-top:15px'>
+                    <h4>{{question.question_text}}</h4>
+                    {% if question.question_type == 'checkbox' or question.question_type == 'radio' %}
+                        {% for option in question.options  %}
+                        <div>
+                            <label>{{ option }}</label>
+                            <input id="{{ question.pk }}" name="{{question.question_text}}" type="{{question.question_type}}">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="range" style="--step:1; --min:1; --max:10">
+                        <input type="range" min="1" max="10" step="1" value="5">
                     </div>
-                    {% endfor %}
-                {% else %}
-                <div class="range" style="--step:1; --min:1; --max:10">
-                    <input type="range" min="1" max="10" step="1" value="5">
-                  </div>
-                {% endif %}
-            </div>
-            {% endfor %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <div class="form-actions" style='margin-top: 15px'>
+                    <button type="submit" class="button-18">Submit</button>
+                </div>
+            </form>
         </div>
     </body>
 </html>
+
+{% comment %} <script>
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+<script> {% endcomment %} {% comment %} js to capture the value of the slider {% endcomment %}

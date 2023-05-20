@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse
-
+from django.views.generic.edit import CreateView
 
 
 
@@ -94,27 +94,39 @@ def show_survey(request, id=None):
     }
     return render(request, "Survey/survey.html", context) """
 
-def survey_view(request):
-    survey = Survey.objects.get(pk=1)
-    questions = survey.question_set.all().values()
-
-    #to load all question options of particular survey 
-    #need to add foreign key in questionoption modled to connect to survey
-    questionoptions = QuestionOption.objects.all().values()
-
-    #to get set of of options for particular question:
-    q_full = []
-    for q in questions.values():
-        q['options'] = questionoptions.filter(question_id = q['id']).values_list('option_text', flat = True)
-        q_full.append(q)
 
 
-    context = {
-        "survey": survey,
-        "questions": q_full,
-    }
+class SurveyView(CreateView):    
 
-    return render(request, "survey/take-survey.html", context )
+    def get(self, request, *args, **kwargs):
+        survey = Survey.objects.get(pk=1)
+        questions = survey.question_set.all().values()
+        #to load all question options of particular survey 
+        #need to add foreign key in questionoption modled to connect to survey
+        questionoptions = QuestionOption.objects.all().values()
+        #to get set of of options for particular question:
+        q_full = []
+        for q in questions.values():
+            q['options'] = questionoptions.filter(question_id = q['id']).values_list('option_text', flat = True)
+            q_full.append(q)
+
+        context = {
+            "survey": survey,
+            "questions": q_full,
+        }
+        return render(request, "survey/take-survey.html", context)
+
+        
+    def post(self, request, *args, **kwargs):
+        form = AnswerForm()
+        if form.is_valid():
+            if form.is_valid():
+                new_survey = form.save(commit = False)
+                new_survey.organization = request.user.organization  
+                new_survey.save()
+                return redirect('organization:profile')
+
+        return render(request, "survey/take-survey.html", {"form": form} )
 
     
 

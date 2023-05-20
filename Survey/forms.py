@@ -31,5 +31,6 @@ class SurveyForm(forms.Form):
         return submission """
 
 class AnswerForm(forms.ModelForm):
-    model = Answer
-    fields = ["answer"]
+    class Meta:
+        model = Answer
+        fields = ["answer"]
