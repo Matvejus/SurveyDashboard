@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'bootstrap5',
     'chartjs',
     'django_extensions',
+    'djf_surveys',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'djf_surveys.context_processors.surveys_context'
             ],
         },
     },
