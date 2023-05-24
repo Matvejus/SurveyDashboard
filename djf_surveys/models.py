@@ -54,6 +54,7 @@ class Survey(BaseModel):
     duplicate_entry = models.BooleanField(_("mutiple submissions"), default=False, help_text=_("If True, user can resubmit."))
     private_response = models.BooleanField(_("private response"), default=False, help_text=_("If True, only admin and owner can access."))
     can_anonymous_user = models.BooleanField(_("anonymous submission"), default=False, help_text=_("If True, user without authentatication can submit."))
+    org_profiles = models.ManyToManyField('organization.OrgProfile', blank=True, help_text=("Select Organizations that are allowed to take the survey"))
 
     class Meta:
         verbose_name = _("survey")

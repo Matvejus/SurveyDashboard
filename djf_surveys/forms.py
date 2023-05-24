@@ -1,6 +1,8 @@
 from typing import List, Tuple
 
 from django import forms
+from organization.models import OrgProfile
+from .models import Survey
 from django.db import transaction
 from django.core.validators import MaxLengthValidator
 
@@ -16,6 +18,21 @@ def make_choices(question: Question) -> List[Tuple[str, str]]:
         choice = choice.strip()
         choices.append((choice.replace(' ', '_').lower(), choice))
     return choices
+
+
+class SurveyForm(forms.ModelForm):
+    org_profiles = forms.ModelMultipleChoiceField(
+        queryset=OrgProfile.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
+    class Meta:
+        model = Survey
+        fields = [
+            'name', 'description', 'org_profiles', 'editable', 'deletable', 
+            'duplicate_entry', 'private_response', 'can_anonymous_user'
+        ]
 
 
 class BaseSurveyForm(forms.Form):

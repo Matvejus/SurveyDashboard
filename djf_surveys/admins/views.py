@@ -13,23 +13,22 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
+from organization.models import OrgProfile
+from organization.forms import NewOrgForm
 
 from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
 from djf_surveys.models import Survey, Question, UserAnswer
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.views import SurveyListView
-from djf_surveys.forms import BaseSurveyForm
+from djf_surveys.forms import BaseSurveyForm, SurveyForm
 from djf_surveys.summary import SummaryResponse
 
 
 @method_decorator(staff_member_required, name='dispatch')
 class AdminCreateSurveyView(ContextTitleMixin, CreateView):
     model = Survey
+    form_class = SurveyForm
     template_name = 'djf_surveys/admins/form.html'
-    fields = [
-        'name', 'description', 'org_profiles', 'editable', 'deletable', 
-        'duplicate_entry', 'private_response', 'can_anonymous_user'
-    ]
     title_page = _("Add New Survey")
 
     def post(self, request, *args, **kwargs):
