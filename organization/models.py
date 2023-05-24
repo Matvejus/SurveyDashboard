@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import CustomUser
@@ -12,6 +13,7 @@ class OrgProfile(models.Model):
     num_employees = models.CharField(max_length=20)
     founded = models.PositiveIntegerField(validators=[MinValueValidator(1000), MaxValueValidator(datetime.datetime.now().year)])
     email = models.EmailField(max_length=255, blank=False)
+    license_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def __str__(self):
         return f"{self.title}"
