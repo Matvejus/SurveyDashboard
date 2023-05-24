@@ -1,0 +1,34 @@
+{% extends get_master_template %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container px-5 py-5">
+        {% include 'djf_surveys/components/section_welcome.html' %}
+
+        {% include 'djf_surveys/components/search_form.html' %}
+        {% if object_list %}
+            <div class="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                {% for survey in page_obj %}
+                    {% include 'djf_surveys/components/card_list_survey.html' %}
+                {% endfor %}
+            </div>
+            <div class="py-10">
+                {% include 'djf_surveys/components/pagination.html' %}
+            </div>
+        {% else %}
+            {% include 'djf_surveys/components/empty_state.html' %}
+        {% endif %}
+    </div>
+
+    {% include 'djf_surveys/components/modal_delete.html' %}
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'djf_surveys/te-starter/js/tw-elements.umd.min.js' %}"></script>
+    {% include 'djf_surveys/components/modal_delete_js.html' %}
+{% endblock %}
