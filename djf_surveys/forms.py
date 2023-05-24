@@ -23,7 +23,7 @@ def make_choices(question: Question) -> List[Tuple[str, str]]:
 class SurveyForm(forms.ModelForm):
     org_profiles = forms.ModelMultipleChoiceField(
         queryset=OrgProfile.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple, 
         required=False,
     )
 

@@ -10,19 +10,18 @@
     <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
         <div class="max-w-lg mx-auto">
             <h1 class="text-2xl font-bold text-center text-blue-500 sm:text-3xl">{{ title_page }}</h1>
-
-            <p class="max-w-md mx-auto mt-4 text-center text-gray-500">
-                {{ sub_title_page }}
-            </p>
-
+            <p class="max-w-md mx-auto mt-4 text-center text-gray-500">{{ sub_title_page }}</p>
             <form method="post">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                         <label for="email" class="text-base font-medium">{{ field.label }}</label>
-
-                        <div class="mt-1">
-                            {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
+                        <div class="mt-1 scrollable-box">
+                            {% if field.name == 'org_profiles' %}
+                                <div style="width: 200px; height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                                    {{ field }}
+                                </div>
+                            {% elif field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
                                 {{ field }}
                             {% else %}
                                 {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
@@ -32,17 +31,6 @@
                         <span class="text-xs text-red-400">{{ field.errors }}</span>
                     </div>
                 {% endfor %}
-
-                {% for org_profile_id, org_profile_form in org_profiles_forms.items %}
-                    <div>
-                        <h3>Organization Profile {{ org_profile_id }}</h3>
-                        {{ org_profile_forms.as_p }}
-                        <input type="checkbox" id="select_{{ org_profile_id }}" name="select_{{ org_profile_id }}">
-                        <label for="select_{{ org_profile_id }}">Select this organization</label>
-                    </div>
-                {% endfor %}
-
-
                 <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                     <button type="submit" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
                         {% trans "Submit" %}
@@ -51,7 +39,6 @@
             </form>
         </div>
     </div>
-
 {% endblock %}
 
 {% block extra_js %}

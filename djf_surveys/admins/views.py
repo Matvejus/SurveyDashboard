@@ -13,8 +13,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
-from organization.models import OrgProfile
-from organization.forms import NewOrgForm
 
 from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
 from djf_surveys.models import Survey, Question, UserAnswer
