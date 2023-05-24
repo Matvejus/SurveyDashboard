@@ -27,14 +27,13 @@ INSTALLED_APPS = [
     'organization',
     'info_pages',
     'users',
-    'Survey',
+    'djf_surveys',
 
     # apps:
     'jquery',
     'bootstrap5',
     'chartjs',
     'django_extensions',
-    'djf_surveys',
 
     'django.contrib.admin',
     'django.contrib.auth',

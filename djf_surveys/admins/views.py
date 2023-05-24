@@ -23,11 +23,11 @@ from djf_surveys.summary import SummaryResponse
 
 
 @method_decorator(staff_member_required, name='dispatch')
-class AdminCrateSurveyView(ContextTitleMixin, CreateView):
+class AdminCreateSurveyView(ContextTitleMixin, CreateView):
     model = Survey
     template_name = 'djf_surveys/admins/form.html'
     fields = [
-        'name', 'description', 'editable', 'deletable', 
+        'name', 'description', 'org_profiles', 'editable', 'deletable', 
         'duplicate_entry', 'private_response', 'can_anonymous_user'
     ]
     title_page = _("Add New Survey")
