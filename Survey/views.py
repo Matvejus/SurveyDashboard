@@ -43,6 +43,7 @@ class SurveyDetailView(View):
 
 @method_decorator(login_required, name='dispatch')
 class SurveySubmitView(View):
+
     def post(self, request, *args, **kwargs):
         survey = get_object_or_404(Survey, pk=kwargs.get('pk'), survey_name_slug=kwargs.get('survey_name'))
         questions = survey.question_set.all()
@@ -96,41 +97,47 @@ def show_survey(request, id=None):
 
 
 
-class SurveyView(CreateView):    
+class SurveyView(View):    
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         survey = Survey.objects.get(pk=1)
         questions = survey.question_set.all().values()
         #to load all question options of particular survey 
         #need to add foreign key in questionoption modled to connect to survey
-        questionoptions = QuestionOption.objects.all().values()
+        questionoptions = QuestionOption.objects.all()
         #to get set of of options for particular question:
         q_full = []
         for q in questions.values():
-            q['options'] = questionoptions.filter(question_id = q['id']).values_list('option_text', flat = True)
+            q['options'] = questionoptions.values().filter(question_id = q['id']).values_list('option_text', flat = True)
             q_full.append(q)
 
+        # Create a new Response object
+        response = Response(respondent=request.user, survey=survey)
+        response.save()
+
+        organization = request.user.organization
+
+        for option in questionoptions:
+            answer_text = request.POST.get(f'answer-{option.pk}')
+            if option:
+                answer = Answer(
+                    response=response,
+                    Question=option,
+                    answer=answer_text,
+                    user=request.user,
+                    organization=organization,
+                    survey=survey,
+                )
+                answer.save()
+            
         context = {
             "survey": survey,
             "questions": q_full,
         }
-        return render(request, "survey/take-survey.html", context)
-
         
-    def post(self, request, *args, **kwargs):
-        form = AnswerForm()
-        if form.is_valid():
-            if form.is_valid():
-                new_survey = form.save(commit = False)
-                new_survey.organization = request.user.organization  
-                new_survey.save()
-                return redirect('organization:profile')
+        return render(request, "survey/take-survey.html", context )
 
-        return render(request, "survey/take-survey.html", {"form": form} )
 
-    
-
-    #def save: on click save answers and attach saved answers/users/org/time to response model
 
     
 

@@ -10,4 +10,5 @@ urlpatterns = [
     path("", include("info_pages.urls")),
     path("survey/", include("Survey.urls")),
     path('users/', include('users.urls')),
+    path('test-surveys/', include('djf_surveys.urls'))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
