@@ -7,11 +7,13 @@ import uuid
 
 class CustomUser(AbstractUser):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(max_length=255, blank=False, unique=True)
     first_name = models.CharField(max_length=150, verbose_name='First name')
     last_name = models.CharField(max_length=150, verbose_name='Last name')
     organization = models.ForeignKey('organization.OrgProfile', blank=True, null=True, on_delete=models.SET_NULL, related_name='users')
     position = models.CharField(max_length=150, verbose_name='Position')
     avatar = models.ImageField(upload_to="avatars")
+    temp_license_code = models.UUIDField(blank=True, null=True)
 
     class Meta:
         order_with_respect_to = 'organization'
