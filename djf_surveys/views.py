@@ -25,10 +25,11 @@ class SurveyListView(ContextTitleMixin, ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q')
+        current_user_org_profile = self.request.user.organization
         if query:
-            object_list = self.model.objects.filter(name__icontains=query)
+            object_list = self.model.objects.filter(name__icontains=query, org_profiles__in=[current_user_org_profile])
         else:
-            object_list = self.model.objects.all()
+            object_list = self.model.objects.filter(org_profiles__in=[current_user_org_profile])
         return object_list
 
     def get_context_data(self, **kwargs):
