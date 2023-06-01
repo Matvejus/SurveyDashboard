@@ -28,7 +28,6 @@ class OrgProfile(models.Model):
 
         title = models.CharField(max_length=200, blank=False)
         org_type = models.CharField(choices=OrganizationType.choices)
-        logo = models.ImageField(upload_to='org_logo')
         vision = models.CharField(max_length=250, blank=True)
         num_employees = models.CharField(max_length=20)
         founded = models.PositiveIntegerField(validators=[MinValueValidator(1000), MaxValueValidator(datetime.datetime.now().year)])
@@ -36,15 +35,27 @@ class OrgProfile(models.Model):
     
 
         def __str__(self):
-            return f"{self.title} - Orchestrator: {self.orchestrator}"
+            return f"{self.title}"
 
 
 #model to gather users in one network
 class CollaborationNetwork(models.Model):
+    #Stage choices of the collaboration| start, middle, end - changes surveys avalibale for participants
+    class NetworkStage(models.TextChoices):
+         
+         START = "START", _("Starting phase of the collaboration")
+         MIDDLE = "MIDDLE", _("Middle stage")
+         END = "END", _("Final stage of the collaboration")
+         
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=160)
+    stage = models.CharField(choices=NetworkStage.choices)
     orchestrator = models.ForeignKey(CustomUser)#Collaboration can be managed only by one person
     paticipants = models.ForeignKey(CustomUser)#Collaboration can have many participants
+
+    def __str__(self):
+            return f"{self.title} - Orchestrator: {self.orchestrator}"
 
 
 #Basic survey model. It now stores both questions and answers, this is a simple solution that needs to be rebuild.
