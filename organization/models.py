@@ -24,20 +24,18 @@ class OrgProfile(models.Model):
              FARMERS = "FARMERS_ASC", _("Farmers' association")
              LABOR_UNION = "LABOR_UNION", _("LABOR_UNION")
              OTHER = "OTHER", _("Other civil society organization (e.g. Women Association, Youth Association)")
-             
 
         title = models.CharField(max_length=200, blank=False)
-        org_type = models.CharField(choices=OrganizationType.choices)
+        org_type = models.CharField(max_length = 20, choices=OrganizationType.choices)
         vision = models.CharField(max_length=250, blank=True)
         num_employees = models.CharField(max_length=20)
         founded = models.PositiveIntegerField(validators=[MinValueValidator(1000), MaxValueValidator(datetime.datetime.now().year)])
         email = models.EmailField(max_length=255, blank=False)
-    
 
         def __str__(self):
             return f"{self.title}"
-
-
+        
+        
 #model to gather users in one network
 class CollaborationNetwork(models.Model):
     #Stage choices of the collaboration| start, middle, end - changes surveys avalibale for participants
@@ -46,13 +44,12 @@ class CollaborationNetwork(models.Model):
          START = "START", _("Starting phase of the collaboration")
          MIDDLE = "MIDDLE", _("Middle stage")
          END = "END", _("Final stage of the collaboration")
-         
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=160)
-    stage = models.CharField(choices=NetworkStage.choices)
-    orchestrator = models.ForeignKey(CustomUser)#Collaboration can be managed only by one person
-    paticipants = models.ForeignKey(CustomUser)#Collaboration can have many participants
+    stage = models.CharField(max_length = 20, choices=NetworkStage.choices)
+    orchestrator = models.ForeignKey('CustomUser', on_delete=models.DO_NOTHING, related_name='network orchestrator')
+    participants = models.ManyToManyField('CustomUser', related_name='network participants')
 
     def __str__(self):
             return f"{self.title} - Orchestrator: {self.orchestrator}"
