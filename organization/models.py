@@ -1,22 +1,51 @@
-import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import CustomUser
 import datetime
+import uuid
 
-#Model for organizations
+from django.utils.translation import gettext_lazy as _
+
+
+
+
+#Model for organization (stakeholder)
 class OrgProfile(models.Model):
-    title = models.CharField(max_length=200, blank=False)
-    logo = models.ImageField(upload_to='org_logo')
-    vision = models.CharField(max_length=250, blank=True)
-    mission = models.CharField(max_length=500, blank=True)
-    num_employees = models.CharField(max_length=20)
-    founded = models.PositiveIntegerField(validators=[MinValueValidator(1000), MaxValueValidator(datetime.datetime.now().year)])
-    email = models.EmailField(max_length=255, blank=False)
-    license_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+        #choice class
+        class OrganizationType(models.TextChoices):
+             
+             GOVERMENT_FEDERAL = "GVR_F", _("Government - Federal or state government jurisdiction/agency")
+             GOVERMENT_LOCAL = "GVR_L", _("Government - Local agency (e.g. district, municipality, regional)")
+             NGO = "NGO", _("NGO - National or International")
+             PRIVATE_MULTI = "PRIV_MULTI", _("Private sector - Multinational Corporation")
+             PRIVATE_NATIONAL = "PRIV_NATIONAL", _("Private sector - National Corporation")
+             SMALLHOLDER = "SMALLHOLDER", _("Smallholder producer")
+             PRODUCER = "PRODUCER", _("Producer organization")
+             FARMERS = "FARMERS_ASC", _("Farmers' association")
+             LABOR_UNION = "LABOR_UNION", _("LABOR_UNION")
+             OTHER = "OTHER", _("Other civil society organization (e.g. Women Association, Youth Association)")
+             
 
-    def __str__(self):
-        return f"{self.title}"
+        title = models.CharField(max_length=200, blank=False)
+        org_type = models.CharField(choices=OrganizationType.choices)
+        logo = models.ImageField(upload_to='org_logo')
+        vision = models.CharField(max_length=250, blank=True)
+        num_employees = models.CharField(max_length=20)
+        founded = models.PositiveIntegerField(validators=[MinValueValidator(1000), MaxValueValidator(datetime.datetime.now().year)])
+        email = models.EmailField(max_length=255, blank=False)
+    
+
+        def __str__(self):
+            return f"{self.title} - Orchestrator: {self.orchestrator}"
+
+
+#model to gather users in one network
+class CollaborationNetwork(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=160)
+    orchestrator = models.ForeignKey(CustomUser)#Collaboration can be managed only by one person
+    paticipants = models.ForeignKey(CustomUser)#Collaboration can have many participants
+
 
 #Basic survey model. It now stores both questions and answers, this is a simple solution that needs to be rebuild.
 class TestSurvey(models.Model):
