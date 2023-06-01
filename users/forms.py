@@ -14,6 +14,7 @@ class CustomUserCreationForm(UserCreationForm):
             "last_name",
             "username",
             "organization",
+            "collaboration_network",
             "position",
             "avatar",
             "temp_license_code",

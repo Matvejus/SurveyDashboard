@@ -22,7 +22,7 @@ class OrgProfile(models.Model):
              SMALLHOLDER = "SMALLHOLDER", _("Smallholder producer")
              PRODUCER = "PRODUCER", _("Producer organization")
              FARMERS = "FARMERS_ASC", _("Farmers' association")
-             LABOR_UNION = "LABOR_UNION", _("LABOR_UNION")
+             LABOR_UNION = "LABOR_UNION", _("Labor union")
              OTHER = "OTHER", _("Other civil society organization (e.g. Women Association, Youth Association)")
 
         title = models.CharField(max_length=200, blank=False)
@@ -48,8 +48,8 @@ class CollaborationNetwork(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=160)
     stage = models.CharField(max_length = 20, choices=NetworkStage.choices)
-    orchestrator = models.ForeignKey('CustomUser', on_delete=models.DO_NOTHING, related_name='network orchestrator')
-    participants = models.ManyToManyField('CustomUser', related_name='network participants')
+    orchestrator = models.ForeignKey('users.CustomUser', on_delete=models.DO_NOTHING, related_name='orchestrator')
+    collaborators = models.ManyToManyField('users.CustomUser', related_name='collaborators')
 
     def __str__(self):
             return f"{self.title} - Orchestrator: {self.orchestrator}"
