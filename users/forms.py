@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import Group
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from organization.models import OrgProfile
@@ -37,4 +38,5 @@ class CustomUserCreationForm(UserCreationForm):
                                                     license_code=self.cleaned_data.get('temp_license_code'))
         if commit:
             user.save()
+
         return user

@@ -21,7 +21,11 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=150, verbose_name='Last name')
     organization = models.ForeignKey('organization.OrgProfile', null=True, on_delete=models.SET_NULL, related_name='users')
     collaboration_network = models.ForeignKey('organization.CollaborationNetwork', null=True, on_delete=models.SET_NULL)
-    role = models.CharField(max_length = 20, choices=UserType.choices)
+    role = models.CharField(
+        max_length=20,
+        choices=UserType.choices,
+        default=UserType.COLLABORATOR,
+    )
     position = models.CharField(max_length=150, verbose_name='Position')
     avatar = models.ImageField(upload_to="avatars", blank = True, null = True)
     temp_license_code = models.UUIDField(blank=True, null=True)

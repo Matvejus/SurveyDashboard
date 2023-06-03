@@ -1,9 +1,14 @@
 from django import forms
-from .models import TestSurvey, OrgProfile, Contact
+from .models import TestSurvey, OrgProfile, Contact, CollaborationNetwork
 
 class NewOrgForm(forms.ModelForm):
     class Meta:
         model = OrgProfile
+        fields = '__all__'
+
+class NewCollaborationForm(forms.ModelForm):
+    class Meta:
+        model = CollaborationNetwork
         fields = '__all__'
 
 class TestSurveyForm(forms.ModelForm):
