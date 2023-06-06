@@ -4,11 +4,11 @@ from io import StringIO
 from django.utils.text import capfirst
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic.edit import CreateView, UpdateView
-from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.http import Http404
 
@@ -17,8 +17,14 @@ from djf_surveys.models import Survey, Question, TYPE_FIELD
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.admins.v2.forms import QuestionForm, QuestionWithChoicesForm
 
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
 
-@method_decorator(staff_member_required, name='dispatch')
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     template_name = 'djf_surveys/admins/question_form_v2.html'
     success_url = reverse_lazy("djf_surveys:")
@@ -64,7 +70,14 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
         return gettext("Type Field %s") % Question.TYPE_FIELD[self.type_field_id][1]
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
     model = Question
     template_name = 'djf_surveys/admins/question_form_v2.html'

@@ -24,7 +24,18 @@ def index(request):
     context = {'form': form}
     return render(request, 'organization/index.html', context)
 
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils.decorators import method_decorator
 
+
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required([ 'Orchestrator','Supervisor'])], name='dispatch')
 class NewOrgView(CreateView):
     model = OrgProfile
     fields = '__all__'

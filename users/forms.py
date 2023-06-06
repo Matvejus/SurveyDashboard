@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from organization.models import OrgProfile
+from .utils import setup_groups_permissions
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -33,27 +34,5 @@ class CustomUserCreationForm(UserCreationForm):
         user.organization = OrgProfile.objects.get(title=self.cleaned_data.get('organization').title)
         if commit:
             user.save()
-
-        collaborator_group, created = Group.objects.get_or_create(name='COLLABORATOR')
-        user.groups.add(collaborator_group)
-        
-        #collaborator permissions
-        permission_codes = [
-            'view_answer',
-            'view_question',
-            'view_survey',
-            'add_useranswer',
-            'view_useranswer',
-            'view_collaborationnetwork',
-            'view_orgprofile',
-            'add_testsurvey',
-            'view_testsurvey',
-            'change_customuser',
-            'delete_customuser',
-            'view_customuser',
-        ]
-
-        # permissions assign to
-        permissions = Permission.objects.filter(codename__in=permission_codes)
-        collaborator_group.permissions.set(permissions)
+            setup_groups_permissions(user)
         return user
