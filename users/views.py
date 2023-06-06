@@ -13,14 +13,14 @@ class RegisterView(CreateView):
     success_url = reverse_lazy("organization:index")
     template_name = "registration/registration.html"
 
-def group_required(group_name):
+def group_required(group_names):
     def check_group(user):
-        group = Group.objects.get(name=group_name)
-        return user.groups.filter(name=group_name).exists()
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required('collaborator')], name='dispatch')
+@method_decorator([login_required, group_required(['Collaborator', 'Orchestrator','Supervisor'])], name='dispatch')
 class update_user_profile(View):
     def post(self, request):
         form = CustomUserCreationForm(request.POST, request.FILES, instance=request.user)

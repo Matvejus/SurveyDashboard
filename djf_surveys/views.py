@@ -16,7 +16,6 @@ from djf_surveys import app_settings
 from djf_surveys.utils import NewPaginator
 
 
-@method_decorator(login_required, name='dispatch')
 class SurveyListView(ContextTitleMixin, ListView):
     model = Survey
     title_page = 'Survey List'
@@ -99,11 +98,13 @@ class EditSurveyFormView(ContextTitleMixin, SurveyFormView):
         context['object'] = self.get_object().survey
         return context
 
+    # right now still shows the edit button but can not access it when not Orch/Super
+    def filt_groups(self):
+        return self.request.user.groups.filter(name__in=['Orchestrator', 'Supervisor']).exists()
+
     def dispatch(self, request, *args, **kwargs):
-        # handle if user not same
-        user_answer = self.get_object()
-        if user_answer.user != request.user or not user_answer.survey.editable:
-            messages.warning(request, gettext("You can't edit this survey. You don't have permission."))
+        if not self.filt_groups():
+            messages.warning(request, gettext("You don't have permission to access this view."))
             return redirect("djf_surveys:index")
         return super().dispatch(request, *args, **kwargs)
 
@@ -124,10 +125,14 @@ class EditSurveyFormView(ContextTitleMixin, SurveyFormView):
 class DeleteSurveyAnswerView(DetailView):
     model = UserAnswer
 
+    # right now still shows the edit button but can not access it when not Orch/Super
+    def filt_groups(self):
+        return self.request.user.groups.filter(name__in=['Orchestrator', 'Supervisor']).exists()
+    
+    #redirects to index but would be better to redirect to detail
     def dispatch(self, request, *args, **kwargs):
-        # handle if user not same
-        user_answer = self.get_object()
-        if user_answer.user != request.user or not user_answer.survey.deletable:
+        if not self.filt_groups():
+            user_answer = self.get_object()
             messages.warning(request, gettext("You can't delete this survey. You don't have permission."))
             return redirect("djf_surveys:index")
         return super().dispatch(request, *args, **kwargs)
