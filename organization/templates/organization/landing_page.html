@@ -1,0 +1,599 @@
+{% load static %}
+{%block css_files%}
+<link rel='stylesheet' href="{% static 'organization/style.css'%}">
+{% endblock %}
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.101.0" />
+	
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<meta name="ahrefs-site-verification" content="a4d19d13d080685e48094a2591188be35d7b5db05918a5eb84828500a14f3c5e">
+	
+	<title>Home Page</title>
+	
+	
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
+		  rel="stylesheet" 
+		  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+		  crossorigin="anonymous">
+	<script 
+		  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+		  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+	      crossorigin="anonymous">
+	</script>
+
+	<script type = "text/javascript" src = "https://www.gstatic.com/charts/loader.js">
+	</script>
+	<script type = "text/javascript">
+	google.charts.load('current', { 'packages': ['corechart','line','table', 'geochart'] });    
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="https://kit.fontawesome.com/731b8140c4.js" crossorigin="anonymous"></script>
+	
+	
+	
+	
+	<link rel="stylesheet" href='style.css' >
+
+	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="DOI Foundation WIP site">
+
+	<link rel="icon" sizes="48x48" href="/images/favicons/favicon.ico">
+	<link rel="icon" sizes="32x32" href="/images/favicons/favicon-32x32.png">
+	<link rel="icon" sizes="16x16" href="/images/favicons/favicon-16x16.png">
+	<link rel="apple-touch-icon-precomposed" href="/images/favicons/apple-touch-icon.png">
+	<link rel="apple-touch-icon-precomposed" sizes="192x192" href="/images/favicons/android-chrome-192x192.png">
+	<link rel="apple-touch-icon-precomposed" sizes="512x512" href="/images/favicons/android-chrome-512x512.png">
+    
+</head>
+<body>
+	<header>
+	<div class="row">
+		<div class="col logo">			
+			<a href="https://www.doi.org/"><img class="header-logo" src="{% static 'organization/images/CONESU.svg' %}" /></a>
+		</div>
+	</div>
+	
+	<div class="navigation-container">
+		<div class="nav">
+			<nav>
+				<input type="checkbox" name="" id="">
+				<div class="hamburger-lines">
+					<span class="line line1"></span>
+					<span class="line line2"></span>
+					<span class="line line3"></span>
+				</div>
+				<ul class="menu-items">
+					
+										
+
+							<li>
+								
+								<span class='nolink'>The project</span>
+								<i class="fa-solid fa-fw fa-angle-down"></i>
+								
+    							
+									<ul class="submenu">
+										
+											<li><a href="/the-foundation/about-us/">About Us</a>
+										
+											<li><a href="/the-foundation/board-and-governance/">Board &amp; Governance</a>
+										
+											<li><a href="/the-foundation/sustainability/">Sustainability</a>
+										
+									</ul>
+								
+							</li>
+										
+
+							<li>
+								
+								<span class='nolink'>Our partners</span>
+								<i class="fa-solid fa-fw fa-angle-down"></i>
+								
+    							
+									<ul class="submenu">
+										
+											<li><a href="/the-community/what-are-registration-agencies/">Collaborators</a>
+										
+									</ul>
+								
+							</li>
+										
+
+							<li>
+								
+								<a href="{% url 'users:login' %}"><span class='nolink'>log in</span></a>
+			
+							</li>
+				</ul>
+
+				
+			</nav>
+		</div>
+	</div>
+</header>
+
+	
+    <main aria-role="main">
+      <header class="homepage-header">
+      </header>
+      <div class="homepage-content">
+        
+        
+<section class="home-top">
+     <div class="background" style="background-image:url(/images/logos/dash-anim.gif); padding-bottom:20px"></div>
+     
+    <div class="row">
+        <div class="col left">
+            <div class="maintext">Welcome to Collaborative Networks for Sustainability</div>
+            <div class="subtext">This website showcases (preliminary) outputs from the Amsterdam University of Applied Sciences CONESU project, including orchestration tools for multi-stakeholder collaborations, teaching cases, videos and academic papers. Tools and teaching cases have been co-developed in close collaboration with practitioners from both the public and private sector.</div>
+
+            <div class='link'>
+                <a href="/the-foundation/about-us/">learn more</a>
+                <i class="fa-solid fa-fw fa-arrow-right-long"></i>
+            </div>
+        </div>
+        <div class="col right">
+            
+        </div>
+
+    </div>
+</section>
+
+        <section class="home-infos">
+    
+    <div class="row">
+
+    
+        <div class="col" >
+            <div class='icon'><img src="{% static 'organization/images/globe.png' %}"/></div>
+            <h2 class="title">WHAT IS CONESU?</h2>
+            <div class="maintext"><p>Collaborative networks are emerging rapidly as the preferred way of organizing to 
+              address urgent societal challenges such as persistent poverty, 
+              climate change and rapid biodiversity loss. Yet, the long-term survival of such 
+              collaborative networks is challenging, and the value created in them can be lost if they dissolve.
+              <b>Network orchestrator is a new professional role performed by individuals and organizations.</b></p>
+</div>
+
+            <div class='link'>
+                <a href="/the-community/what-are-registration-agencies/">learn more</a>
+                <i class="fa-solid fa-fw fa-arrow-right-long"></i>
+            </div>
+        </div>
+    
+        <div class="col" >
+            <div class='icon'><img src="{% static 'organization/images/target.png' %}"/></div>
+            <h2 class="title">FOR WHOM IT MIGHT BE USEFUL?</h2>
+            <div class="maintext">
+              <ul>
+                <li>A practitioner involved in orchestrating multi-stakeholder collaborations focusing on sustainability.</li>
+                <li>A researcher or consultant conducting research to aid professionals, such as managers and policy makers, in making decisions about establishing, joining or funding collaborative networks for sustainability.</li>
+                <li>A lecturer/teacher interested in or teaching about multi-stakeholder collaborations, partnerships or orchestration.</li>
+              </ul>
+</div>
+    
+</section>
+        
+<section class='home-announcement'>
+    <div class="row">
+        <div class="col left">
+            <div class="wrapper">
+                <img src="{% static 'organization/images/results_red.png'%}" width="250" />
+            </div>
+        </div>
+        <div class="col right">
+            <h2 class="title">OUR RESULTS</h2>
+            <div class="maintext">
+                <p>Collaborative networks have become key organizational vehicles for promoting transformational change towards sustainability in many industries, the projects aims to make an impact beyond the apparel industry. Conferences, publications and webinars will be organized to disseminate research results, best practices and tools to professionals. A scholarly community that conducts engaged research to aid professionals, such as managers, funders, and policy makers, in making decisions about establishing, joining or funding collaborative networks for sustainability as well as educational programs and executive trainings on network orchestration are targeted outputs of the project.</p>
+            </div>
+
+            
+            <div class='link-alt'>
+                <a href="https://www.handidentity.com/">Learn more</a>
+                <i class="fa-solid fa-arrow-right-long hover-move-right"></i>
+            </div>
+
+            
+        </div>
+
+    </div>
+</section>
+
+
+        
+          <section class="how-many">
+    <div class="row titlerow">
+        <h2 class="title">How many surveys have been taken?</h2>
+    </div>
+    <div class="row numbers">
+        <div class="col">
+            <span id='resolutions_clock_count' class='bignumber'></span>
+            <span class='subtext'>Total passed surveys on CONESU platform (all time)</span>          
+        </div>
+    </div>    
+    <div class="row numbers">
+        <div class="col">
+            <span id='uptime_percent' class='bignumber'></span>
+            <span class='subtext'>Uptime over the last 90 days</span>          
+            <p class='footnote'><span id='resolutions_clock_rate' class='smallnumber'></span></p>
+        </div>
+    </div>
+    <div id="el"></div>
+</section>
+
+        
+
+        
+<section class="home-resolve" style="background-image:url(/images/dot-pattern.svg);">
+    <div class="row">
+        <div class="col left">
+            <h2 class="title">CONTACT US</h2>
+<!--             <div class="maintext">Type or paste a known DOI name exactly—including its prefix and suffix—into the text box below and then &lsquo;submit&rsquo; to resolve it.</div>
+ -->            <div class="form">
+                <form method="post" action="https://doi.org" id="resolveID" accept-charset="utf-8">
+
+                   
+                    <input class='input-content' type="text" name="hdl" id="nameID" placeholder="Your@email.com">
+                    <input class='submit' type="submit" alt="Resolve your DOI" align="middle">
+                    
+                    </form>
+            </div>
+            <div class='subtext'>Gain new knowledge and insights on network orchestration of collaborative networks for sustainability with CONESU.</div>
+        </div>
+        <div class="col right">
+        </div>
+
+    </div>
+</section>
+
+        <div class="sticky-socials">
+    <ul class="socials-side">
+        				
+            <li><a href="https://twitter.com/DOI_Foundation"><i class='fa-brands fa-fw fa-twitter'></i></a></li>
+        				
+            <li><a href="https://www.linkedin.com/company/doi-foundation-inc/"><i class='fa-brands fa-fw fa-linkedin'></i></a></li>
+        				
+            <li><a href="mailto:info@doi.org"><i class='fa-solid fa-fw fa-envelope'></i></a></li>
+        
+    </ul>
+</div>
+
+        
+      </div>
+    </main>
+    
+    <script>
+
+   {% comment %}  const STATS_REFRESH_INTERVAL = 1000 * 60 * 60; 
+    const RESOLUTIONS_CLOCK_UPDATE_INTERVAL = 500; 
+
+    let resolutionsClockIntervalId = null;
+
+    let doiResolutions = null;
+    let counts = null;
+    let mapMode = "logScale";
+
+
+
+    async function getDoiValueAsJson(doi, type) {
+        let url = 'https://doi.org/api/handles/' + doi + '?type=' + type + "&auth";
+        const response = await fetch(url);
+        let handleRecord = await response.json();
+        let handleValue = handleRecord.values[0];
+        let valueJson = handleValue.data.value;
+        let result = JSON.parse(valueJson);
+        console.log("Fetching stats");
+        return result;
+    }
+
+    async function fetchStats() {
+        doiResolutions = await getDoiValueAsJson('10.1000/1000', 'DOI_RESOLUTIONS');
+        counts = await getDoiValueAsJson('10.1000/1000', 'DOI_COUNTS');
+        console.log("Stats loaded");
+        renderResults(doiResolutions,counts);
+        setTimeout(fetchStats, STATS_REFRESH_INTERVAL);
+    }
+    fetchStats();
+
+    function renderResults(doiResolutions,counts) {
+        renderResolutionsClock(doiResolutions);
+        
+        renderResolutionsBotPercent(doiResolutions);
+        renderResolutionsConnegPercent(doiResolutions);
+        renderResolutionsUptime(doiResolutions);
+
+        google.charts.load('current', { 'packages': ['corechart','line','table','geochart'] });
+
+        try{
+          google.charts.setOnLoadCallback(renderResolutionsChart(doiResolutions)); 
+          google.charts.setOnLoadCallback(renderTotalHandlesChart(counts)); 
+          google.charts.setOnLoadCallback(renderResolutionsMap(doiResolutions)); 
+        } catch(err) {
+          
+        }
+    }
+
+    function renderResolutionsUptime(doiResolutions) {
+      try {
+        let uptimeElement = document.getElementById('uptime_percent');
+        let uptimePercent = doiResolutions.uptime.uptimePercentage;
+        let uptimeText =  uptimePercent + "%";
+        uptimeElement.textContent = uptimeText;
+      } catch {
+
+      }
+    }
+
+    function renderResolutionsMap(doiResolutions) {
+      try {
+        let mode = mapMode;
+        let resolutionsByCountry = convertResolutionsByCountryForGoogleMap(doiResolutions.resolutionsByCountryLastMonth, mode);
+        var data = google.visualization.arrayToDataTable(resolutionsByCountry);
+        var options = {
+            backgroundColor: 'transparent',
+            colorAxis: {colors: ['white', '#5C7392']},
+            legend: 'none'
+        };
+        var chart = new google.visualization.GeoChart(document.getElementById('world_map'));
+        chart.draw(data, options);
+      } catch {
+        
+      }
+    }
+    function convertResolutionsByCountryForGoogleMap(resolutionsByCountry, mode) {
+      let result = [];
+      let columns = ['Country', 'Resolutions'];
+      result.push(columns);
+      let count = 0;
+      for (let country of resolutionsByCountry) {
+          let code = country.countryCode;
+          let rawValue = parseInt(country.resolutions);
+          let formattedValue = "" + rawValue;
+          let value = Math.log(rawValue);
+          let item = {
+              v: value,
+              f: formattedValue
+          };
+          let row = [code, item];
+          result.push(row);
+          count++;
+      }
+      return result;
+    }
+
+    function renderResolutionsClock(doiResolutions) {
+        let resolutionsTotalAndRate = doiResolutions.resolutionsTotalAndRate;
+        let clockElement = document.getElementById('resolutions_clock_count');
+        let rateElement = document.getElementById('resolutions_clock_rate');
+
+        
+        let ratePerSecond = resolutionsTotalAndRate.resolutionsPerSecondLast24Hours;
+        let incrementPerMs = ratePerSecond / 1000;
+        rateElement.textContent = ratePerSecond
+
+        let start = new Date(resolutionsTotalAndRate.asOfTimestamp);
+        let currentCount = calculateResolutionsClock(start, incrementPerMs, resolutionsTotalAndRate.allTime);
+        clockElement.textContent = getClockText(currentCount);
+        clearInterval(resolutionsClockIntervalId);
+        resolutionsClockIntervalId = setInterval(function() {
+            let currentCount = calculateResolutionsClock(start, incrementPerMs, resolutionsTotalAndRate.allTime);
+            let clockText = getClockText(currentCount);
+            clockElement.textContent = clockText;
+        }, RESOLUTIONS_CLOCK_UPDATE_INTERVAL);
+    }
+
+    function calculateResolutionsClock(start, incrementPerMs, initialCount) {
+        let timeSinceStartMs = Date.now() - start;
+        let increment = Math.round(incrementPerMs * timeSinceStartMs);
+        let currentCount = initialCount + increment;
+        return currentCount;
+    }
+
+    function getClockText(count) {
+        let clockText = count.toLocaleString("en-US");
+        return clockText;
+    }  
+
+    function renderTotalHandlesChart(counts) {
+      let totalDois = convertTotalDoisDataForGoogleCharts(counts);
+      var data = google.visualization.arrayToDataTable(totalDois);
+      var options = {
+          chartArea: {'height': '80%'},
+          backgroundColor: 'transparent', 
+          responsive: true,        
+          height:600,
+          colors: ['#5C7392'],
+          title: 'Total DOIs',
+          legend: { position: 'bottom' },
+          trendlines: {
+              0: {
+                  type: 'exponential',
+                  color: '#FAB70C',
+                  tooltip: false
+              }
+          }
+      };
+      
+      var chart = new google.visualization.LineChart(document.getElementById('total-dois'));
+      chart.draw(data, options);
+    }
+    function convertTotalDoisDataForGoogleCharts(monthlyCounts) {
+        let result = [];
+        let columns = ["Date", "Total DOIs"];
+        result.push(columns);
+        for (let month in monthlyCounts) {
+            let value = monthlyCounts[month].doiCount;
+            let row = [new Date(month), value];
+            result.push(row);
+        }
+        return result;
+    }
+
+    function renderResolutionsChart(doiResolutions) {
+        let monthlyResolutions = doiResolutions.monthlyResolutions;
+
+        monthLabels = [];
+        resolutions = [];
+        both = [];
+        
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'date');
+        data.addColumn('number', 'resolutions');
+
+        for (var key in monthlyResolutions) {
+          if (!monthlyResolutions[key].isIncompleteMonth) {
+            if(key.substr(5)=='01') {
+              monthLabels.push(key.substr(0,4));
+            } else {
+              monthLabels.push("");
+            }
+            
+            resolutions.push(monthlyResolutions[key].resolutions) 
+            both.push([key, monthlyResolutions[key].resolutions ]) ; 
+            
+            
+            datestring = key + "-01";
+            var dateobj = new Date(datestring);
+            
+            data.addRow([dateobj, monthlyResolutions[key].resolutions ]);
+                      
+          }
+        }
+        
+        
+        console.log("drawing google chart");
+          
+        
+        var options = {
+          hAxis: {
+            format: 'Y',
+            slantedText:true,
+            slantedTextAngle:45
+          },
+          chartArea: {'height': '80%'},
+          fontName:'futura-pt',
+          colors: ['#5C7392'],
+          title:'DOI Resolutions', 
+          responsive: true,        
+          height:600,
+          timeline: {
+            groupByRowLabel: true
+          },
+          legend: { position: 'bottom'},
+          trendlines : { 
+            0: 
+              {
+                type: 'polynomial',
+                degree: 3,
+                color: '#FAB70C',
+                tooltip: false
+              }
+          }	
+        };
+
+        
+        var chart = new google.visualization.LineChart(document.getElementById('doi-resolutions'));
+        chart.draw(data, options);
+
+        return;
+    }
+
+    function renderResolutionsBotPercent(doiResolutions) {
+      try {
+        let botPercentElement = document.getElementById('bot_percent');
+        let botPercentTextElement = document.getElementById('bot_percent_text');
+        let botPercent = doiResolutions.botPercent.botPercent;
+        let month = reformatMonth(doiResolutions.botPercent.month);
+        let botPercentContent =  botPercent + "%";
+        let botPercentTextContent = replaceWildCards(botPercentTextElement.textContent, "**MONTH**", month);
+        botPercentElement.textContent = botPercentContent;
+        botPercentTextElement.textContent = botPercentTextContent;
+        botPercentTextElement.style.opacity=1;
+      } catch {
+
+      }
+    }    
+
+    function replaceWildCards(theString, find, replace) {
+      return theString.replace(find, replace);
+    }
+
+    function reformatMonth(monthYear) {
+      const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ]
+      let d = new Date(monthYear);
+      let year = d.getFullYear();
+      let monthName = months[d.getUTCMonth()];
+      return monthName + " " + year;
+    }
+
+    function renderResolutionsConnegPercent(doiResolutions) {
+      try {
+        let connegPercentElement = document.getElementById('content_negotiation_percent');
+        let connegPercentTextElement = document.getElementById('content_negotiation_text');
+
+        let connegPercent = doiResolutions.connegPercent.connegPercent;
+        let month = reformatMonth(doiResolutions.connegPercent.month);
+        let connegPercentContent =  connegPercent + "%";
+        let connegPercentTextContent = replaceWildCards(connegPercentTextElement.textContent,"**MONTH**", month);
+        connegPercentElement.textContent = connegPercentContent;
+        connegPercentTextElement.textContent = connegPercentTextContent;
+        connegPercentTextElement.style.opacity=1;
+      } catch {
+
+      }
+    } {% endcomment %}
+
+  </script>
+    
+
+	
+
+<footer>
+	<div class="row">
+		<div class="col">
+			<a href="https://www.doi.org/"><img class='footer-logo' src="{% static 'organization/images/CONESU_PROJECT.svg'%}" /></a>
+		</div>
+		<div class="col">
+			<ul>
+			
+				<li><a href="/the-identifier/resources/">Resources</a></li>
+			
+				<li><a href="/the-foundation/board-and-governance/">TEAM</a></li>
+			
+				<li><a href="mailto:professorship-cie@hva.nl">Email us</a></li>
+			
+			</ul>
+		</div>
+		<div class="col">
+			<ul>			
+				<li><a href="/privacy-policy/">Privacy Policy</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col copyright">
+				<p>Copyright © 2023 CONESU. <i class='fa-brands fa-fw fa-creative-commons'></i></p>
+</footer>
+
+<script src="/js/script.js"></script>
+
+</body>
+</html>
