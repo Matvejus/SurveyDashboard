@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView
 from django.utils.decorators import method_decorator
-from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash, authenticate, login
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -14,19 +15,16 @@ class RegisterView(CreateView):
     success_url = reverse_lazy("organization:index")
     template_name = "registration/registration.html"
 
-class different_dashboards(LoginView):
-    def get_redirect_url(self):
-        user = self.request.user
-        if user.is_authenticated:
-            if user.groups.filter(name='Supervisor').exists():
-                return '#url super'
-            elif user.groups.filter(name='Orchestrator').exists():
-                return '#url orch'
-            else:
-                return 'djf_surveys.index'
-        else:
-            return super().get_redirect_url()    
-
+@login_required
+def redirectgroup(request):
+    user = request.user
+    if user.groups.filter(name='Supervisor').exists():
+        return redirect('djf_surveys:admin_survey')
+    elif user.groups.filter(name='Orchestrator').exists():
+        return redirect('djf_surveys:index')
+    else:
+        return redirect('organization:profile')        
+    
 def group_required(group_names):
     def check_group(user):
         user_groups = user.groups.values_list('name', flat=True)
