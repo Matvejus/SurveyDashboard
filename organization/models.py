@@ -49,7 +49,7 @@ class CollaborationNetwork(models.Model):
     title = models.CharField(max_length=160)
     stage = models.CharField(max_length = 20, choices=NetworkStage.choices)
     orchestrator = models.ForeignKey('users.CustomUser', on_delete=models.DO_NOTHING, related_name='orchestrator')
-    collaborators = models.ManyToManyField('users.CustomUser', related_name='collaborators')
+    collaborators = models.ManyToManyField('users.CustomUser', related_name='collaborators', blank= True, null = True)
 
     def __str__(self):
             return f"{self.title} - Orchestrator: {self.orchestrator}"

@@ -22,7 +22,7 @@ def index(request):
         
     #Display form.
     context = {'form': form}
-    return render(request, 'organization/index.html', context)
+    return render(request, 'organization/landing_page.html', context)
 
 
 class NewOrgView(CreateView):
@@ -31,7 +31,7 @@ class NewOrgView(CreateView):
     template_name = 'new_org.html'
     success_url = '/users/register'
 
-
+#page of collaboraton
 def orgpage(request, org_id):
     org = OrgProfile.objects.get(id = org_id)
 
