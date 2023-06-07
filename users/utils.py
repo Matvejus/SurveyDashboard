@@ -23,6 +23,7 @@ GROUPS_PERMISSIONS = {
     'change_question',
     'view_question',
     'view_survey',
+    'change_survey',
     'add_useranswer',
     'view_useranswer',
     'view_collaborationnetwork',
