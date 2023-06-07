@@ -6,8 +6,9 @@ from .models import Survey
 from django.db import transaction
 from django.core.validators import MaxLengthValidator
 
+from django.utils.translation import gettext_lazy as _
 from djf_surveys.models import Answer, TYPE_FIELD, UserAnswer, Question
-from djf_surveys.widgets import CheckboxSelectMultipleSurvey, RadioSelectSurvey, DateSurvey, RatingSurvey
+from djf_surveys.widgets import CheckboxSelectMultipleSurvey, RadioSelectSurvey, DateSurvey, RatingSurvey, InlineChoiceField
 from djf_surveys.app_settings import DATE_INPUT_FORMAT, SURVEY_FIELD_VALIDATORS
 from djf_surveys.validators import validate_rating
 
@@ -179,3 +180,21 @@ class EditSurveyForm(BaseSurveyForm):
             if not created and answer:
                 answer.value = value
                 answer.save()
+
+class QuestionForm(forms.ModelForm):
+    
+    class Meta:
+        model = Question
+        fields = ['label', 'key', 'help_text', 'required']
+
+
+class QuestionWithChoicesForm(forms.ModelForm):
+    
+    class Meta:
+        model = Question
+        fields = ['label', 'key', 'choices', 'help_text', 'required']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['choices'].widget = InlineChoiceField()
+        self.fields['choices'].help_text = _("Click Button Add to adding choice")
