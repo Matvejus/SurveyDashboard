@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
 from django.utils.decorators import method_decorator
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import View
@@ -22,7 +23,15 @@ from djf_surveys.forms import BaseSurveyForm, SurveyForm
 from djf_surveys.summary import SummaryResponse
 
 
-@method_decorator(staff_member_required, name='dispatch')
+
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Supervisor'])], name='dispatch')
 class AdminCreateSurveyView(ContextTitleMixin, CreateView):
     model = Survey
     form_class = SurveyForm
@@ -40,7 +49,14 @@ class AdminCreateSurveyView(ContextTitleMixin, CreateView):
             return self.form_invalid(form)
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Supervisor'])], name='dispatch')
 class AdminEditSurveyView(ContextTitleMixin, UpdateView):
     model = Survey
     template_name = 'djf_surveys/admins/form.html'
@@ -89,7 +105,14 @@ class AdminDeleteSurveyView(DetailView):
         return redirect("djf_surveys:admin_survey")
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     """
     Note: This class already has version 2
@@ -120,7 +143,14 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
         return reverse("djf_surveys:admin_forms_survey", args=[self.survey.slug])
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
     """
     Note: This class already has version 2
@@ -141,7 +171,14 @@ class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
         return reverse("djf_surveys:admin_forms_survey", args=[self.survey.slug])
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminDeleteQuestionView(DetailView):
     model = Question
     survey = None
@@ -158,7 +195,14 @@ class AdminDeleteQuestionView(DetailView):
         return redirect("djf_surveys:admin_forms_survey", slug=self.survey.slug)
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminChangeOrderQuestionView(View):
     def post(self, request, *args, **kwargs):
         ordering = request.POST['order_question'].split(",")
@@ -174,7 +218,14 @@ class AdminChangeOrderQuestionView(View):
         return JsonResponse(data, status=200)
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class DownloadResponseSurveyView(DetailView):
     model = Survey
 
@@ -208,7 +259,14 @@ class DownloadResponseSurveyView(DetailView):
         return response
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class SummaryResponseSurveyView(ContextTitleMixin, DetailView):
     model = Survey
     template_name = "djf_surveys/admins/summary.html"
