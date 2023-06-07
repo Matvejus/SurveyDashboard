@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import Group
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import user_passes_test, login_required
 from .forms import CustomUserCreationForm
 
@@ -12,6 +13,19 @@ class RegisterView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("organization:index")
     template_name = "registration/registration.html"
+
+class different_dashboards(LoginView):
+    def get_redirect_url(self):
+        user = self.request.user
+        if user.is_authenticated:
+            if user.groups.filter(name='Supervisor').exists():
+                return '#url super'
+            elif user.groups.filter(name='Orchestrator').exists():
+                return '#url orch'
+            else:
+                return 'djf_surveys.index'
+        else:
+            return super().get_redirect_url()    
 
 def group_required(group_names):
     def check_group(user):

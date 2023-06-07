@@ -7,19 +7,18 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
 from django.utils.decorators import method_decorator
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import View
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib import messages
 
 from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
-from djf_surveys.models import Survey, Question, UserAnswer
+from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.views import SurveyListView
-from djf_surveys.forms import BaseSurveyForm, SurveyForm
+from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm
 from djf_surveys.summary import SummaryResponse
 
 
@@ -31,7 +30,7 @@ def group_required(group_names):
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required(['Supervisor'])], name='dispatch')
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminCreateSurveyView(ContextTitleMixin, CreateView):
     model = Survey
     form_class = SurveyForm
@@ -56,7 +55,7 @@ def group_required(group_names):
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required(['Supervisor'])], name='dispatch')
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminEditSurveyView(ContextTitleMixin, UpdateView):
     model = Survey
     template_name = 'djf_surveys/admins/form.html'
@@ -71,12 +70,26 @@ class AdminEditSurveyView(ContextTitleMixin, UpdateView):
         return reverse("djf_surveys:admin_forms_survey", args=[survey.slug])
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminSurveyListView(SurveyListView):
     template_name = 'djf_surveys/admins/survey_list.html'
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminSurveyFormView(ContextTitleMixin, FormMixin, DetailView):
     model = Survey
     template_name = 'djf_surveys/admins/form_preview.html'
@@ -94,7 +107,14 @@ class AdminSurveyFormView(ContextTitleMixin, FormMixin, DetailView):
         return self.object.description
 
 
-@method_decorator(staff_member_required, name='dispatch')
+def group_required(group_names):
+    def check_group(user):
+        user_groups = user.groups.values_list('name', flat=True)
+        return any(group_name in user_groups for group_name in group_names)
+
+    return user_passes_test(check_group)
+
+@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminDeleteSurveyView(DetailView):
     model = Survey
 
@@ -114,33 +134,48 @@ def group_required(group_names):
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminCreateQuestionView(ContextTitleMixin, CreateView):
-    """
-    Note: This class already has version 2
-    """
-    model = Question
-    template_name = 'djf_surveys/admins/question_form.html'
+    template_name = 'djf_surveys/admins/question_form_v2.html'
     success_url = reverse_lazy("djf_surveys:")
-    fields = ['label', 'key', 'type_field', 'choices', 'help_text', 'required']
     title_page = _("Add Question")
     survey = None
+    type_field_id = None
 
     def dispatch(self, request, *args, **kwargs):
         self.survey = get_object_or_404(Survey, id=kwargs['pk'])
+        self.type_field_id = kwargs['type_field']
+        if self.type_field_id not in TYPE_FIELD:
+            raise Http404
         return super().dispatch(request, *args, **kwargs)
+
+    def get_form_class(self):
+        choices = [TYPE_FIELD.multi_select, TYPE_FIELD.select, TYPE_FIELD.radio]
+        if self.type_field_id in choices:
+            return QuestionWithChoicesForm
+        else:
+            return QuestionForm
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
             question = form.save(commit=False)
             question.survey = self.survey
+            question.type_field = self.type_field_id
             question.save()
             messages.success(self.request, gettext("%(page_action_name)s succeeded.") % dict(page_action_name=capfirst(self.title_page.lower())))
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type_field_id'] = self.type_field_id
+        return context
+
     def get_success_url(self):
         return reverse("djf_surveys:admin_forms_survey", args=[self.survey.slug])
+
+    def get_sub_title_page(self):
+        return gettext("Type Field %s") % Question.TYPE_FIELD[self.type_field_id][1]
 
 
 def group_required(group_names):
@@ -152,23 +187,37 @@ def group_required(group_names):
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
-    """
-    Note: This class already has version 2
-    """
     model = Question
-    template_name = 'djf_surveys/admins/question_form.html'
+    template_name = 'djf_surveys/admins/question_form_v2.html'
     success_url = SURVEYS_ADMIN_BASE_PATH
-    fields = ['label', 'key', 'type_field', 'choices', 'help_text', 'required']
-    title_page = _("Add Question")
+    title_page = _("Edit Question")
     survey = None
+    type_field_id = None
 
     def dispatch(self, request, *args, **kwargs):
         question = self.get_object()
+        self.type_field_id = question.type_field
         self.survey = question.survey
         return super().dispatch(request, *args, **kwargs)
 
+    def get_form_class(self):
+        choices = [TYPE_FIELD.multi_select, TYPE_FIELD.select, TYPE_FIELD.radio]
+        if self.type_field_id in choices:
+            return QuestionWithChoicesForm
+        else:
+            return QuestionForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type_field_id'] = self.type_field_id
+        return context
+
     def get_success_url(self):
         return reverse("djf_surveys:admin_forms_survey", args=[self.survey.slug])
+
+    def get_sub_title_page(self):
+        question = self.get_object()
+        return gettext("Type Field %s") % question.get_type_field_display()
 
 
 def group_required(group_names):
