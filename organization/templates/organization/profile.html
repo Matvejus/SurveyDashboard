@@ -12,21 +12,17 @@
 <body>
   <div class = 'page-grid'>
     <div>{% comment %} empty div for sidebar {% endcomment %}</div>
-    <div>
-    <div  id = "profile" class="container profile"> 
-        <img src="{{user.avatar.url}}">
-        <div class "profile">
-            <h1>{{user.first_name}} {{user.last_name}}</h1>
-            <p>{{user.organization}} - {{user.position}}</p>
-        </div>
-        <div class ='profile-buttons'>
-          <a class="button-18" href='/surveys' role="button">Survey</a>&nbsp&nbsp&nbsp&nbsp&nbsp
-        </div>
-    </div>
-  <div class ="grid-container container">
-   <div class="grid-item"> <canvas class id="Satis_bar" height = '300px'></canvas></div>
-   <div class="grid-item"><canvas class id="Pie"></canvas> </div>
-   <div class="grid-item"><canvas class id="Projects" height = '300px'></canvas> </div>
+  <div class ="container grid grid-container">
+    <div class = "first-row">
+      <div class="wide grid-item"></div>
+      <div class="grid-item"></div>
+    </div>  
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
   </div> 
 
       
