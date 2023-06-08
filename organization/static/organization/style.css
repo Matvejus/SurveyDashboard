@@ -133,7 +133,7 @@ section.home-top {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 120px 0; }
+    padding: 295px 0; }
     @media (max-width: 1260px) {
       section.home-top .left {
         padding: 60px 0; } }
