@@ -22,16 +22,25 @@ def make_choices(question: Question) -> List[Tuple[str, str]]:
 
 
 class SurveyForm(forms.ModelForm):
-    org_profiles = forms.ModelMultipleChoiceField(
-        queryset=OrgProfile.objects.all(),
-        widget=forms.CheckboxSelectMultiple, 
-        required=False,
-    )
+
+    CHOICES = (("GVR_F", "Government - Federal or state government"),
+               ("GVR_L", "Government - Local agency"),
+               ("NGO", "NGO - National or International"),
+               ("PRIV_MULTI", "Private sector - Multinational Corporation"),
+               ("PRIV_NATIONAL", "Private sector - National Corporation"),
+               ("SMALLHOLDER", "Smallholder producer"),
+               ("PRODUCER", "Producer organization"),
+               ("FARMERS_ASC", "Farmers' association"),
+               ("LABOR_UNION", "Labor union"),
+               ("OTHER", "Other civil society organization")
+           )
+    
+    org_type = forms.MultipleChoiceField(choices=CHOICES, widget=forms.CheckboxSelectMultiple())
 
     class Meta:
         model = Survey
         fields = [
-            'name', 'description', 'org_profiles', 'editable', 'deletable', 
+            'name', 'description', 'org_type', 'editable', 'deletable',
             'duplicate_entry', 'private_response', 'can_anonymous_user'
         ]
 

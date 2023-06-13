@@ -49,11 +49,12 @@
         <div class="chart-wrapper">
           <div class="chart-stage">
             <canvas id="Projects"></canvas>
+            <canvas id="stacked"></canvas>
           </div>
         </div>
         <div class="chart-wrapper">
           <div class="chart-stage">
-            <canvas id="stacked"></canvas>
+            <canvas class id="pie-chart"/>
           </div>
         </div>
         <div class="chart-wrapper">
@@ -73,7 +74,7 @@
         <div class="chart-wrapper">
          
           <div class="chart-stage">
-            <canvas class id="pie-chart"/>
+          
           </div>
 
         </div>
@@ -193,7 +194,7 @@ var myChart = new Chart(ctx, {
     labels: ["January", "February", "March", "April", "May", "June", "July"] ,
     datasets: [{
       label: 'Red',
-      data: [65, 59, 80, 81, 56, 55, 40],
+      data: [65, 59, 80, 60, 56, 55, 40],
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
       borderWidth: 1
@@ -238,14 +239,14 @@ var myChart = new Chart(ctx, {
     data: {
       labels: ["January", "February", "March", "April", "May", "June", "July"],
       datasets: [{
-        label: 'Blue Group',
+        label: 'Blue',
         data: blueData,
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1
       },
       {
-        label: 'Red Group',
+        label: 'Red',
         data: redData,
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
@@ -292,14 +293,14 @@ var myChart = new Chart(ctx, {
     data: {
       labels: ["January", "February", "March", "April", "May", "June", "July"],
       datasets: [{
-        label: 'Blue Group',
+        label: 'Blue',
         data: blueData,
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1
       },
       {
-        label: 'Red Group',
+        label: 'Red',
         data: redData,
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',

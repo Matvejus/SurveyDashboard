@@ -21,7 +21,7 @@ def redirectgroup(request):
     if user.groups.filter(name='Supervisor').exists():
         return redirect('djf_surveys:admin_survey')
     elif user.groups.filter(name='Orchestrator').exists():
-        return redirect('djf_surveys:index')
+        return redirect('organization:profile')
     else:
         return redirect('organization:profile')        
     

@@ -14,8 +14,8 @@ class OrgProfile(models.Model):
         #choice class
         class OrganizationType(models.TextChoices):
              
-             GOVERMENT_FEDERAL = "GVR_F", _("Government - Federal or state government jurisdiction/agency")
-             GOVERMENT_LOCAL = "GVR_L", _("Government - Local agency (e.g. district, municipality, regional)")
+             GOVERMENT_FEDERAL = "GVR_F", _("Government - Federal or state government")
+             GOVERMENT_LOCAL = "GVR_L", _("Government - Local agency")
              NGO = "NGO", _("NGO - National or International")
              PRIVATE_MULTI = "PRIV_MULTI", _("Private sector - Multinational Corporation")
              PRIVATE_NATIONAL = "PRIV_NATIONAL", _("Private sector - National Corporation")
@@ -23,10 +23,10 @@ class OrgProfile(models.Model):
              PRODUCER = "PRODUCER", _("Producer organization")
              FARMERS = "FARMERS_ASC", _("Farmers' association")
              LABOR_UNION = "LABOR_UNION", _("Labor union")
-             OTHER = "OTHER", _("Other civil society organization (e.g. Women Association, Youth Association)")
+             OTHER = "OTHER", _("Other civil society organization")
 
         title = models.CharField(max_length=200, blank=False)
-        org_type = models.CharField(max_length = 20, choices=OrganizationType.choices)
+        org_type = models.CharField(max_length = 250, choices=OrganizationType.choices)
         vision = models.CharField(max_length=250, blank=True)
         num_employees = models.CharField(max_length=20)
         founded = models.PositiveIntegerField(validators=[MinValueValidator(1000), MaxValueValidator(datetime.datetime.now().year)])
@@ -49,7 +49,7 @@ class CollaborationNetwork(models.Model):
     title = models.CharField(max_length=160)
     stage = models.CharField(max_length = 20, choices=NetworkStage.choices)
     orchestrator = models.ForeignKey('users.CustomUser', on_delete=models.DO_NOTHING, related_name='orchestrator')
-    collaborators = models.ManyToManyField('users.CustomUser', related_name='collaborators', blank= True, null = True)
+    collaborators = models.ManyToManyField('users.CustomUser', related_name='collaborators',)
 
     def __str__(self):
             return f"{self.title} - Orchestrator: {self.orchestrator}"

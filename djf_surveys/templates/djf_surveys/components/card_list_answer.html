@@ -29,7 +29,7 @@
             </div>
         {% endif %}
         <cite class="flex items-center mb-8 not-italic">
-            <img src="{{ object.get_user_photo }}" alt="" class="object-cover w-12 h-12 rounded-full"/>
+            <img src="{{ object.user.avatar.url }}" alt="" class="object-cover w-12 h-12 rounded-full"/>
 
             <p class="ml-3 leading-none">
                 <span class="block font-medium"> {{ object.user }} </span>
