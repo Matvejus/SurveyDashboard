@@ -11,6 +11,8 @@ from djf_surveys import app_settings
 from djf_surveys.utils import create_star
 
 
+
+
 TYPE_FIELD = namedtuple(
     'TYPE_FIELD', 'text number radio select multi_select text_area url email date rating'
 )._make(range(10))

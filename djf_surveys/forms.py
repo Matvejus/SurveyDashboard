@@ -32,8 +32,9 @@ class SurveyForm(forms.ModelForm):
                ("PRODUCER", "Producer organization"),
                ("FARMERS_ASC", "Farmers' association"),
                ("LABOR_UNION", "Labor union"),
-               ("OTHER", "Other civil society organization")
+               ("OTHER", "Other civil society organization"),
            )
+   
     
     org_type = forms.MultipleChoiceField(choices=CHOICES, widget=forms.CheckboxSelectMultiple())
 
@@ -41,8 +42,9 @@ class SurveyForm(forms.ModelForm):
         model = Survey
         fields = [
             'name', 'description', 'org_type', 'editable', 'deletable',
-            'duplicate_entry', 'private_response', 'can_anonymous_user'
+            'duplicate_entry', 'private_response', 'can_anonymous_user',
         ]
+
 
 
 class BaseSurveyForm(forms.Form):

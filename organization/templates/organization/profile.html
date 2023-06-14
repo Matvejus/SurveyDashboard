@@ -156,32 +156,46 @@
           });
           
       </script>
+<script>
 
-      <script>
-       var ctx = document.getElementById('Pie').getContext('2d');
+var ctx = document.getElementById('Pie').getContext('2d');
 var myChart = new Chart(ctx, {
-  type: 'doughnut',
+  type: 'polarArea',
   data: {
     labels: ['Red', 'Blue'],
     datasets: [{
       label: 'Completed surveys',
       data: [1, 2],
       backgroundColor: [
-        'rgba(255, 99, 132, 0.2)', // Red
-        'rgba(54, 162, 235, 0.2)'   // Blue
+        'rgba(255, 99, 132, 0.9)', // Red
+        'rgba(54, 162, 235, 0.9)'   // Blue
       ],
       borderWidth: 1
     }]
   },
   options: {
+    responsive: true,
     scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
+      r: {
+        pointLabels: {
+          display: true,
+          centerPointLabels: true,
+          font: {
+            size: 18
+          }
         }
-      }]
+      }
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Polar Area Chart With Centered Point Labels'
+      }
     }
-  }
+  },
 });
      
         
