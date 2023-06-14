@@ -185,14 +185,14 @@ class QuestionForm(forms.ModelForm):
     
     class Meta:
         model = Question
-        fields = ['label', 'key', 'help_text', 'required']
+        fields = ['label', 'key','level','dimension', 'help_text', 'required']
 
 
 class QuestionWithChoicesForm(forms.ModelForm):
     
     class Meta:
         model = Question
-        fields = ['label', 'key', 'choices', 'help_text', 'required']
+        fields = ['label', 'key','level','dimension', 'choices', 'help_text', 'required']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
