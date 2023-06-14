@@ -144,4 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = BASE_DIR / "uploads/"
 MEDIA_URL = "/user-media/"
 
+SURVEY_USER_PHOTO_PROFILE = "self.CustomUser.avatar.url"
+
+
 django_heroku.settings(locals())

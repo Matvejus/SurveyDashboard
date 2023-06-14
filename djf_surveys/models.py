@@ -11,6 +11,8 @@ from djf_surveys import app_settings
 from djf_surveys.utils import create_star
 
 
+
+
 TYPE_FIELD = namedtuple(
     'TYPE_FIELD', 'text number radio select multi_select text_area url email date rating'
 )._make(range(10))
@@ -54,8 +56,8 @@ class Survey(BaseModel):
     duplicate_entry = models.BooleanField(_("mutiple submissions"), default=False, help_text=_("If True, user can resubmit."))
     private_response = models.BooleanField(_("private response"), default=False, help_text=_("If True, only admin and owner can access."))
     can_anonymous_user = models.BooleanField(_("anonymous submission"), default=False, help_text=_("If True, user without authentatication can submit."))
-    org_profiles = models.ManyToManyField('organization.OrgProfile', blank=True, help_text=("Select Organizations that are allowed to take the survey"))
-
+    org_type = models.CharField(_("Organization type"), blank = True, max_length = 200)
+    
     class Meta:
         verbose_name = _("survey")
         verbose_name_plural = _("surveys")
@@ -137,7 +139,7 @@ class UserAnswer(BaseModel):
         return str(self.id)
 
     def get_user_photo(self):
-        default_photo = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+        default_photo = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FSmiley&psig=AOvVaw37yL7OOD0qcGmTVkbRk7Hx&ust=1686701802745000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCMjQxYD8vv8CFQAAAAAdAAAAABAE"
         if app_settings.SURVEY_USER_PHOTO_PROFILE:
             try:
                 return eval(app_settings.SURVEY_USER_PHOTO_PROFILE)

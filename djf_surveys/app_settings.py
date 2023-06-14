@@ -1,10 +1,14 @@
 from django.conf import settings
+from users.models import CustomUser
+
+
+
 # replace master template
 SURVEY_MASTER_TEMPLATE = settings.SURVEY_MASTER_TEMPLATE if hasattr(settings,
                                                                     'SURVEY_MASTER_TEMPLATE') else 'djf_surveys/master.html'
 
 # profile photo path
-SURVEY_USER_PHOTO_PROFILE = settings.SURVEY_USER_PHOTO_PROFILE if hasattr(settings, 'SURVEY_USER_PHOTO_PROFILE') else ""
+SURVEY_USER_PHOTO_PROFILE = 'users.customuser.avatar.url'
 
 # date input format
 DATE_INPUT_FORMAT = settings.DATE_INPUT_FORMAT if hasattr(settings, 'DATE_INPUT_FORMAT') else \

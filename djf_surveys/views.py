@@ -21,14 +21,13 @@ class SurveyListView(ContextTitleMixin, ListView):
     title_page = 'Survey List'
     paginate_by = app_settings.SURVEY_PAGINATION_NUMBER['survey_list']
     paginator_class = NewPaginator
-
+    #edit this function in order to show surveys available for particular org type
     def get_queryset(self):
         query = self.request.GET.get('q')
-        current_user_org_profile = self.request.user.organization
         if query:
-            object_list = self.model.objects.filter(name__icontains=query, org_profiles__in=[current_user_org_profile])
+            object_list = self.model.objects.filter(name__icontains=query)
         else:
-            object_list = self.model.objects.filter(org_profiles__in=[current_user_org_profile])
+            object_list = self.model.objects.all()
         return object_list
 
     def get_context_data(self, **kwargs):
@@ -195,6 +194,7 @@ class DetailResultSurveyView(ContextTitleMixin, DetailView):
 
     def get_sub_title_page(self):
         return self.get_object().survey.description
+        
 
 
 def share_link(request, slug):
