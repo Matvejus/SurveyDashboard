@@ -198,3 +198,4 @@ class QuestionWithChoicesForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['choices'].widget = InlineChoiceField()
         self.fields['choices'].help_text = _("Click Button Add to adding choice")
+        self.fields['dimension'].choices = []  # initially render the dimension dropdown as empty

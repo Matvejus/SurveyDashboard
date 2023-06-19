@@ -1,6 +1,9 @@
 {% extends 'djf_surveys/admins/form.html' %}
 
 {% block extra_js %}
+    <script src="{% static 'djf_surveys/js/dynamic_dropdowns.js' %}"></script>
+
+
     <script>
         var choicesVal = document.getElementById('id_type_field').value;
         var elChoice = document.querySelector("#section_field_id_choices");
