@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from djf_surveys.utils import get_level_field
 
 from djf_surveys import app_settings
 from djf_surveys.utils import create_star
@@ -91,6 +92,10 @@ class Question(BaseModel):
         (TYPE_FIELD.rating, _("Rating"))
     ]
 
+    Level_choices = [(level['id'], level['label']) for level in get_level_field()]
+    Dimension_choices = [(dim['id'], dim['label']) for level in get_level_field() for dim in level['dimensions']]
+    level = models.CharField(max_length=20, choices=Level_choices)
+    dimension = models.CharField(max_length=20, choices=Dimension_choices)
     key = models.CharField(_("key"), max_length=225, unique=True, null=True, blank=True,
                            help_text=_("Unique key for this question, fill in the blank if you want to use for automatic generation."))
     survey = models.ForeignKey(Survey, related_name='questions', on_delete=models.CASCADE, verbose_name=_("survey"))
@@ -114,10 +119,27 @@ class Question(BaseModel):
         verbose_name_plural = _("questions")
         ordering = ["ordering"]
 
+    @property
+    def sub_dimension(self):
+        for level in get_level_field():
+            if level['id'] == self.level:
+                for dimension in level['dimensions']:
+                    if dimension['id'] == self.dimension:
+                        return dimension['sub_dimension']
+        return None
+    
+
     def __str__(self):
         return f"{self.label}-survey-{self.survey.id}"
 
     def save(self, *args, **kwargs):
+        # sub-dimension based on level and dimension
+        for level in get_level_field():
+            if level['id'] == self.level:
+                for dimension in level['dimensions']:
+                    if dimension['id'] == self.dimension:
+                        self.sub_dimension = dimension['sub_dimension']
+                        break
         if self.key:
             self.key = generate_unique_slug(Question, self.key, self.id, "key")
         else:

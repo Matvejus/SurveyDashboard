@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib import messages
+from djf_surveys.utils import get_level_field
 
 from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
 from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD
@@ -169,6 +170,7 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['type_field_id'] = self.type_field_id
+        context['level_dimensions'] = {level['id']: {dim['id']: dim['label'] for dim in level['dimensions']} for level in get_level_field()}
         return context
 
     def get_success_url(self):
