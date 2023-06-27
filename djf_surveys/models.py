@@ -117,17 +117,7 @@ class Question(BaseModel):
     class Meta:
         verbose_name = _("question")
         verbose_name_plural = _("questions")
-        ordering = ["ordering"]
-
-    @property
-    def sub_dimension(self):
-        for level in get_level_field():
-            if level['id'] == self.level:
-                for dimension in level['dimensions']:
-                    if dimension['id'] == self.dimension:
-                        return dimension['sub_dimension']
-        return None
-    
+        ordering = ["ordering"]    
 
     def __str__(self):
         return f"{self.label}-survey-{self.survey.id}"
