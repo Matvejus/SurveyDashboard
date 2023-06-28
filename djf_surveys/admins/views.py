@@ -9,13 +9,14 @@ from django.views.generic.edit import FormMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib import messages
+from django.template.loader import render_to_string
 
 from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
-from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD
+from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Dimension, SubDimension
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.views import SurveyListView
 from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm
@@ -124,6 +125,27 @@ class AdminDeleteSurveyView(DetailView):
         messages.success(request, gettext("Survey %ss succesfully deleted.") % survey.name)
         return redirect("djf_surveys:admin_survey")
 
+    
+def load_dimensions(request):
+    print("Loading dimensions...")
+    level_id = request.GET.get('level')
+    print(f"Received level_id: {level_id}")
+    dimensions = Dimension.objects.filter(level_id=level_id).order_by('label')
+    print(f"Found {len(dimensions)} dimensions")
+    html = render_to_string('djf_surveys/admins/dimension_dropdown_list_options.html', {'dimensions': dimensions})
+    print("Rendered HTML for dimensions")
+    return HttpResponse(html)
+
+def load_subdimensions(request):
+    print("Loading subdimensions...")
+    dimension_id = request.GET.get('dimension')
+    print(f"Received dimension_id: {dimension_id}")
+    subdimensions = SubDimension.objects.filter(dimension_id=dimension_id).order_by('label')
+    print(f"Found {len(subdimensions)} subdimensions")
+    html = render_to_string('djf_surveys/admins/subdimension_dropdown_list_options.html', {'subdimensions': subdimensions})
+    print("Rendered HTML for subdimensions")
+    return HttpResponse(html)
+
 
 def group_required(group_names):
     def check_group(user):
@@ -132,7 +154,7 @@ def group_required(group_names):
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
+@method_decorator([login_required, group_required(['Orchestrator', 'Supervisor'])], name='dispatch')
 class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     template_name = 'djf_surveys/admins/question_form_v2.html'
     success_url = reverse_lazy("djf_surveys:")

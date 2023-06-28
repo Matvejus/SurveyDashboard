@@ -7,7 +7,7 @@ from django.db import transaction
 from django.core.validators import MaxLengthValidator
 
 from django.utils.translation import gettext_lazy as _
-from djf_surveys.models import Answer, TYPE_FIELD, UserAnswer, Question
+from djf_surveys.models import Answer, TYPE_FIELD, UserAnswer, Question, Level, Dimension, SubDimension
 from djf_surveys.widgets import CheckboxSelectMultipleSurvey, RadioSelectSurvey, DateSurvey, RatingSurvey, InlineChoiceField
 from djf_surveys.app_settings import DATE_INPUT_FORMAT, SURVEY_FIELD_VALIDATORS
 from djf_surveys.validators import validate_rating
@@ -193,19 +193,66 @@ class EditSurveyForm(BaseSurveyForm):
                 answer.save()
 
 class QuestionForm(forms.ModelForm):
-    
     class Meta:
         model = Question
-        fields = ['label', 'key','level','dimension', 'help_text', 'required']
+        fields = ('level', 'dimension', 'subdimension', 'key', 'survey', 'label', 'type_field', 'choices', 'help_text', 'required', 'ordering')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['dimension'].queryset = Dimension.objects.none()
+        self.fields['subdimension'].queryset = SubDimension.objects.none()
+
+        if 'level' in self.data:
+            try:
+                level_id = int(self.data.get('level'))
+                self.fields['dimension'].queryset = Dimension.objects.filter(level_id=level_id).order_by('label')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty Dimension queryset
+        elif self.instance.pk:
+            self.fields['dimension'].queryset = self.instance.level.dimensions.order_by('label')
+
+        if 'dimension' in self.data:
+            try:
+                dimension_id = int(self.data.get('dimension'))
+                self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('label')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty SubDimension queryset
+        elif self.instance.pk:
+            self.fields['subdimension'].queryset = self.instance.dimension.sub_dimensions.order_by('label')
 
 
 class QuestionWithChoicesForm(forms.ModelForm):
+    level = forms.ModelChoiceField(queryset=Level.objects.all())
+    dimension = forms.ModelChoiceField(queryset=Dimension.objects.none())
+    subdimension = forms.ModelChoiceField(queryset=SubDimension.objects.none())
     
     class Meta:
         model = Question
-        fields = ['label', 'key','level','dimension', 'choices', 'help_text', 'required']
+        fields = ['label', 'key','level','dimension', 'subdimension', 'choices', 'help_text', 'required']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['choices'].widget = InlineChoiceField()
         self.fields['choices'].help_text = _("Click Button Add to adding choice")
+        self.fields['dimension'].queryset = Dimension.objects.none()
+        self.fields['subdimension'].queryset = SubDimension.objects.none()
+
+        if 'level' in self.data:
+            try:
+                level_id = int(self.data.get('level'))
+                self.fields['dimension'].queryset = Dimension.objects.filter(level_id=level_id).order_by('label')
+            except (ValueError, TypeError):
+                pass  
+
+        elif self.instance.pk:
+            self.fields['dimension'].queryset = self.instance.level.dimensions.order_by('label')
+
+        if 'dimension' in self.data:
+            try:
+                dimension_id = int(self.data.get('dimension'))
+                self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('label')
+            except (ValueError, TypeError):
+                pass  
+
+        elif self.instance.pk:
+            self.fields['subdimension'].queryset = self.instance.dimension.sub_dimensions.order_by('label')
