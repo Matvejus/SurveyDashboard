@@ -11,7 +11,7 @@
             </p>
 
             <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
-                <form method="post">
+                <form method="post" id="QuestionForm" data-dimensions-url="{% url 'djf_surveys:ajax_load_dimensions' %}" data-subdimensions-url="{% url 'djf_surveys:ajax_load_subdimensions' %}" novalidate>
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="mb-5" id="section_field_{{ field.auto_id }}">

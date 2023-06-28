@@ -66,6 +66,8 @@ TEMPLATES = [
             BASE_DIR / "organization" / "static" / "organization",
             BASE_DIR / "Survey" / "static" / "Survey",
             BASE_DIR / "info_pages" / "templates" / "static",
+            BASE_DIR / "surveydashboard" / "djf_surveys" / "templates",
+            BASE_DIR / "djf_surveys" / "templates" / "djf_surveys",
 
         ],
         'APP_DIRS': True,
