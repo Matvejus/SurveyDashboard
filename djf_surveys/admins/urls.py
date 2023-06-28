@@ -15,4 +15,6 @@ urlpatterns = [
     path('question/ordering/', admin_views.AdminChangeOrderQuestionView.as_view(), name='admin_change_order_question'),
     path('download/survey/<str:slug>/', admin_views.DownloadResponseSurveyView.as_view(), name='admin_download_survey'),
     path('summary/survey/<str:slug>/', admin_views.SummaryResponseSurveyView.as_view(), name='admin_summary_survey'),
+    path('ajax/load-dimensions/', admin_views.load_dimensions, name='ajax_load_dimensions'),  # AJAX
+    path('ajax/load-subdimensions/', admin_views.load_subdimensions, name='ajax_load_subdimensions'),  # AJAX
 ]

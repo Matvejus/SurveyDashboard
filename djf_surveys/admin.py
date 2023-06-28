@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Survey, Question, Answer, UserAnswer
+from .models import Survey, Question, Answer, UserAnswer, Level, Dimension, SubDimension
 
 
 class AdminQuestion(admin.ModelAdmin):
@@ -26,7 +26,9 @@ class AdminSurvey(admin.ModelAdmin):
     list_display = ('name', 'slug')
     exclude = ['slug']
 
-
+admin.site.register(Level)
+admin.site.register(Dimension)
+admin.site.register(SubDimension)
 admin.site.register(Survey, AdminSurvey)
 admin.site.register(Question, AdminQuestion)
 admin.site.register(Answer, AdminAnswer)
