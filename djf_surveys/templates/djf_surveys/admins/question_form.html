@@ -3,46 +3,34 @@
 {% block extra_js %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-$("#id_level").change(function () {
-    var url = $("#questionForm").attr("data-dimensions-url");
-    var levelId = $(this).val();
-
-    $.ajax({
-        url: url,
-        data: {
-            'level': levelId
-        },
-        success: function (data) {
-            $("#id_dimension").html("");
-            $.each(data, function(i, item) {
-                $('#id_dimension').append($('<option>', { 
-                    value: item.id,
-                    text : item.label 
-                }));
-            });
-        }
+    $("#id_level").change(function () {
+        var url = $("#QuestionForm").attr("data-dimensions-url");
+        var levelId = $(this).val();
+    
+        $.ajax({
+            url: url,
+            data: {
+                'level': levelId
+            },
+            success: function (data) {
+                $("#id_dimension").html(data);
+            }
+        });
     });
-});
-
-$("#id_dimension").change(function () {
-    var url = $("#questionForm").attr("data-subdimensions-url");
-    var dimensionId = $(this).val();
-
-    $.ajax({
-        url: url,
-        data: {
-            'dimension': dimensionId
-        },
-        success: function (data) {
-            $("#id_subdimension").html("");
-            $.each(data, function(i, item) {
-                $('#id_subdimension').append($('<option>', { 
-                    value: item.id,
-                    text : item.label 
-                }));
-            });
-        }
-    });
-});
+    
+    $("#id_dimension").change(function () {
+        var url = $("#QuestionForm").attr("data-subdimensions-url");
+        var dimensionId = $(this).val();
+    
+        $.ajax({
+            url: url,
+            data: {
+                'dimension': dimensionId
+            },
+            success: function (data) {
+                $("#id_subdimension").html(data);
+            }
+        });
+    });   
 </script>
 {% endblock %}

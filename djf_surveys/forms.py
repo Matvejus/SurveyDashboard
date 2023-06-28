@@ -195,64 +195,39 @@ class EditSurveyForm(BaseSurveyForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ('level', 'dimension', 'subdimension', 'key', 'survey', 'label', 'type_field', 'choices', 'help_text', 'required', 'ordering')
+        fields = ('label', 'key', 'level', 'dimension', 'subdimension', 'help_text', 'required')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['dimension'].queryset = Dimension.objects.none()
         self.fields['subdimension'].queryset = SubDimension.objects.none()
 
-        if 'level' in self.data:
-            try:
-                level_id = int(self.data.get('level'))
-                self.fields['dimension'].queryset = Dimension.objects.filter(level_id=level_id).order_by('label')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty Dimension queryset
+    def clean(self):
+        cleaned_data = super().clean()
+        if 'dimension' in cleaned_data:
+            dimension_id = cleaned_data.get('dimension').id
+            self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
+
         elif self.instance.pk:
-            self.fields['dimension'].queryset = self.instance.level.dimensions.order_by('label')
-
-        if 'dimension' in self.data:
-            try:
-                dimension_id = int(self.data.get('dimension'))
-                self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('label')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty SubDimension queryset
-        elif self.instance.pk:
-            self.fields['subdimension'].queryset = self.instance.dimension.sub_dimensions.order_by('label')
-
-
-class QuestionWithChoicesForm(forms.ModelForm):
-    level = forms.ModelChoiceField(queryset=Level.objects.all())
-    dimension = forms.ModelChoiceField(queryset=Dimension.objects.none())
-    subdimension = forms.ModelChoiceField(queryset=SubDimension.objects.none())
+            self.fields['subdimension'].queryset = self.instance.dimension.subdimension_set.order_by('id')
+        return cleaned_data
     
+class QuestionWithChoicesForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['label', 'key','level','dimension', 'subdimension', 'choices', 'help_text', 'required']
-    
+        fields = ('label', 'key', 'level', 'dimension', 'subdimension', 'choices', 'help_text', 'required')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['choices'].widget = InlineChoiceField()
         self.fields['choices'].help_text = _("Click Button Add to adding choice")
-        self.fields['dimension'].queryset = Dimension.objects.none()
         self.fields['subdimension'].queryset = SubDimension.objects.none()
 
-        if 'level' in self.data:
-            try:
-                level_id = int(self.data.get('level'))
-                self.fields['dimension'].queryset = Dimension.objects.filter(level_id=level_id).order_by('label')
-            except (ValueError, TypeError):
-                pass  
+    def clean(self):
+        cleaned_data = super().clean()
+        if 'dimension' in cleaned_data:
+            dimension_id = cleaned_data.get('dimension').id
+            self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
 
         elif self.instance.pk:
-            self.fields['dimension'].queryset = self.instance.level.dimensions.order_by('label')
-
-        if 'dimension' in self.data:
-            try:
-                dimension_id = int(self.data.get('dimension'))
-                self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('label')
-            except (ValueError, TypeError):
-                pass  
-
-        elif self.instance.pk:
-            self.fields['subdimension'].queryset = self.instance.dimension.sub_dimensions.order_by('label')
+            self.fields['subdimension'].queryset = self.instance.dimension.subdimension_set.order_by('id')
+        return cleaned_data

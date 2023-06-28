@@ -1,3 +1,4 @@
-{% for sub_dimension in sub_dimensions %}
-<option value="{{ sub_dimension.pk }}">{{ sub_dimension.name }}</option>
+<option value="">---------</option>
+{% for subdimension in subdimensions %}
+<option value="{{ subdimension.pk }}">{{ subdimension.id }}</option>
 {% endfor %}

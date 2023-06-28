@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-from django.http import JsonResponse, HttpResponse, Http404
+from django.http import JsonResponse, HttpResponse, Http404, HttpResponseServerError
 from django.contrib import messages
 from django.template.loader import render_to_string
 
@@ -127,24 +127,14 @@ class AdminDeleteSurveyView(DetailView):
 
     
 def load_dimensions(request):
-    print("Loading dimensions...")
     level_id = request.GET.get('level')
-    print(f"Received level_id: {level_id}")
-    dimensions = Dimension.objects.filter(level_id=level_id).order_by('label')
-    print(f"Found {len(dimensions)} dimensions")
-    html = render_to_string('djf_surveys/admins/dimension_dropdown_list_options.html', {'dimensions': dimensions})
-    print("Rendered HTML for dimensions")
-    return HttpResponse(html)
+    dimensions = Dimension.objects.filter(level_id=level_id).order_by('id')
+    return render(request, 'admins/dimension_dropdown_list_options.html', {'dimensions': dimensions})
 
 def load_subdimensions(request):
-    print("Loading subdimensions...")
     dimension_id = request.GET.get('dimension')
-    print(f"Received dimension_id: {dimension_id}")
-    subdimensions = SubDimension.objects.filter(dimension_id=dimension_id).order_by('label')
-    print(f"Found {len(subdimensions)} subdimensions")
-    html = render_to_string('djf_surveys/admins/subdimension_dropdown_list_options.html', {'subdimensions': subdimensions})
-    print("Rendered HTML for subdimensions")
-    return HttpResponse(html)
+    subdimensions = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
+    return render(request, 'admins/sub_dimension_dropdown_list_options.html', {'subdimensions': subdimensions})
 
 
 def group_required(group_names):
@@ -156,15 +146,17 @@ def group_required(group_names):
 
 @method_decorator([login_required, group_required(['Orchestrator', 'Supervisor'])], name='dispatch')
 class AdminCreateQuestionView(ContextTitleMixin, CreateView):
-    template_name = 'djf_surveys/admins/question_form_v2.html'
+    template_name = 'djf_surveys/admins/question_form.html'
     success_url = reverse_lazy("djf_surveys:")
     title_page = _("Add Question")
     survey = None
     type_field_id = None
 
+    
     def dispatch(self, request, *args, **kwargs):
         self.survey = get_object_or_404(Survey, id=kwargs['pk'])
         self.type_field_id = kwargs['type_field']
+        self.object = None  # Add this line
         if self.type_field_id not in TYPE_FIELD:
             raise Http404
         return super().dispatch(request, *args, **kwargs)
@@ -178,11 +170,17 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
+
+        if 'dimension' in form.data:
+            dimension_id = form.data.get('dimension')
+            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id)
+
         if form.is_valid():
             question = form.save(commit=False)
             question.survey = self.survey
             question.type_field = self.type_field_id
             question.save()
+            self.object = question
             messages.success(self.request, gettext("%(page_action_name)s succeeded.") % dict(page_action_name=capfirst(self.title_page.lower())))
             return self.form_valid(form)
         else:
@@ -190,6 +188,8 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        if 'object' not in context:
+            context['object'] = None
         context['type_field_id'] = self.type_field_id
         return context
 
@@ -210,7 +210,7 @@ def group_required(group_names):
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
     model = Question
-    template_name = 'djf_surveys/admins/question_form_v2.html'
+    template_name = 'djf_surveys/admins/question_form.html'
     success_url = SURVEYS_ADMIN_BASE_PATH
     title_page = _("Edit Question")
     survey = None
