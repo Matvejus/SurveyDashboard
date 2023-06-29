@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
 {% endblock %}
 
+
 {% block content %}
 
 <body>
@@ -64,6 +65,10 @@
       
   {% block scripts %}
 
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <script>
     
     var ctx = document.getElementById('polar');
@@ -75,11 +80,16 @@ var myChart = new Chart(ctx, {
       {
         label: 'Network',
         data: [
-          { id: 'COLL-OUTPUT', value: { number: 40, link: `localhost:8000/surveys/dashboard/summary/survey/main/COLL-OUTPUT`, }, },
-          { id: 'RES-MOBIL', value: { number: 40, link: `localhost:8000/surveys/dashboard/summary/survey/main/RES-MOBIL`, }, },
-          { id: 'NET-ACC', value: { number: 40, link: `localhost:8000/surveys/dashboard/summary/survey/main/NET-ACC`, }, },
-          { id: 'POS-REP', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/' }, },
+          { id: 'COLL-OUTPUT', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/COLL-OUTPUT' } },
+          { id: 'RES-MOBIL', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/RES-MOBIL' } },
+          { id: 'NET-ACC', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/NET-ACC' } },
+          { id: 'POS-REP', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/' } },
         ],
+        
+        parsing: {
+          key: 'value.number'
+        },
+
         backgroundColor: [
           'rgba(255, 99, 132, 0.9)', // Red
           'rgba(54, 162, 235, 0.9)',   // Blue
@@ -91,11 +101,16 @@ var myChart = new Chart(ctx, {
       {
         label: 'Organizational',
         data: [
-          { id: 'ACS', value: { number: 80, link: `localhost:8000/surveys/dashboard/summary/survey/main/ACS`, }, },
-          { id: 'ORG-LEARN', value: { number: 80, link: `localhost:8000/surveys/dashboard/summary/survey/main/ORG-LEARN`, }, },
-          { id: 'BUILD-PART', value: { number: 80, link: `localhost:8000/surveys/dashboard/summary/survey/main/BUILD-PART`, }, },
-          { id: 'ACS', value: { number: 80, link: `localhost:8000/surveys/dashboard/summary/survey/main/ACS`, } ,},
+          { id: 'ACS', value: { number: 80, link: 'localhost:8000/surveys/dashboard/summary/survey/main/ACS' } },
+          { id: 'ORG-LEARN', value: { number: 80, link: 'localhost:8000/surveys/dashboard/summary/survey/main/ORG-LEARN' } },
+          { id: 'BUILD-PART', value: { number: 80, link: 'localhost:8000/surveys/dashboard/summary/survey/main/BUILD-PART' } },
+          { id: 'ACS', value: { number: 80, link: 'localhost:8000/surveys/dashboard/summary/survey/main/ACS' } },
         ],
+        
+        parsing: {
+          key: 'value.number'
+        },
+
         backgroundColor: [
           'rgba(255, 99, 132, 0.9)', // Red
           'rgba(54, 162, 235, 0.9)',   // Blue
@@ -107,11 +122,16 @@ var myChart = new Chart(ctx, {
       {
         label: 'Individual',
         data: [
-          { id: 'COLL-OP', value: { number: 120, link: `localhost:8000/surveys/dashboard/summary/survey/main/COLL-OP`, }, },
-          { id: 'SHARE-LEARN', value: { number: 120, link: `localhost:8000/surveys/dashboard/summary/survey/main/SHARE-LEARN`, }, },
-          { id: 'FEI', value: { number: 120, link: `localhost:8000/surveys/dashboard/summary/survey/main/FEI`,},},
-          { id: 'VISIB', value: { number: 120, link: `localhost:8000/surveys/dashboard/summary/survey/main/VISIB`,},},
+          { id: 'COLL-OP', value: { number: 120, link: 'localhost:8000/surveys/dashboard/summary/survey/main/COLL-OP' } },
+          { id: 'SHARE-LEARN', value: { number: 120, link: 'localhost:8000/surveys/dashboard/summary/survey/main/SHARE-LEARN' } },
+          { id: 'FEI', value: { number: 120, link: 'localhost:8000/surveys/dashboard/summary/survey/main/FEI'} },
+          { id: 'VISIB', value: { number: 120, link: 'localhost:8000/surveys/dashboard/summary/survey/main/VISIB'} },
           ],
+
+          parsing: {
+            key: 'value.number'
+          },
+
           backgroundColor: [
           'rgba(255, 99, 132, 0.9)', // Red
           'rgba(54, 162, 235, 0.9)',   // Blue
@@ -122,15 +142,12 @@ var myChart = new Chart(ctx, {
           borderWidth: 2
         },]},
         options: {
-          parsing: {
-            key: 'value.number',
-          },
           responsive: true,
           scale: {display: false},
           scales: {
             r: {
               pointLabels: {
-                display: false,
+                display: true,
                 centerPointLabels: true,
                 font: {
                   size: 24
@@ -138,10 +155,9 @@ var myChart = new Chart(ctx, {
               }
             },
           },
-          onClick: function(e, data) {
-            console.log(data[0]);
-            window.open("localhost:8000/surveys/dashboard/summary/survey/main/")
-           },
+           onClick: function(e, clickData) {
+            console.log(clickData[0]);
+          },
         plugins: {
           labels: {
             render: 'label',
@@ -164,7 +180,7 @@ var myChart = new Chart(ctx, {
 
     <script>
  
-      var ctx = document.getElementById('donut').getContext('2d');
+      var ctx = document.getElementById('donut');
       var myChart = new Chart(ctx, {
         type: 'radar',
         data: {
