@@ -1,74 +1,208 @@
 {% extends 'organization/base.html' %}
 {% load bootstrap5 %}
 {%load static%}
-{% block page_title %}<title>Profile page</title>{% endblock page_title %}
+{% block page_title %}<title>Wheel dash</title>{% endblock page_title %}
 
 {%block css_files%}
-<link rel="stylesheet" href="{% static 'organization/keen-dashboards.css' %}" type="text/css" media="screen">
+{% comment %} <link rel="stylesheet" href="{% static 'organization/keen-dashboards.css' %}" type="text/css" media="screen"> {% endcomment %}
 <link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
+<link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
 {% endblock %}
 
 {% block content %}
 
-
-
-
-
-
 <body>
   <div class = 'page-grid'>
     <div>{% comment %} empty div for sidebar {% endcomment %}</div>
-      <div class='container'>
-        <canvas class id="Pie"/>
+    <div class="grid grid-rows-3 auto-cols-auto	 gap-4">
+      <div class="grid grid-rows-2 gap-4">
+        <div class='container'>
+          <div class="grid grid-cols-3 gap-2">
+          <div class='container'>
+            <h1>15</h1>
+            Total resp</div>
+          <div class='container'>
+            <div class =""><canvas class id="donut"/></div>
+            Radar</div>
+          <div class='container'>
+            <h1>0:04:32</h1>
+            Av. time min.</div>
+       </div>
       </div>
+      <div class='container'>
+         <div class =""><canvas class id="polar"/></div>
+      </div>
+      
+        <table class="container">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Organization</th>
+              <th>Response</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Matvei Mochalov</td>
+              <td>CONESU</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Thomas va Oost</td>
+              <td>CONESU</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Jovan Banduka</td>
+              <td>Accor</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
     </div>
 
       
   {% block scripts %}
 
-<script>
-
-var ctx = document.getElementById('Pie').getContext('2d');
+  <script>
+    
+    var ctx = document.getElementById('polar');
 var myChart = new Chart(ctx, {
   type: 'polarArea',
   data: {
-    labels: ['Red', 'Blue'],
-    datasets: [{
-      label: 'Completed surveys',
-      data: [1, 2],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.9)', // Red
-        'rgba(54, 162, 235, 0.9)'   // Blue
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      r: {
-        pointLabels: {
-          display: true,
-          centerPointLabels: true,
-          font: {
-            size: 18
+    labels: ['Co-creating solutions', 'Establishing legitimacy', 'Brokering relations', 'Facilitating activities'],
+    datasets: [
+      {
+        label: 'Network',
+        data: [
+          { id: 'COLL-OUTPUT', value: { number: 40, link: `localhost:8000/surveys/dashboard/summary/survey/main/COLL-OUTPUT`, }, },
+          { id: 'RES-MOBIL', value: { number: 40, link: `localhost:8000/surveys/dashboard/summary/survey/main/RES-MOBIL`, }, },
+          { id: 'NET-ACC', value: { number: 40, link: `localhost:8000/surveys/dashboard/summary/survey/main/NET-ACC`, }, },
+          { id: 'POS-REP', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/' }, },
+        ],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.9)', // Red
+          'rgba(54, 162, 235, 0.9)',   // Blue
+          'rgba(0, 128, 0, 0.9)', // Green
+          'rgba(255, 255, 0)', // Green
+        ],
+        borderWidth: 1
+      },
+      {
+        label: 'Organizational',
+        data: [
+          { id: 'ACS', value: { number: 80, link: `localhost:8000/surveys/dashboard/summary/survey/main/ACS`, }, },
+          { id: 'ORG-LEARN', value: { number: 80, link: `localhost:8000/surveys/dashboard/summary/survey/main/ORG-LEARN`, }, },
+          { id: 'BUILD-PART', value: { number: 80, link: `localhost:8000/surveys/dashboard/summary/survey/main/BUILD-PART`, }, },
+          { id: 'ACS', value: { number: 80, link: `localhost:8000/surveys/dashboard/summary/survey/main/ACS`, } ,},
+        ],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.9)', // Red
+          'rgba(54, 162, 235, 0.9)',   // Blue
+          'rgba(0, 128, 0, 0.9)', // Green
+          'rgba(255, 255, 0)', // Green
+        ],
+        borderWidth: 2
+      },
+      {
+        label: 'Individual',
+        data: [
+          { id: 'COLL-OP', value: { number: 120, link: `localhost:8000/surveys/dashboard/summary/survey/main/COLL-OP`, }, },
+          { id: 'SHARE-LEARN', value: { number: 120, link: `localhost:8000/surveys/dashboard/summary/survey/main/SHARE-LEARN`, }, },
+          { id: 'FEI', value: { number: 120, link: `localhost:8000/surveys/dashboard/summary/survey/main/FEI`,},},
+          { id: 'VISIB', value: { number: 120, link: `localhost:8000/surveys/dashboard/summary/survey/main/VISIB`,},},
+          ],
+          backgroundColor: [
+          'rgba(255, 99, 132, 0.9)', // Red
+          'rgba(54, 162, 235, 0.9)',   // Blue
+          'rgba(0, 128, 0, 0.9)', // green
+          'rgba(255, 255, 0)', // green
+            
+          ],
+          borderWidth: 2
+        },]},
+        options: {
+          parsing: {
+            key: 'value.number',
+          },
+          responsive: true,
+          scale: {display: false},
+          scales: {
+            r: {
+              pointLabels: {
+                display: false,
+                centerPointLabels: true,
+                font: {
+                  size: 24
+                }
+              }
+            },
+          },
+          onClick: function(e, data) {
+            console.log(data[0]);
+            window.open("localhost:8000/surveys/dashboard/summary/survey/main/")
+           },
+        plugins: {
+          labels: {
+            render: 'label',
+            arc: true,
+            fontColor: '#000',
+            position: 'outside'
+          },
+        }
+      },
+    });
+
+  //  function chartOpen(click) {
+     // const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
+     // console.log(points);
+   // }
+    
+   // ctx.onclick = chartOpen;
+         
+    </script>
+
+    <script>
+ 
+      var ctx = document.getElementById('donut').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['Time', 'Statisfaction', 'Projects', 'Surveys', 'Responses', 'Collaborators'],
+          datasets: [{
+            label: 'Blue',
+            data: [11, 8.0, 17, 10, 23, 15],
+            fill: true,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 0.2)',
+            pointBackgroundColor: 'rgb(255, 99, 132)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(255, 99, 132)'
+          },{
+            label: 'Red',
+            data: [15, 6.0, 11, 8, 17, 10],
+            fill: true,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgb(255, 99, 132)',
+            pointBackgroundColor: 'rgb(255, 99, 132)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(255, 99, 132)'
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
           }
         }
-      }
-    },
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Polar Area Chart With Centered Point Labels'
-      }
-    }
-  },
-});
-     
-</script>
+      });
+      
+  </script>
 
 
 {% endblock scripts %}

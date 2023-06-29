@@ -197,6 +197,13 @@ var myChart = new Chart(ctx, {
     }
   },
 });
+
+function chartOpen(click) {
+  const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
+  console.log(points);
+}
+
+ctx.onclick = chartOpen;
      
         
       </script>
