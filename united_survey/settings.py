@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'united_survey.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "conesuproject",
+        "NAME": "main",
         "USER": "root",
         "HOST": "127.0.0.1",
         "PORT": 3306,
