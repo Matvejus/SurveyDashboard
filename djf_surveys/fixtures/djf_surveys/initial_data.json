@@ -1,0 +1,212 @@
+[
+    {
+        "model": "djf_surveys.level",
+        "pk": "Individual",
+        "fields": {
+            "label": "Individual Level"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Solutions",
+        "fields": {
+            "label": "Co-creating solutions",
+            "level": "Individual"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Collaborateive opportunities",
+        "fields": {
+            "label": "Collaborative opportunities",
+            "dimension": "Solutions"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Activities",
+        "fields": {
+            "label": "Facilitating activities",
+            "level": "Individual"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Sharing and learning",
+        "fields": {
+            "label": "Sharing and learning",
+            "dimension": "Activities"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Partnerships",
+        "fields": {
+            "label": "Brokering partnerships",
+            "level": "Individual"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Fair and equal interactions",
+        "fields": {
+            "label": "Fair and equal interactions",
+            "dimension": "Partnerships"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Legitimacy",
+        "fields": {
+            "label": "Establishing legitimacy",
+            "level": "Individual"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Visibility",
+        "fields": {
+            "label": "Visibility",
+            "dimension": "Legitimacy"
+        }
+    },
+    {
+        "model": "djf_surveys.level",
+        "pk": "Organization",
+        "fields": {
+            "label": "Organizational Level"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Solutions",
+        "fields": {
+            "label": "Co-creating solutions",
+            "level": "Organization"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Adopting collaborative Solutions",
+        "fields": {
+            "label": "Adopting collaborative solutions",
+            "dimension": "Solutions"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Activities",
+        "fields": {
+            "label": "Facilitating activities",
+            "level": "Organization"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Organizational learning",
+        "fields": {
+            "label": "Organizational learning",
+            "dimension": "Activities"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Partnerships",
+        "fields": {
+            "label": "Brokering partnerships",
+            "level": "Organization"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Partnership building",
+        "fields": {
+            "label": "Partnership building",
+            "dimension": "Partnerships"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Legitimacy",
+        "fields": {
+            "label": "Establishing legitimacy",
+            "level": "Organization"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Positive Reputation",
+        "fields": {
+            "label": "Positive reputation",
+            "dimension": "Legitimacy"
+        }
+    },
+    {
+        "model": "djf_surveys.level",
+        "pk": "Network",
+        "fields": {
+            "label": "Network"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Solutions",
+        "fields": {
+            "label": "Co-creating solutions",
+            "level": "Network"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Solutions",
+        "fields": {
+            "label": "Collaborative Output",
+            "dimension": "Solutions"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Activities",
+        "fields": {
+            "label": "Facilitating activities",
+            "level": "Network"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Activities",
+        "fields": {
+            "label": "Resource mobilization",
+            "dimension": "Activities"
+        }
+    },
+    {
+        "model": "djf_surveys.dimension",
+        "pk": "Partnerships",
+        "fields": {
+            "label": "Brokering partnerships",
+            "level": "Network"
+        }
+    },
+    {
+        "model": "djf_surveys.subdimension",
+        "pk": "Network access",
+        "fields": {
+            "label": "Network access",
+            "dimension": "Partnerships"
+        }
+    },
+
+    {
+        "model": "organization.orgprofile",
+        "pk": 1,
+        "fields": {
+            "title": "Organization 1",
+            "org_type": "GOVERMENT_FEDERAL",
+            "vision": "Organization 1 Vision",
+            "num_employees": "50",
+            "founded": 2000,
+            "email": "org1@example.com"
+        }
+    }
+]
