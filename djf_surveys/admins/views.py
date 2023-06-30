@@ -217,9 +217,9 @@ class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
     type_field_id = None
 
     def dispatch(self, request, *args, **kwargs):
-        question = self.get_object()
-        self.type_field_id = question.type_field
-        self.survey = question.survey
+        self.object = self.get_object()
+        self.type_field_id = self.object.type_field
+        self.survey = self.object.survey
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):
@@ -229,8 +229,24 @@ class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
         else:
             return QuestionForm
 
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+
+        if 'dimension' in form.data:
+            dimension_id = form.data.get('dimension')
+            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id)
+
+        if form.is_valid():
+            self.object = form.save()
+            messages.success(self.request, gettext("%(page_action_name)s succeeded.") % dict(page_action_name=capfirst(self.title_page.lower())))
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        if 'object' not in context:
+            context['object'] = None
         context['type_field_id'] = self.type_field_id
         return context
 
@@ -238,8 +254,7 @@ class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
         return reverse("djf_surveys:admin_forms_survey", args=[self.survey.slug])
 
     def get_sub_title_page(self):
-        question = self.get_object()
-        return gettext("Type Field %s") % question.get_type_field_display()
+        return gettext("Type Field %s") % self.object.get_type_field_display()
 
 
 def group_required(group_names):

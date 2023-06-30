@@ -82,7 +82,7 @@ class Level(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.id
+        return self.label
 
 
 class Dimension(models.Model):
