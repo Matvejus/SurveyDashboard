@@ -26,9 +26,26 @@ class AdminSurvey(admin.ModelAdmin):
     list_display = ('name', 'slug')
     exclude = ['slug']
 
-admin.site.register(Level)
-admin.site.register(Dimension)
-admin.site.register(SubDimension)
+class LevelAdmin(admin.ModelAdmin):
+    list_display = ('id', 'label', 'description')
+    search_fields = ('id', 'label')
+
+admin.site.register(Level, LevelAdmin)
+
+class DimensionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'label', 'description', 'level')
+    search_fields = ('id', 'label')
+    list_filter = ('level',)
+
+admin.site.register(Dimension, DimensionAdmin)
+
+class SubDimensionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'label', 'description', 'dimension')
+    search_fields = ('id', 'label')
+    list_filter = ('dimension',)
+
+admin.site.register(SubDimension, SubDimensionAdmin)
+
 admin.site.register(Survey, AdminSurvey)
 admin.site.register(Question, AdminQuestion)
 admin.site.register(Answer, AdminAnswer)

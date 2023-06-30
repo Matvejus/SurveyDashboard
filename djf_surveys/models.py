@@ -77,7 +77,7 @@ class Survey(BaseModel):
         verbose_name_plural = _("surveys")
 
 class Level(models.Model):
-    id = models.CharField(max_length=10, primary_key=True)
+    id = models.CharField(max_length=20, primary_key=True)
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
@@ -86,7 +86,7 @@ class Level(models.Model):
 
 
 class Dimension(models.Model):
-    id = models.CharField(max_length=10, primary_key=True)
+    id = models.CharField(max_length=40, primary_key=True)
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE, related_name='dimensions')
@@ -96,7 +96,7 @@ class Dimension(models.Model):
 
 
 class SubDimension(models.Model):
-    id = models.CharField(max_length=20, primary_key=True)
+    id = models.CharField(max_length=40, primary_key=True)
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     dimension = models.ForeignKey(Dimension, on_delete=models.CASCADE, related_name='sub_dimensions')
