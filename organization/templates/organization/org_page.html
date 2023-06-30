@@ -10,60 +10,448 @@
 {% endblock %}
 
 
+<style type = "text/css">
+  .chart-wrapper {
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 13px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+
+
 {% block content %}
 
-<body>
+<body>  
   <div class = 'page-grid'>
     <div>{% comment %} empty div for sidebar {% endcomment %}</div>
-    <div class="grid grid-rows-3 auto-cols-auto	 gap-4">
-      <div class="grid grid-rows-2 gap-4">
-        <div class='container'>
-          <div class="grid grid-cols-3 gap-2">
-          <div class='container'>
-            <h1>15</h1>
-            Total resp</div>
-          <div class='container'>
-            <div class =""><canvas class id="donut"/></div>
-            Radar</div>
-          <div class='container'>
+    <div class="grid grid-rows-3 grid-cols-6 gap-4">
+      <div class='container row-span-3 col-span-3'>
+        <div class =""><canvas class id="polar"/></div>
+     </div>
+        <div class='col-span-3'>
+          <div class="grid grid-cols-3 gap-4 grid-flow-col auto-cols-max ">
+          <div class='chart-wrapper container'>
+          <div><canvas class="" id="donutChart"/></div>  
+          </div>
+          <div class='chart-wrapper container'>
+            <div class =""><canvas class="" id="donut"/></div>
+          </div>
+          <div class='chart-wrapper container' style ="grid-auto-cols: 100px;">
             <h1>0:04:32</h1>
-            Av. time min.</div>
+            Av. time min.
+          </div>
        </div>
-      </div>
-      <div class='container'>
-         <div class =""><canvas class id="polar"/></div>
-      </div>
-      
-        <table class="container">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Organization</th>
-              <th>Response</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Matvei Mochalov</td>
-              <td>CONESU</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Thomas va Oost</td>
-              <td>CONESU</td>
-              <td>No</td>
-            </tr>
-            <tr>
-              <td>Jovan Banduka</td>
-              <td>Accor</td>
-              <td>Yes</td>
-            </tr>
-          </tbody>
-        </table>
+      </div> 
+          <table class="container row-span-3 col-span-3 w-full border-collapse bg-white text-left text-sm text-gray-500">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">Name</th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">State</th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">Role</th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">Team</th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+              <tr class="hover:bg-gray-50">
+                <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                  <div class="relative h-10 w-10">
+                    <img
+                      class="h-full w-full rounded-full object-cover object-center"
+                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt=""
+                    />
+                    <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
+                  </div>
+                  <div class="text-sm">
+                    <div class="font-medium text-gray-700">Matvei Mochalov</div>
+                    <div class="text-gray-400">mochalov.matvei@gmail.com</div>
+                  </div>
+                </th>
+                <td class="px-6 py-4">
+                  <span
+                    class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                    Active
+                  </span>
+                </td>
+                <td class="px-6 py-4">Full stack</td>
+                <td class="px-6 py-4">
+                  <div class="flex gap-2">
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600"
+                    >
+                      Design
+                    </span>
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-1 text-xs font-semibold text-violet-600"
+                    >
+                      Develop
+                    </span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex justify-end gap-4">
+                    <a x-data="{ tooltip: 'Delete' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </a>
+                    <a x-data="{ tooltip: 'Edite' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                  <div class="relative h-10 w-10">
+                    <img
+                      class="h-full w-full rounded-full object-cover object-center"
+                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt=""
+                    />
+                    <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
+                  </div>
+                  <div class="text-sm">
+                    <div class="font-medium text-gray-700">Thomas van Oost</div>
+                    <div class="text-gray-400">TvO@hva.nl</div>
+                  </div>
+                </th>
+                <td class="px-6 py-4">
+                  <span
+                    class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                    Active
+                  </span>
+                </td>
+                <td class="px-6 py-4">Back end developer</td>
+                <td class="px-6 py-4">
+                  <div class="flex gap-2">
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-1 text-xs font-semibold text-violet-600"
+                    >
+                      Develop
+                    </span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex justify-end gap-4">
+                    <a x-data="{ tooltip: 'Delete' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </a>
+                    <a x-data="{ tooltip: 'Edite' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                  <div class="relative h-10 w-10">
+                    <img
+                      class="h-full w-full rounded-full object-cover object-center"
+                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt=""
+                    />
+                    <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
+                  </div>
+                  <div class="text-sm">
+                    <div class="font-medium text-gray-700">Steven Jobs</div>
+                    <div class="text-gray-400">jobs@sailboatui.com</div>
+                  </div>
+                </th>
+                <td class="px-6 py-4">
+                  <span
+                    class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                    Active
+                  </span>
+                </td>
+                <td class="px-6 py-4">Test</td>
+                <td class="px-6 py-4">
+                  <div class="flex gap-2">
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-600"
+                    >
+                      Product
+                    </span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex justify-end gap-4">
+                    <a x-data="{ tooltip: 'Delete' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </a>
+                    <a x-data="{ tooltip: 'Edite' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                  <div class="relative h-10 w-10">
+                    <img
+                      class="h-full w-full rounded-full object-cover object-center"
+                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt=""
+                    />
+                    <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
+                  </div>
+                  <div class="text-sm">
+                    <div class="font-medium text-gray-700">Steven Jobs</div>
+                    <div class="text-gray-400">jobs@sailboatui.com</div>
+                  </div>
+                </th>
+                <td class="px-6 py-4">
+                  <span
+                    class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-1 text-xs font-semibold text-red-600"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full bg-red-600"></span>
+                    None
+                  </span>
+                </td>
+                <td class="px-6 py-4">Product Designer</td>
+                <td class="px-6 py-4">
+                  <div class="flex gap-2">
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600"
+                    >
+                      Design
+                    </span>
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-600"
+                    >
+                      Product
+                    </span>
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-1 text-xs font-semibold text-violet-600"
+                    >
+                      Develop
+                    </span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex justify-end gap-4">
+                    <a x-data="{ tooltip: 'Delete' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </a>
+                    <a x-data="{ tooltip: 'Edite' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                  <div class="relative h-10 w-10">
+                    <img
+                      class="h-full w-full rounded-full object-cover object-center"
+                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt=""
+                    />
+                    <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
+                  </div>
+                  <div class="text-sm">
+                    <div class="font-medium text-gray-700">Steven Jobs</div>
+                    <div class="text-gray-400">jobs@sailboatui.com</div>
+                  </div>
+                </th>
+                <td class="px-6 py-4">
+                  <span
+                    class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                    Active
+                  </span>
+                </td>
+                <td class="px-6 py-4">Product Designer</td>
+                <td class="px-6 py-4">
+                  <div class="flex gap-2">
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600"
+                    >
+                      Design
+                    </span>
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-600"
+                    >
+                      Product
+                    </span>
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-1 text-xs font-semibold text-violet-600"
+                    >
+                      Develop
+                    </span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex justify-end gap-4">
+                    <a x-data="{ tooltip: 'Delete' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </a>
+                    <a x-data="{ tooltip: 'Edite' }" href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                        x-tooltip="tooltip"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
     </div>
 
       
   {% block scripts %}
+  <script src="{% static 'djf_surveys/css/tailwindcss-3.3.1.js' %}"></script>
+<script src="{% static 'djf_surveys/css/tailwindcss-plugin-3.3.1.js' %}"></script>
+<script src="{% static 'djf_surveys/te-starter/js/tw-elements.umd.min.js' %}"></script>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -96,7 +484,7 @@ var myChart = new Chart(ctx, {
           'rgba(0, 128, 0, 0.9)', // Green
           'rgba(255, 255, 0)', // Green
         ],
-        borderWidth: 1
+        borderWidth: 1,
       },
       {
         label: 'Organizational',
@@ -142,13 +530,16 @@ var myChart = new Chart(ctx, {
           borderWidth: 2
         },]},
         options: {
+          scale: {
+            display: false
+        },
           responsive: true,
-          scale: {display: false},
           scales: {
             r: {
               pointLabels: {
                 display: true,
                 centerPointLabels: true,
+                arc: true,
                 font: {
                   size: 24
                 }
@@ -157,8 +548,12 @@ var myChart = new Chart(ctx, {
           },
            onClick: function(e, clickData) {
             console.log(clickData[0]);
+            window.open('localhost:8000')
           },
         plugins: {
+          legend: {
+            display: false,
+          },
           labels: {
             render: 'label',
             arc: true,
@@ -214,11 +609,143 @@ var myChart = new Chart(ctx, {
                 beginAtZero: true
               }
             }]
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
           }
-        }
+        },
       });
       
   </script>
+
+  <script>
+
+    
+
+
+      var ctx = document.getElementById('donutChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Collaborators', 'Orchestrator', 'Supervisor', 'Advisor'],
+          datasets: [{
+            data: [10, 20, 15, 5], // Dummy dataset values
+            backgroundColor: [
+              'rgb(255, 99, 132, 0.2)',
+              'rgb(54, 162, 235, 0.2)',
+              'rgb(255, 206, 86, 0.2)',
+              'rgb(75, 192, 192, 0.2)'
+            ],
+            borderColor: [
+              'rgb(255, 99, 132, 1)',
+              'rgb(54, 162, 235, 1)',
+              'rgb(255, 206, 86, 1)',
+              'rgb(75, 192, 192, 1)',
+            ],
+            borderWidth: 1,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false,
+            },
+            title: {
+              display: true,
+              text: 'Responses'
+            }
+          },
+        }
+      });
+
+      Chart.pluginService.register({
+        beforeDraw: function(chart) {
+          if (chart.config.options.elements.center) {
+            // Get ctx from string
+            var ctx = chart.chart.ctx;
+      
+            // Get options from the center object in options
+            var centerConfig = chart.config.options.elements.center;
+            var fontStyle = centerConfig.fontStyle || 'Arial';
+            var txt = centerConfig.text;
+            var color = centerConfig.color || '#000';
+            var maxFontSize = centerConfig.maxFontSize || 75;
+            var sidePadding = centerConfig.sidePadding || 20;
+            var sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
+            // Start with a base font of 30px
+            ctx.font = "30px " + fontStyle;
+      
+            // Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+            var stringWidth = ctx.measureText(txt).width;
+            var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
+      
+            // Find out how much the font can grow in width.
+            var widthRatio = elementWidth / stringWidth;
+            var newFontSize = Math.floor(30 * widthRatio);
+            var elementHeight = (chart.innerRadius * 2);
+      
+            // Pick a new font size so it will not be larger than the height of label.
+            var fontSizeToUse = Math.min(newFontSize, elementHeight, maxFontSize);
+            var minFontSize = centerConfig.minFontSize;
+            var lineHeight = centerConfig.lineHeight || 25;
+            var wrapText = false;
+      
+            if (minFontSize === undefined) {
+              minFontSize = 20;
+            }
+      
+            if (minFontSize && fontSizeToUse < minFontSize) {
+              fontSizeToUse = minFontSize;
+              wrapText = true;
+            }
+      
+            // Set font settings to draw it correctly.
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+            var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+            ctx.font = fontSizeToUse + "px " + fontStyle;
+            ctx.fillStyle = color;
+      
+            if (!wrapText) {
+              ctx.fillText(txt, centerX, centerY);
+              return;
+            }
+      
+            var words = txt.split(' ');
+            var line = '';
+            var lines = [];
+      
+            // Break words up into multiple lines if necessary
+            for (var n = 0; n < words.length; n++) {
+              var testLine = line + words[n] + ' ';
+              var metrics = ctx.measureText(testLine);
+              var testWidth = metrics.width;
+              if (testWidth > elementWidth && n > 0) {
+                lines.push(line);
+                line = words[n] + ' ';
+              } else {
+                line = testLine;
+              }
+            }
+      
+            // Move the center up depending on line height and number of lines
+            centerY -= (lines.length / 2) * lineHeight;
+      
+            for (var n = 0; n < lines.length; n++) {
+              ctx.fillText(lines[n], centerX, centerY);
+              centerY += lineHeight;
+            }
+            //Draw text in center
+            ctx.fillText(line, centerX, centerY);
+          }
+        }
+      });
+  </script>
+
 
 
 {% endblock scripts %}

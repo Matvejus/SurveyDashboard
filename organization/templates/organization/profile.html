@@ -197,13 +197,6 @@ var myChart = new Chart(ctx, {
     }
   },
 });
-
-function chartOpen(click) {
-  const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
-  console.log(points);
-}
-
-ctx.onclick = chartOpen;
      
         
       </script>
@@ -352,7 +345,7 @@ var myChart = new Chart(ctx, {
 <script>
   var ctx = document.getElementById('pie-chart').getContext('2d');
   var myChart = new Chart(ctx, {
-    type: 'pie',
+    type: 'bar',
     data: {
       labels: ['Collaborators', 'Orchestrator', 'Supervisor', 'Advisor'],
       datasets: [{
@@ -376,7 +369,7 @@ var myChart = new Chart(ctx, {
       responsive: true,
       plugins: {
         legend: {
-          position: 'top',
+          display: false,
         },
         title: {
           display: true,
