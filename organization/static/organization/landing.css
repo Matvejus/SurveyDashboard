@@ -350,8 +350,9 @@
   all: unset;
   /* Define your positioning and width */
   position: absolute;
-  top: 600px;
-  left: 200px;
-  width: 1000px;
+  top: 100px;
+  left: 650px;
+  width: 950px;
+  transform: scale(0.75);
   /* You might also need to define left or right property to position your element horizontally */
 }
