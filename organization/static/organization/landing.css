@@ -339,3 +339,13 @@
   border-style: solid;
   border-color: black;
 }
+
+.noStyle {
+  /* Reset/Override styles */
+  all: unset;
+  /* Define your positioning and width */
+  position: absolute;
+  top: 800px;
+  width: 1000px;
+  /* You might also need to define left or right property to position your element horizontally */
+}
