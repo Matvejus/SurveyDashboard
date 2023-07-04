@@ -30,7 +30,7 @@
   <div class = 'page-grid'>
     <div>{% comment %} empty div for sidebar {% endcomment %}</div>
     <div class="grid grid-rows-3 grid-cols-6 gap-4">
-      <div class='container row-span-3 col-span-3'>
+      <div class='chart-wrapper container row-span-3 col-span-3'>
         <div class =""><canvas class id="polar"/></div>
      </div>
         <div class='col-span-3'>
@@ -47,7 +47,7 @@
           </div>
        </div>
       </div> 
-          <table class="container row-span-3 col-span-3 w-full border-collapse bg-white text-left text-sm text-gray-500">
+          <table class="chart-wrapper container row-span-3 col-span-3 w-full border-collapse bg-white text-left text-sm text-gray-500">
             <thead class="bg-gray-50">
               <tr>
                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">Name</th>
@@ -480,13 +480,29 @@ var myChart = new Chart(ctx, {
         },
 
         backgroundColor: [
-          'rgba(255, 99, 132, 0.9)', // Red
-          'rgba(54, 162, 235, 0.9)',   // Blue
-          'rgba(0, 128, 0, 0.9)', // Green
-          'rgba(255, 255, 0)', // Green
+        "#FFD041",
+    
         ],
-        borderWidth: 1,
-        borderColor: 'rgba(255, 99, 132, 0.9)', // Red,
+        borderWidth: 0,
+      },
+      {
+        label: 'Network Text',
+        data: [
+          { id: 'COLL-OUTPUT', value: { number: 60, link: 'localhost:8000/surveys/dashboard/summary/survey/main/COLL-OUTPUT' } },
+          { id: 'RES-MOBIL', value: { number: 60, link: 'localhost:8000/surveys/dashboard/summary/survey/main/RES-MOBIL' } },
+          { id: 'NET-ACC', value: { number: 60, link: 'localhost:8000/surveys/dashboard/summary/survey/main/NET-ACC' } },
+          { id: 'POS-REP', value: { number: 60, link: 'localhost:8000/surveys/dashboard/summary/survey/main/' } },
+        ],
+        
+        parsing: {
+          key: 'value.number'
+        },
+
+        backgroundColor: [
+        "#F4D8A5",
+    
+        ],
+        borderWidth: 0,
       },
       {
         label: 'Organizational',
@@ -502,12 +518,9 @@ var myChart = new Chart(ctx, {
         },
 
         backgroundColor: [
-          'rgba(255, 99, 132, 0.9)', // Red
-          'rgba(54, 162, 235, 0.9)',   // Blue
-          'rgba(0, 128, 0, 0.9)', // Green
-          'rgba(255, 255, 0)', // Green
+        "#FFFFFF",
         ],
-        borderWidth: 1,
+        borderWidth: 5,
         borderColor: 'rgba(255, 99, 132, 0.9)', // Red,
       },
       {
@@ -524,14 +537,30 @@ var myChart = new Chart(ctx, {
           },
 
           backgroundColor: [
-          'rgba(255, 99, 132, 0.9)', // Red
-          'rgba(54, 162, 235, 0.9)',   // Blue
-          'rgba(0, 128, 0, 0.9)', // green
-          'rgba(255, 255, 0)', // green
+          "#FFFFFF",
             
           ],
-          borderWidth: 2,
+          borderWidth: 5,
           borderColor: 'rgba(255, 99, 132, 0.9)', // Red,
+        },
+        {
+          label: 'Levels',
+          data: [
+            { id: 'COLL-OUTPUT', value: { number: 140, link: 'localhost:8000/surveys/dashboard/summary/survey/main/COLL-OUTPUT' } },
+            { id: 'RES-MOBIL', value: { number: 140, link: 'localhost:8000/surveys/dashboard/summary/survey/main/RES-MOBIL' } },
+            { id: 'NET-ACC', value: { number: 140, link: 'localhost:8000/surveys/dashboard/summary/survey/main/NET-ACC' } },
+            { id: 'POS-REP', value: { number: 140, link: 'localhost:8000/surveys/dashboard/summary/survey/main/' } },
+          ],
+          
+          parsing: {
+            key: 'value.number'
+          },
+  
+          backgroundColor: [
+          "#F4D8A5",
+      
+          ],
+          borderWidth: 0,
         },]},
         options: {
           scale: {
@@ -551,12 +580,15 @@ var myChart = new Chart(ctx, {
             },
           },
            onClick: function(e, clickData) {
-            console.log(clickData[0]);
+            var activePoints = myChart.getElementsAtEvent(e);
+           var selectedIndex = activePoints[0]._index;
+           console.log(this.data.datasets[0].data[selectedIndex]);
+
             //window.open('http://localhost:8000/surveys/dashboard/summary/survey/main/')
           },
         plugins: {
           legend: {
-            display: false,
+            display: true,
           },
           labels: {
             render: 'label',
@@ -667,6 +699,42 @@ var myChart = new Chart(ctx, {
 
       
   </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script>
+  // Wait for the DOM content to load
+document.addEventListener("DOMContentLoaded", function() {
+  // Get all the grid items
+  var gridItems = document.querySelectorAll(".chart-wrapper");
+
+  // Loop through each grid item
+  gridItems.forEach(function(item) {
+    // Create a timeline for the animation
+    var tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: item,
+        start: "top 80%", // Adjust the scroll trigger start position as needed
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    // Define the animation
+    tl.fromTo(
+      item,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 }
+    );
+
+    // Add hover effect
+    item.addEventListener("mouseenter", function() {
+      gsap.to(item, { scale: 1.05, duration: 0.3 });
+    });
+
+    item.addEventListener("mouseleave", function() {
+      gsap.to(item, { scale: 1, duration: 0.3 });
+    });
+  });
+});
+</script>
 
 
 

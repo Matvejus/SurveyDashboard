@@ -2,7 +2,7 @@
 @import url("https://use.typekit.net/gcr6xms.css");
 body {
   color: #707070;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 300; }
 
 .homepage-header, .single-header {
@@ -93,11 +93,13 @@ circle.circle-animation {
     -moz-transform: rotate(360deg); } }
 
 section.home-top {
-  margin-top: 60px; }
+  margin-top: 0px;
+  height: 100vh;
+ }
   section.home-top .background {
     position: absolute;
-    width: 50%;
-    height: 40%;
+    width: 100%;
+    height: 50%;
     right: 0;
     background-size: contain;
     background-position: center;
@@ -132,13 +134,13 @@ section.home-top {
   section.home-top .left {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     padding: 295px 0; }
     @media (max-width: 1260px) {
       section.home-top .left {
         padding: 60px 0; } }
     section.home-top .left .maintext {
-      flex-basis: 30%;
+      flex-basis: 10%;
       font-size: 1.5rem;
       padding-bottom: 20px; }
     section.home-top .left .subtext {
@@ -1480,4 +1482,8 @@ table {
 
 li {
   padding-bottom: 10px;
+}
+
+.bg-my-pink {
+  background-color: #C06A99;
 }

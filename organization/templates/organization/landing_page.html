@@ -29,16 +29,9 @@
 
 	<script type = "text/javascript" src = "https://www.gstatic.com/charts/loader.js">
 	</script>
-	<script type = "text/javascript">
-	google.charts.load('current', { 'packages': ['corechart','line','table', 'geochart'] });    
-	</script>
+  <script src="https://cdn.tailwindcss.com"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script src="https://kit.fontawesome.com/731b8140c4.js" crossorigin="anonymous"></script>
-	
-	
-	
-	
-	
 
 	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="DOI Foundation WIP site">
 
@@ -48,6 +41,7 @@
 	<link rel="apple-touch-icon-precomposed" href="/images/favicons/apple-touch-icon.png">
 	<link rel="apple-touch-icon-precomposed" sizes="192x192" href="/images/favicons/android-chrome-192x192.png">
 	<link rel="apple-touch-icon-precomposed" sizes="512x512" href="/images/favicons/android-chrome-512x512.png">
+  <link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
   <link rel="stylesheet" href='style.css' >  
 </head>
 <body>
@@ -126,7 +120,9 @@
         
         
 <section class="home-top">
-     <div class="background" style="background-image:url(/images/logos/dash-anim.gif); padding-bottom:20px"></div>
+     <div class="background">
+      <img src="{% static 'organization/images/elipse.png'%}" style="max-width: 60%;"/>      
+     </div>
      
     <div class="row">
         <div class="col left">
@@ -139,9 +135,33 @@
             </div>
         </div>
         <div class="col right">
-            
+          <img src="{% static 'organization/images/collab.svg'%}" style="max-width: 100%;"/> 
         </div>
-
+        
+    </div>
+    {% comment %} <div class="flex flex-nowrap overflow-x-auto space-x-15 bg-danger-500 justify-end mt-auto">
+      <section class="flex-shrink-10 object-cover object-center">
+        <span><img src="{% static 'organization/images/MVO.JPG' %}" class="h-20" alt=""/></span>
+      </section>
+      <section class="flex-shrink-10 object-cover object-center">
+        <span><img src="{% static 'organization/images/kuy.PnG' %}" class="h-20" alt=""/></span>
+      </section>
+      <section class="flex-shrink-10 object-cover object-center">
+        <span><img src="{% static 'organization/images/art.PnG' %}" class="h-20" alt=""/></span>
+      </section>
+      <section class="flex-shrink-10 object-cover object-center">
+        <span><img src="{% static 'organization/images/modint.PnG' %}" class="object-scale-down h-20" alt=""/></span>
+      </section>
+      <section class="flex-shrink-10 object-cover object-center">
+        <span><img src="{% static 'organization/images/circle.PnG' %}" class="h-20" alt=""/></span>
+      </section>
+      <section class="flex-shrink-10 object-cover object-center">
+        <span><img src="{% static 'organization/images/msm.PnG' %}" class="h-20" alt=""/></span>
+      </section>
+      <section class="flex-shrink-10 object-cover object-center">
+        <span><img src="{% static 'organization/images/mud.PnG' %}" class="h-20" alt=""/></span>
+      </section> fucking flex bar that cant be aligned to the bottom of the screen
+     {% endcomment %}
     </div>
 </section>
 
@@ -206,24 +226,24 @@
 
 
         
-          <section class="how-many">
-    <div class="row titlerow">
-        <h2 class="title">How many surveys have been taken?</h2>
-    </div>
-    <div class="row numbers">
-        <div class="col">
-            <span id='resolutions_clock_count' class='bignumber'></span>
-            <span class='subtext'>Total passed surveys on CONESU platform (all time)</span>          
-        </div>
-    </div>    
-    <div class="row numbers">
-        <div class="col">
-            <span id='uptime_percent' class='bignumber'></span>
-            <span class='subtext'>Uptime over the last 90 days</span>          
-            <p class='footnote'><span id='resolutions_clock_rate' class='smallnumber'></span></p>
-        </div>
-    </div>
-    <div id="el"></div>
+<section class="how-many">
+  <div class="row titlerow">
+      <h2 class="title">How many surveys have been taken?</h2>
+  </div>
+  <div class="row numbers">
+      <div class="col">
+        <span id="resolutions_clock_count" class="bignumber">462</span>
+          <span class='subtext'>Total passed surveys on CONESU platform (all time)</span>          
+      </div>
+  </div>    
+  <div class="row numbers">
+      <div class="col">
+          <span id='uptime_percent' class='bignumber'>100%</span>
+          <span class='subtext'>Uptime over the last 90 days</span>          
+          <p class='footnote'><span id='resolutions_clock_rate' class='smallnumber'></span></p>
+      </div>
+  </div>
+  <div id="el"></div>
 </section>
 
         
@@ -266,6 +286,27 @@
         
       </div>
     </main>
+
+    <script>
+      function getRandomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+    
+      function updateCounter() {
+        var counterElement = document.getElementById('resolutions_clock_count');
+        var currentValue = parseInt(counterElement.innerHTML);
+        var randomIncrement = getRandomNumber(1, 10);
+        var newValue = currentValue + randomIncrement;
+        counterElement.innerHTML = newValue;
+    
+        // Update the counter again after a random delay (between 500ms and 2000ms)
+        var randomDelay = getRandomNumber(1500, 4000);
+        setTimeout(updateCounter, randomDelay);
+      }
+    
+      // Start the counter
+      updateCounter();
+    </script>
     
     <script>
 
