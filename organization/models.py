@@ -54,24 +54,6 @@ class CollaborationNetwork(models.Model):
     def __str__(self):
             return f"{self.title} - Orchestrator: {self.orchestrator}"
 
-
-#Basic survey model. It now stores both questions and answers, this is a simple solution that needs to be rebuild.
-class TestSurvey(models.Model):
-    STUDENT = 'STUD'
-    EMPLOYEE = 'EMP'
-    POSITION_CHOICE = [
-            (STUDENT, 'Student'),
-            (EMPLOYEE, 'Employee'),]
-    
-    organization = models.ForeignKey(OrgProfile, on_delete= models.CASCADE)
-    satsified = models.IntegerField( validators=[MinValueValidator(1), MaxValueValidator(10)])
-    period = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(40)])
-    occupation = models.CharField(max_length=10, choices=POSITION_CHOICE)
-    participant = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name_plural = 'Surveys'
-
     
 #Model for contact form on landing page. Might create an abstract user model to store often used fields
 class Contact(models.Model):
