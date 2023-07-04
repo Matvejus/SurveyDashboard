@@ -31,8 +31,7 @@
 <body>  
   <div class = 'page-grid'>
     <div>{% comment %} empty div for sidebar {% endcomment %}</div>
-<<<<<<< HEAD
-    <div class="grid grid-rows-3 grid-cols-6 gap-4">
+  {% comment %}   <div class="grid grid-rows-3 grid-cols-6 gap-4">
       <div class='chart-wrapper container row-span-3 col-span-3'>
         <div class =""><canvas class id="polar"/></div>
      </div>
@@ -40,8 +39,7 @@
           <div class="grid grid-cols-3 gap-4 grid-flow-col auto-cols-max ">
           <div class='chart-wrapper container'>
           <div><canvas class="" id="donutChart"/></div>  
-          </div>
-=======
+          </div> {% endcomment %}
       <div class="grid grid-rows-3 grid-cols-6 gap-4">
         <div class='container row-span-3 col-span-3'>
           <div class =""><canvas class id="polar"/></div>
@@ -51,7 +49,6 @@
               <div class='chart-wrapper container'>
             <div><canvas class="Responses" id="donutChart"/></div>  
         </div>
->>>>>>> abb91b13fb3f51ad775d143a39cc61f5bf48e868
           <div class='chart-wrapper container'>
             <div class =""><canvas class="" id="donut"/></div>
           </div>
@@ -60,9 +57,7 @@
               Av. time min.
             </div>
           </div>
-<<<<<<< HEAD
        </div>
-      </div> 
           <table class="chart-wrapper container row-span-3 col-span-3 w-full border-collapse bg-white text-left text-sm text-gray-500">
             <thead class="bg-gray-50">
               <tr>
@@ -462,10 +457,8 @@
             </tbody>
           </table>
         </div>
-=======
         </div> 
       </div>
->>>>>>> abb91b13fb3f51ad775d143a39cc61f5bf48e868
     </div>
   </div>
 
@@ -818,7 +811,7 @@
       
   </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-<script>
+{% comment %} <script>
   // Wait for the DOM content to load
 document.addEventListener("DOMContentLoaded", function() {
   // Get all the grid items
@@ -852,7 +845,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 });
-</script>
+</script> {% endcomment %}
 
 
 
