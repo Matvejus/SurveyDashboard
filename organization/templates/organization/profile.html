@@ -80,10 +80,9 @@
   </div>
 
   <div class="buttons">
-    <a class="button-18 button-1" href='/surveys' role="button">Survey</a>
-    <a class="button-18 button-2" href='/surveys' role="button">Works</a>
-    <a class="button-18 button-3" href='/surveys' role="button">Knop4</a>
-    <a class="button-18 button-4" href='/surveys' role="button">Snuif</a>
+    <a class="button-18 button-1" href={% url "djf_surveys:index" %} role="button">Survey</a>
+    <a class="button-18 button-2" href='{% url "organization:orgpage" org_id=org.id %}' role="button">Dashboard</a>
+    <a class="button-18 button-4" href={% url "users:edit_profile" %} role="button">Edit Profile</a>
     <!-- Additional buttons as needed -->
   </div>
 </div>
