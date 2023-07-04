@@ -7,8 +7,6 @@
   flex-direction: column;
   align-items: space-evenly;
   background: #ffffff;
-  width: 1200px;
-  height: 1500px;
   position: relative;
   box-shadow: var(
     --card-shadowlight-box-shadow,
@@ -55,7 +53,7 @@
 }
 
 .UserAvatar, .MainAvatar {
-  width: 300px;
+  width: 200px;
   height: 200px;
   margin-left: 130px;
   margin-top: 20px;
@@ -63,7 +61,7 @@
 }
 
 .UserAvatar {
-  border-radius: 35%;
+  border-radius: 43%;
   box-shadow: var(
     --card-shadowlight-box-shadow,
     3px 9px 18px -10px rgba(0, 0, 0, 0.5)

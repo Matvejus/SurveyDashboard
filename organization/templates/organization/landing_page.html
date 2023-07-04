@@ -135,7 +135,7 @@
             </div>
         </div>
         <div class="col right">
-          <img src="{% static 'organization/images/collab.svg'%}" style="max-width: 100%;"/> 
+          <img src="{% static 'organization/images/collab.svg'%}" style="max-width: 100%; padding-top: 96px;"/> 
         </div>
         
     </div>
@@ -226,36 +226,30 @@
 
 
         
-<section class="how-many">
+<section class="how-many bg-slate-100">
   <div class="row titlerow">
-      <h2 class="title">How many surveys have been taken?</h2>
+      <h2 class="flex justify-center text-2xl pb-5">How many surveys have been taken?</h2>
   </div>
-  <div class="row numbers">
-      <div class="col">
-        <span id="resolutions_clock_count" class="bignumber">462</span>
-          <span class='subtext'>Total passed surveys on CONESU platform (all time)</span>          
-      </div>
+  <div class="justify-center items-center flex flex-col gap-3 pb-5" >
+        <span id="resolutions_clock_count" class=" font-semibold text-8xl ">637</span>
+          <span class="subtext">Total passed surveys on CONESU platform (all time)</span>          
   </div>    
-  <div class="row numbers">
-      <div class="col">
-          <span id='uptime_percent' class='bignumber'>100%</span>
-          <span class='subtext'>Uptime over the last 90 days</span>          
-          <p class='footnote'><span id='resolutions_clock_rate' class='smallnumber'></span></p>
-      </div>
+  <div class="justify-center items-center flex flex-col gap-3">
+          <span id="uptime_percent" class="font-semibold text-8xl ">100%</span>
+          <span class="subtext">Uptime over the last 90 days</span>          
   </div>
-  <div id="el"></div>
 </section>
 
         
 
         
-<section class="home-resolve" style="background-image:url(/images/dot-pattern.svg);">
+<section class="home-resolve">
     <div class="row">
         <div class="col left">
             <h2 class="title">CONTACT US</h2>
 <!--             <div class="maintext">Type or paste a known DOI name exactly—including its prefix and suffix—into the text box below and then &lsquo;submit&rsquo; to resolve it.</div>
  -->            <div class="form">
-                <form method="post" action="https://doi.org" id="resolveID" accept-charset="utf-8">
+                <form method="post" action="" id="resolveID" accept-charset="utf-8">
 
                    
                     <input class='input-content' type="text" name="hdl" id="nameID" placeholder="Your@email.com">
