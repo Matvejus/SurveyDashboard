@@ -11,7 +11,7 @@
     <meta http-equiv="cache-control" content="no-store" />
     <meta http-equiv="expires" content="-1" />
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
-    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv=å"pragma" content="no-cache" />
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
@@ -53,8 +53,9 @@
       body {
         font-family: Arial, Helvetica, sans-serif;
       }
-
-      
+      .person-profile {
+        margin-left: 220px; /* Adjust based on the width of your sidebar */
+      }  
     </style>
 
   </head>
@@ -90,15 +91,14 @@
             <hr>
             <div class="dropdown">
               <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{user.avatar.url}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                <img src="{{user.avatar.url}}" alt="" width="48" height="48" class="rounded-circle me-2">
                 <strong>{{f_name}}</strong>
               </a>
               <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                 <li><a class="dropdown-item" href="#">New project...</a></li>
-                <li><a class="dropdown-item" href={% url 'users:edit_profile'%}>Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item" href={% url 'users:edit_profile'%}>Edit Profile</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href='http://127.0.0.1:5500/landing_page.html'>Sign out</a></li>
+                <li><a class="dropdown-item" href={% url 'organization:index' %}>Sign out</a></li>
               </ul>
             </div>
           </div>
@@ -106,8 +106,8 @@
         
       {% endblock %}
 
-        {% block content %}
+      {% block content %}
     </div>
-        {% endblock %}
+      {% endblock %}
     </body>
 </html>

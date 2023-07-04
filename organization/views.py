@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView
 from .forms import TestSurveyForm, ContactForm
 from .models import OrgProfile, TestSurvey
-from django.db.models import Avg, Q, Count, F
+from django.db.models import Avg, Count, OuterRef, Exists
 from users.models import CustomUser
+from djf_surveys.models import UserAnswer
  
 
 # Create your views here.
@@ -98,38 +99,24 @@ def Testsurvey(request):
     return render(request, 'organization/survey.html', context)
 
 def profile(request):
-    user = CustomUser.objects.get(id=request.user.id) #Returns user info
+    user = get_object_or_404(CustomUser, id=request.user.id) 
+    org = user.organization  
+    network = user.collaboration_network 
+    collaborators = CustomUser.objects.filter(collaboration_network=network).exclude(id=user.id)
 
-    survey = TestSurvey.objects.all()#Returns all survey data
+    # Subquery that checks if a user answer exists for each user.
+    has_answer = UserAnswer.objects.filter(user=OuterRef('pk')).values('user')
 
-    survey_satisfaction = survey.aggregate(
-    user_satisfaction=Avg('satsified', filter=Q(participant_id=request.user.id)),
-    avg_satisfaction=Avg('satsified', filter=~Q(participant_id=request.user.id))
-    )
+    # Annotate each collaborator with whether they have an answer or not.
+    collaborators = collaborators.annotate(has_answer=Exists(has_answer))
 
-    org_count = survey.filter(participant_id = request.user.id).values('organization').annotate(count = Count('organization'))   
-    #instead of the list with values separated by comma, for loop in profile html gives unseparated numbers
-    #easier to send the data in right format directly to html
-    passed_orgs = [i['organization'] for i in org_count]
-    passed_times = [i['count'] for i in org_count]
-
-    all_surv = survey.filter(participant_id=request.user.id).values()    
-    #for loop for chart.js
-    org_label = [i['organization_id'] for i in all_surv]              
-    surv_data = [i['satsified'] for i in all_surv]              
-    
-
-    context ={
-        'user':user,
-        'surv_satis': survey_satisfaction,
-        'passed_orgs': passed_orgs,
-        'passed_times':passed_times,
-        'org_label':org_label,
-        'surv_data':surv_data,
-        'org_count': org_count,
+    context = {
+        'user': user,
+        'org': org, 
+        'network': network,
+        'collaborators': collaborators,
     }
 
-    
     return render(request, 'organization/profile.html', context)
 
 

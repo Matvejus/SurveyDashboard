@@ -29,6 +29,7 @@
 <body>  
   <div class = 'page-grid'>
     <div>{% comment %} empty div for sidebar {% endcomment %}</div>
+<<<<<<< HEAD
     <div class="grid grid-rows-3 grid-cols-6 gap-4">
       <div class='chart-wrapper container row-span-3 col-span-3'>
         <div class =""><canvas class id="polar"/></div>
@@ -38,13 +39,26 @@
           <div class='chart-wrapper container'>
           <div><canvas class="" id="donutChart"/></div>  
           </div>
+=======
+      <div class="grid grid-rows-3 grid-cols-6 gap-4">
+        <div class='container row-span-3 col-span-3'>
+          <div class =""><canvas class id="polar"/></div>
+        </div>
+          <div class='col-span-3'>
+            <div class="grid grid-cols-3 gap-4 grid-flow-col auto-cols-max ">
+              <div class='chart-wrapper container'>
+            <div><canvas class="" id="donutChart"/></div>  
+        </div>
+>>>>>>> abb91b13fb3f51ad775d143a39cc61f5bf48e868
           <div class='chart-wrapper container'>
             <div class =""><canvas class="" id="donut"/></div>
           </div>
-          <div class='chart-wrapper container' style ="grid-auto-cols: 100px;">
-            <h1>0:04:32</h1>
-            Av. time min.
+            <div class='chart-wrapper container' style ="grid-auto-cols: 100px;">
+              <h1>0:04:32</h1>
+              Av. time min.
+            </div>
           </div>
+<<<<<<< HEAD
        </div>
       </div> 
           <table class="chart-wrapper container row-span-3 col-span-3 w-full border-collapse bg-white text-left text-sm text-gray-500">
@@ -446,26 +460,31 @@
             </tbody>
           </table>
         </div>
+=======
+        </div> 
+      </div>
+>>>>>>> abb91b13fb3f51ad775d143a39cc61f5bf48e868
     </div>
+  </div>
 
       
   {% block scripts %}
   <script src="{% static 'djf_surveys/css/tailwindcss-3.3.1.js' %}"></script>
-<script src="{% static 'djf_surveys/css/tailwindcss-plugin-3.3.1.js' %}"></script>
-<script src="{% static 'djf_surveys/te-starter/js/tw-elements.umd.min.js' %}"></script>
+  <script src="{% static 'djf_surveys/css/tailwindcss-plugin-3.3.1.js' %}"></script>
+  <script src="{% static 'djf_surveys/te-starter/js/tw-elements.umd.min.js' %}"></script>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <script>
+<script>
     
-    var ctx = document.getElementById('polar');
-var myChart = new Chart(ctx, {
-  type: 'polarArea',
-  data: {
-    labels: ['Co-creating solutions', 'Establishing legitimacy', 'Brokering relations', 'Facilitating activities'],
-    datasets: [
+  var ctx = document.getElementById('polar');
+    var myChart = new Chart(ctx, {
+    type: 'polarArea',
+      data: {
+      labels: ['Co-creating solutions', 'Establishing legitimacy', 'Brokering relations', 'Facilitating activities'],
+      datasets: [
       {
         label: 'Network',
         data: [
