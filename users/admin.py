@@ -8,6 +8,9 @@ from django.contrib.auth.admin import UserAdmin
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     model = CustomUser
-    list_display = ["last_name", "organization"]
+    list_display = ["email", "first_name", "last_name", "organization"]
+    list_filter = ("organization",)
+    search_fields = ("email", "first_name", "last_name", "organization__title")
+    ordering = ("organization", "last_name")
 
-admin.site.register(CustomUser)
+admin.site.register(CustomUser, CustomUserAdmin)
