@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView
 from .forms import TestSurveyForm, ContactForm
 from .models import OrgProfile, TestSurvey
-from django.db.models import Avg, Q, Count, F
+from django.db.models import Avg, Count, OuterRef, Exists
 from users.models import CustomUser
+from djf_surveys.models import UserAnswer
  
 
 # Create your views here.
@@ -103,10 +104,15 @@ def profile(request):
     network = user.collaboration_network 
     collaborators = CustomUser.objects.filter(collaboration_network=network).exclude(id=user.id)
 
+    # Subquery that checks if a user answer exists for each user.
+    has_answer = UserAnswer.objects.filter(user=OuterRef('pk')).values('user')
+
+    # Annotate each collaborator with whether they have an answer or not.
+    collaborators = collaborators.annotate(has_answer=Exists(has_answer))
 
     context = {
         'user': user,
-        'org': org,
+        'org': org, 
         'network': network,
         'collaborators': collaborators,
     }

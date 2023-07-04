@@ -9,6 +9,7 @@
 
 {%block css_files%}
 <link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
+<link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -70,26 +71,116 @@
     </div>
   </div>
 
-  <div class="collaborator-container">
-    {% for collaborator in collaborators %}
-      <div class="avatar">
-        <img class="avatar2" src="{{ collaborator.avatar.url }}" alt="Collaborator avatar" />
-        <div class="other-collaborator-member">{{ collaborator.first_name }} {{ collaborator.last_name }}</div>
-      </div>
-    {% endfor %}
+  <div class="collaborator-container noStyle">
+    <div class="container mx-auto py-6 px-4">
+      <h1 class="text-2xl font-semibold text-gray-900"> Collaboration Network: {{network.title}}</h1>
+
+        <div class="flex flex-col mt-6">
+          <div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden rounded-none">
+              <table class="min-w-full divide-y divide-gray-200">
+                  <thead>
+                      <tr>
+                          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Name</th>
+                          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Response</th>
+                          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Role</th>
+                          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Organization</th>
+                          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Stage</th>
+                          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+                      </tr>
+                  </thead>
+                 <tbody>
+                  {% for collaborator in collaborators %}
+                      <tr class="hover:bg-gray-50">
+                          <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                              <div class="relative h-10 w-10">
+                                  <img
+                                  class="h-full w-full rounded-full object-cover object-center"
+                                  src="{{ collaborator.avatar.url }}"
+                                  alt="{{ collaborator.first_name }} {{ collaborator.last_name}}"
+                                  />
+                                  <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
+                             </div>
+                              <div class="text-sm">
+                                  <div class="font-medium text-gray-700">{{ collaborator.first_name }} {{ collaborator.last_name }}
+                                  {% for group in collaborator.groups.all %}
+                                    - {{ group.name }}
+                                  {% endfor %}
+                                  </div>
+                                  <div class="text-gray-400">{{ collaborator.email }}</div>
+                              </div>
+                          </th>
+                            <td class="px-6 py-4">
+                              {% if collaborator.has_answer %}
+                                <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
+                                <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                                  Answered
+                                </span>
+                              {% else %}
+                                <span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-1 text-xs font-semibold text-red-600">
+                                <span class="h-1.5 w-1.5 rounded-full bg-red-600"></span>
+                                  Not Answered
+                                </span>
+                              {% endif %}
+                            </td>
+                          <td class="px-6 py-4">{{ collaborator.position }}</td>
+                          <td class="px-6 py-4">{{ collaborator.organization }}</td>
+                          <td class="px-6 py-4">{{ network.stage }}</td>
+                          <td class="px-6 py-4">
+                              <div class="flex justify-end gap-4">
+                                  <a x-data="{ tooltip: 'Delete' }" href="#">
+                                      <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                     class="h-6 w-6"
+                                      x-tooltip="tooltip"
+                                      >
+                                      <!-- SVG Content -->
+                                      </svg>
+                                  </a>
+                                  <a x-data="{ tooltip: 'Edite' }" href="#">
+                                      <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="h-6 w-6"
+                                      x-tooltip="tooltip"
+                                      >
+                                      <!-- SVG Content -->
+                                      </svg>
+                                  </a>
+                              </div>
+                          </td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+        </div>
+    </div>
   </div>
 
   <div class="buttons">
-    <a class="button-18 button-1" href='/surveys' role="button">Survey</a>
-    <a class="button-18 button-2" href='/surveys' role="button">Works</a>
-    <a class="button-18 button-3" href='/surveys' role="button">Knop4</a>
-    <a class="button-18 button-4" href='/surveys' role="button">Snuif</a>
+    <a class="button-18 button-1" href={% url "djf_surveys:index" %} role="button">Survey</a>
+    <a class="button-18 button-2" href='{% url "organization:orgpage" org_id=org.id %}' role="button">Dashboard</a>
     <!-- Additional buttons as needed -->
+  </div>
+  
   </div>
 </div>
 
+
+
 {% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script src="{% static 'djf_surveys/css/tailwindcss-3.3.1.js' %}"></script>
+<script src="{% static 'djf_surveys/css/tailwindcss-plugin-3.3.1.js' %}"></script>
+<script src="{% static 'djf_surveys/te-starter/js/tw-elements.umd.min.js' %}"></script>
+
 <script>
   // Wait for the DOM content to load
   document.addEventListener("DOMContentLoaded", function() {
