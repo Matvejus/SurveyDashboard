@@ -1,428 +1,130 @@
 {% extends 'organization/base.html' %}
 {% load bootstrap5 %}
+
 {%load static%}
-{% block page_title %}<title>Profile page</title>{% endblock page_title %}
+
+{% block page_title %}
+<title>Profile page</title>
+{% endblock page_title %}
 
 {%block css_files%}
-<link rel="stylesheet" href="{% static 'organization/keen-dashboards.css' %}" type="text/css" media="screen">
 <link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
 {% endblock %}
 
 {% block content %}
+<div class="person-profile">
+  <div class="network-container">
+    <div class="collaboration-fields">
+      <div class="collaboration-name">Collaboration Network: {{ network.title }}</div>
+      <div class="collaboration-fields2">
+        Stage: {{ network.stage }}<br />
+        Orchestrator: {{ network.orchestrator }}<br />
+      </div>
+    </div>
+  </div>
 
-
-
-<style type = "text/css">
-.chartbox {
-  height: 310 px;
-}
-
-</style>
-
-
-
-
-<body>
-  <div class = 'page-grid'>
-    <div>{% comment %} empty div for sidebar {% endcomment %}</div>
-    <div class="keen-dashboard">
-      <div class="container grid grid-hero-thirds">
-        <div class="grid-hero">
-          <div class="hero chart-wrapper">
-            <div class="chart-stage">
-              <div id="grid-1-1">
-                <canvas class id="Satis_bar"/>
-              </div>
-            </div>
-          </div>
-          <div class="chart-wrapper">
-            <div class="chart-stage">
-              <canvas class id="donut"/>
-            </div>
-          </div>
-        </div>
-        <div class="chart-wrapper">
-          <div class="chart-stage">
-            <canvas class id="Pie"/>
-          </div>
-        </div>
-        <div class="chart-wrapper">
-          <div class="chart-stage">
-            <canvas id="Projects"></canvas>
-            <canvas id="stacked"></canvas>
-          </div>
-        </div>
-        <div class="chart-wrapper">
-          <div class="chart-stage">
-            <canvas class id="pie-chart"/>
-          </div>
-        </div>
-        <div class="chart-wrapper">
-        
-          <div class="chart-stage">
-            <canvas class id="vertical-bar"/>
-          </div>
-          
-        </div>
-        <div class="chart-wrapper">
-        
-          <div class="chart-stage">
-            <img data-src="holder.js/100px120?theme=white">
-          </div>
-         
-        </div>
-        <div class="chart-wrapper">
-         
-          <div class="chart-stage">
-          
-          </div>
-
+ <!-- Goals = organization but changing it sucks-->
+  <div class="goals">
+    <div class="organization-name">Organization</div>
+    <div class="list">
+      <div class="list-of-fields-of-organization">
+        <div class="org-fields">
+          Type: {{ org.get_org_type_display }}<br />
+          Vision: {{ org.vision }}<br />
+          Number of Employees: {{ org.num_employees }}<br />
+          Founded: {{ org.founded }}<br />
+          Email: {{ org.email }}
         </div>
       </div>
     </div>
+  </div>
 
-      
-  {% block scripts %}
+  <div class="personal-information">
+    <div class="personal-information-background"></div>
+    
 
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="organization-type">
+      <div class="type">Type</div>
+      <div class="organization-type2">
+        {{ org.get_org_type_display }}
+      </div>
+    </div>
 
-      <script>
-        var ctx = document.getElementById('Satis_bar').getContext('2d');
-        var myChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Blue', 'Red'],
-            datasets: [{
-              label: 'Networks progress',
-              data: ['2', '1'],
-              backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)'],
-              borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', ''],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true
-                }
-              }]
-            }
-          }
-        });
-        
-      </script>
+    <div class="organization">
+      <div class="organization2">Organization</div>
+      <div class="organization-title">{{org.title}}</div>
+    </div>
 
-      <script>
- 
-          var ctx = document.getElementById('donut').getContext('2d');
-          var myChart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-              labels: ['Time', 'Statisfaction', 'Projects', 'Surveys', 'Responses', 'Collaborators'],
-              datasets: [{
-                label: 'Blue',
-                data: [11, 8.0, 17, 10, 23, 15],
-                fill: true,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 0.2)',
-                pointBackgroundColor: 'rgb(255, 99, 132)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgb(255, 99, 132)'
-              },{
-                label: 'Red',
-                data: [15, 6.0, 11, 8, 17, 10],
-                fill: true,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgb(255, 99, 132)',
-                pointBackgroundColor: 'rgb(255, 99, 132)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgb(255, 99, 132)'
-              }]
-            },
-            options: {
-              scales: {
-                yAxes: [{
-                  ticks: {
-                    beginAtZero: true
-                  }
-                }]
-              }
-            }
-          });
-          
-      </script>
-<script>
+    <div class="organization-role">
+      <div class="role">Role</div>
+      <div class="role-field">{{ user.position }}</div>
+    </div>
 
-var ctx = document.getElementById('Pie').getContext('2d');
-var myChart = new Chart(ctx, {
-  type: 'polarArea',
-  data: {
-    labels: ['Red', 'Blue'],
-    datasets: [{
-      label: 'Completed surveys',
-      data: [1, 2],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.9)', // Red
-        'rgba(54, 162, 235, 0.9)'   // Blue
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      r: {
-        pointLabels: {
-          display: true,
-          centerPointLabels: true,
-          font: {
-            size: 18
-          }
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Polar Area Chart With Centered Point Labels'
-      }
-    }
-  },
-});
-     
-        
-      </script>
-      <script>
-        var ctx = document.getElementById('Projects').getContext('2d');
-var myChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ["January", "February", "March", "April", "May", "June", "July"] ,
-    datasets: [{
-      label: 'Red',
-      data: [65, 59, 80, 60, 56, 55, 40],
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1
-    },
-    {
-      label: 'Blue',
-      data: [56, 79, 60, 71, 66, 54, 48],
-      backgroundColor: 'rgba(54, 162, 235, 0.2)',
-      borderColor: 'rgba(54, 162, 235, 1)',
-      borderWidth: 1
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          suggestedMax: 100,
+    <div class="name">
+      <div class="name2">Name</div>
+      <div class="name-field">{{ user.first_name }} {{ user.last_name }}</div>
+    </div>
 
-        }
-      }]
-    }
-  }
-});
-</script>
-<script>
-  var ctx = document.getElementById('stacked').getContext('2d');
+    <div class="avatar4">
+      <img class="avatar2" src="{{ user.avatar.url }}" alt="User avatar" />
+    </div>
+  </div>
 
-  // Generate random data for two groups over seven months
-  var blueData = [];
-  var redData = [];
-  for (var i = 0; i < 7; i++) {
-    var blueValue = Math.floor(Math.random() * 10) + 1; // Random value between 1 and 10
-    var redValue = Math.floor(Math.random() * 10) + 1; // Random value between 1 and 10
-    blueData.push(blueValue);
-    redData.push(redValue);
-  }
-  
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      datasets: [{
-        label: 'Blue',
-        data: blueData,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
-      },
-      {
-        label: 'Red',
-        data: redData,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'Solutions'
-        }
-      },
-      responsive: true,
-      interaction: {
-        intersect: false
-      },
-      scales: {
-        x: {
-          stacked: true
-        },
-        y: {
-          stacked: true
-        }
-      }
-    }
-  });
-</script>
-<script>
-  var ctx = document.getElementById('vertical-bar').getContext('2d');
+  <div class="collaborator-container">
+    {% for collaborator in collaborators %}
+      <div class="avatar">
+        <img class="avatar2" src="{{ collaborator.avatar.url }}" alt="Collaborator avatar" />
+        <div class="other-collaborator-member">{{ collaborator.first_name }} {{ collaborator.last_name }}</div>
+      </div>
+    {% endfor %}
+  </div>
 
-  // Generate random data for two groups over seven months
-  var blueData = [];
-  var redData = [];
-  for (var i = 0; i < 7; i++) {
-    var blueValue = Math.floor(Math.random() * 10) + 1; // Random value between 1 and 10
-    var redValue = Math.floor(Math.random() * 10) + 1; // Random value between 1 and 10
-    blueData.push(blueValue);
-    redData.push(redValue);
-  }
-  
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      datasets: [{
-        label: 'Blue',
-        data: blueData,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
-      },
-      {
-        label: 'Red',
-        data: redData,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      elements: {
-        bar: {
-          borderWidth: 2
-        }
-      },
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'right'
-        },
-        title: {
-          display: true,
-          text: 'Efforts'
-        }
-      }
-    }
-  });
-</script>
+  <div class="buttons">
+    <a class="button-18 button-1" href='/surveys' role="button">Survey</a>
+    <a class="button-18 button-2" href='/surveys' role="button">Works</a>
+    <a class="button-18 button-3" href='/surveys' role="button">Knop4</a>
+    <a class="button-18 button-4" href='/surveys' role="button">Snuif</a>
+    <!-- Additional buttons as needed -->
+  </div>
+</div>
 
-<script>
-  var ctx = document.getElementById('pie-chart').getContext('2d');
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Collaborators', 'Orchestrator', 'Supervisor', 'Advisor'],
-      datasets: [{
-        data: [10, 20, 15, 5], // Dummy dataset values
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false,
-        },
-        title: {
-          display: true,
-          text: 'Contribution'
-        }
-      }
-    }
-  });
-</script>
-
-
-
-
+{% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 <script>
   // Wait for the DOM content to load
-document.addEventListener("DOMContentLoaded", function() {
-  // Get all the grid items
-  var gridItems = document.querySelectorAll(".chart-wrapper");
-
-  // Loop through each grid item
-  gridItems.forEach(function(item) {
-    // Create a timeline for the animation
-    var tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: item,
-        start: "top 80%", // Adjust the scroll trigger start position as needed
-        toggleActions: "play none none reverse"
-      }
-    });
-
-    // Define the animation
-    tl.fromTo(
-      item,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6 }
-    );
-
-    // Add hover effect
-    item.addEventListener("mouseenter", function() {
-      gsap.to(item, { scale: 1.05, duration: 0.3 });
-    });
-
-    item.addEventListener("mouseleave", function() {
-      gsap.to(item, { scale: 1, duration: 0.3 });
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get all the grid items
+    var gridItems = document.querySelectorAll(".chart-wrapper");
+  
+    // Loop through each grid item
+    gridItems.forEach(function(item) {
+      // Create a timeline for the animation
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: "top 80%", // Adjust the scroll trigger start position as needed
+          toggleActions: "play none none reverse"
+        }
+      });
+  
+      // Define the animation
+      tl.fromTo(
+        item,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6 }
+      );
+  
+      // Add hover effect
+      item.addEventListener("mouseenter", function() {
+        gsap.to(item, { scale: 1.05, duration: 0.3 });
+      });
+  
+      item.addEventListener("mouseleave", function() {
+        gsap.to(item, { scale: 1, duration: 0.3 });
+      });
     });
   });
-});
 </script>
-
-
 {% endblock scripts %}
 
-    </body>
 {% endblock content %}
-
