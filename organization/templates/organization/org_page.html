@@ -51,25 +51,12 @@
             <div class='container row-span-3 col-span-3'>
               <div class=""><canvas class id="polar"/></div>
             </div>
-            <div class='col-span-3'>
-              <div class="grid grid-cols-3 gap-4 grid-flow-col auto-cols-max">
-                <div class='chart-wrapper container'>
-                  <div><canvas class="Responses" id="donutChart"/></div>  
-                </div>
-                <div class='chart-wrapper container'>
-                  <div class=""><canvas class="" id="donut"/></div>
-                </div>
-                <div class='chart-wrapper container' style="grid-auto-cols: 100px;">
-                  <h1>0:04:32</h1>
-                  Av. time min.
-                </div>
-              </div>
-            </div>
+      
             <!--Entire Block for Collaboration Network-->
             <div class="row-span-2 col-span-3">
               <div class="container mx-auto py-6 px-4">
                 <h1 class="text-2xl font-semibold text-gray-900">Collaboration Network: {{network.title}}</h1>
-                <div class="flex flex-col mt-6">
+                <div class="flex flex-col mt-6 scrollable-box">
                   <div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden rounded-none">
                     <table class="min-w-full divide-y divide-gray-200">
                       <thead>
@@ -140,6 +127,20 @@
               </div>
             </div>
             <!-- End Block Collaboration Network-->
+            <div class='col-span-3'>
+              <div class="grid grid-cols-3 gap-4 grid-flow-col auto-cols-max">
+                <div class='chart-wrapper container'>
+                  <div><canvas class="Responses" id="donutChart"/></div>  
+                </div>
+                <div class='chart-wrapper container'>
+                  <div class=""><canvas class="" id="donut"/></div>
+                </div>
+                <div class='chart-wrapper container' style="grid-auto-cols: 100px;">
+                  <h1>0:04:32</h1>
+                  Av. time min.
+                </div>
+              </div>
+            </div>
          </div>
       </div>
     </div>
