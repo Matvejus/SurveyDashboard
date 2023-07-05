@@ -44,9 +44,9 @@
 .container {
   border-radius: 25px;
   width: 100%;
-  margin: 40px;
+  margin: 4px;
   background-color: #fafafa;
-  padding: 40px;
+  padding: 0px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
   align-items: center;
