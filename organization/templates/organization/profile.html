@@ -8,15 +8,16 @@
 {% endblock page_title %}
 
 {%block css_files%}
-<link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
+
 <link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
+<link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
 {% endblock %}
 
 {% block content %}
 <div class = 'page-grid'>
   <div>{% comment %} empty div for sidebar {% endcomment %}</div>
 <div class="person-profile">
-  <div class="network-container">
+  <div class="flex w-20">
     <div class="collaboration-fields">
       <div class="collaboration-name">Collaboration Network: {{ network.title }}</div>
         <div class="collaboration-fields2">
