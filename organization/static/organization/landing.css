@@ -365,3 +365,9 @@
   transform: scale(0.75);
   /* You might also need to define left or right property to position your element horizontally */
 }
+
+.scrollable-box {
+  max-height: 500px; /* Adjust this value as needed */
+  overflow-y: auto; /* Enable vertical scrolling when necessary */
+  overflow-x: auto;
+}
