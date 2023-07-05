@@ -19,9 +19,16 @@
     width: 100%;
     height: 100%;
   }
-  .person-profile {
-    margin-left: 220px; /* Adjust based on the width of your sidebar */
-  }  
+  .my-container {
+    border-radius: 25px;
+    width: 100%;
+    margin: 40px;
+    background-color: #fafafa;
+    padding: 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    align-items: center;
+  }
 </style>
 
 
@@ -41,7 +48,7 @@
           <div><canvas class="" id="donutChart"/></div>  
           </div> {% endcomment %}
       <div class="grid grid-rows-3 grid-cols-6 gap-4">
-        <div class='container row-span-3 col-span-3'>
+        <div class='my-container row-span-3 col-span-3'>
           <div class =""><canvas class id="polar"/></div>
         </div>
           <div class='col-span-3'>
@@ -681,7 +688,7 @@
           scales: {
             r: {
               pointLabels: {
-                display: false,
+                display: true,
                 centerPointLabels: true,
                 arc: true,
                 font: {
@@ -691,15 +698,11 @@
             },
           },
            onClick: function(e, clickData) {
-            var activePoints = myChart.getElementsAtEvent(e);
-           var selectedIndex = activePoints[0]._index;
-           console.log(this.data.datasets[0].data[selectedIndex]);
-
-            //window.open('http://localhost:8000/surveys/dashboard/summary/survey/main/')
+            window.open("http://localhost:8000/surveys/dashboard/summary/survey/123/")
           },
         plugins: {
           legend: {
-            display: true,
+            display: false,
           },
           labels: {
             render: 'label',
@@ -711,12 +714,12 @@
       },
     });
 
-  //  function chartOpen(click) {
-     // const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
-     // console.log(points);
-   // }
+   {% comment %}  function chartOpen(click) {
+     const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
+     console.log(points);
+    }
     
-   // ctx.onclick = chartOpen;
+   // ctx.onclick = chartOpen; {% endcomment %}
          
     </script>
 

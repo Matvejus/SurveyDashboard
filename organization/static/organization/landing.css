@@ -7,8 +7,6 @@
   flex-direction: column;
   align-items: space-evenly;
   background: #ffffff;
-  width: 1200px;
-  height: 1500px;
   position: relative;
   box-shadow: var(
     --card-shadowlight-box-shadow,
@@ -43,6 +41,17 @@
   width: 771px;
 }
 
+.container {
+  border-radius: 25px;
+  width: 100%;
+  margin: 40px;
+  background-color: #fafafa;
+  padding: 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  align-items: center;
+}
+
 .collaborator-container {
   display: grid;
   flex-wrap: wrap;
@@ -55,7 +64,7 @@
 }
 
 .UserAvatar, .MainAvatar {
-  width: 300px;
+  width: 200px;
   height: 200px;
   margin-left: 130px;
   margin-top: 20px;
@@ -63,7 +72,7 @@
 }
 
 .UserAvatar {
-  border-radius: 35%;
+  border-radius: 43%;
   box-shadow: var(
     --card-shadowlight-box-shadow,
     3px 9px 18px -10px rgba(0, 0, 0, 0.5)
