@@ -47,7 +47,7 @@
             <div class='chart-wrapper container'>
             <div><canvas class="" id="donutChart"/></div>  
           </div> {% endcomment %}
-          <div class="grid grid-rows-3 grid-cols-6 gap-4">
+          <div class="grid grid-rows-2 grid-cols-6 gap-4">
             <div class='container row-span-3 col-span-3'>
               <div class=""><canvas class id="polar"/></div>
             </div>
@@ -129,14 +129,14 @@
             <!-- End Block Collaboration Network-->
             <div class='col-span-3'>
               <div class="grid grid-cols-3 gap-4 grid-flow-col auto-cols-max">
-                <div class='chart-wrapper container'>
+                <div class='container'>
                   <div><canvas class="Responses" id="donutChart"/></div>  
                 </div>
-                <div class='chart-wrapper container'>
+                <div class='container'>
                   <div class=""><canvas class="" id="donut"/></div>
                 </div>
-                <div class='chart-wrapper container' style="grid-auto-cols: 100px;">
-                  <h1>0:04:32</h1>
+                <div class='container justify-center items-center flex flex-col'>
+                  <h1 class="font-semibold text-3xl">0:04:32</h1>
                   Av. time min.
                 </div>
               </div>
@@ -376,7 +376,7 @@
             },
           },
            onClick: function(e, clickData) {
-            window.open("http://localhost:8000/surveys/dashboard/summary/survey/123/")
+            window.open("http://localhost:8000/surveys/dashboard/summary/survey/conesu/")
           },
         plugins: {
           legend: {
