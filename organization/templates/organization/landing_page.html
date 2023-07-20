@@ -43,7 +43,6 @@
 	<link rel="apple-touch-icon-precomposed" sizes="192x192" href="/images/favicons/android-chrome-192x192.png">
 	<link rel="apple-touch-icon-precomposed" sizes="512x512" href="/images/favicons/android-chrome-512x512.png">
   <link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
-  <link rel="stylesheet" href='style.css' >  
 </head>
 <body>
 	<header>
@@ -136,7 +135,7 @@
             </div>
         </div>
         <div class="col right">
-          <img src="{% static 'organization/images/collab.svg'%}" style="max-width: 100%; padding-top: 65px;"/> 
+          <img src="{% static 'organization/images/collab.svg'%}" style="max-width: 100%; padding-top: 180px;"/> 
         </div>
         
     </div>
@@ -306,7 +305,9 @@
  
     <script>
       // Smooth scrolling setup using GSAP
-      gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+      
   
       // Configure the ScrollTrigger for smooth scrolling
       gsap.defaults({ ease: "power1.out" });
