@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'bootstrap5',
     'chartjs',
     'django_extensions',
+    "django_browser_reload",
 
     'django.contrib.admin',
     'django.contrib.auth',

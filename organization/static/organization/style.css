@@ -167,7 +167,7 @@ section.home-top .left {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 195px 0;
+  padding: 320px 0;
 }
 @media (max-width: 1260px) {
   section.home-top .left {
@@ -196,6 +196,7 @@ section.home-infos h2.title {
   font-family: "futura-pt-bold";
   font-size: 21px;
   color: #000;
+  padding-bottom: 20px;
 }
 section.home-infos .row {
   width: 80%;
@@ -252,6 +253,7 @@ section.home-announcement h2.title {
   font-family: "futura-pt-bold";
   font-size: 21px;
   color: #fff;
+  padding-bottom: 20px;
 }
 section.home-announcement .left {
   flex-basis: 40%;
