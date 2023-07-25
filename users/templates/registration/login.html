@@ -1,4 +1,5 @@
-{% extends "organization/base.html" %}
+{% extends 'organization/base.html' %}
+{% load djf_survey_tags i18n %}
 {% load django_browser_reload %}
 {% load static %}
 
@@ -22,7 +23,7 @@
     <div
       class="relative overflow-hidden md:flex w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 i justify-around items-center hidden">
       <div>
-        <h1 class="text-white font-bold text-4xl font-sans">CONESU</h1>
+        <h1 class="text-white font-bold text-5xl font-sans">CONESU</h1>
         <p class="text-white mt-1">The most popular collaboration platform.</p>
         <button type="submit" class="block w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2">Read More</button>
       </div>
@@ -32,8 +33,30 @@
       <div class="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
     </div>
     <div class="flex md:w-1/2 justify-center py-10 items-center bg-white">
-      {% csrf_token %}
-      <form class="bg-white">
+      <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-lg mx-auto">
+          <h1 class="text-center text-3xl">Welcome back! </h1>
+            <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
+                <form method="post" id="LoginForm" class="w-80" >
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-5" id="section_field_{{ field.auto_id }}">
+                            <label for="email" class="text-base font-medium">{{ field.label }}</label>
+                            <div class="mt-1">
+                            {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}                          
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-lg ho">
+                        {% trans "LOG IN" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+     {% comment %}  <form class="bg-white">
         <h1 class="text-gray-800 font-bold text-2xl mb-1">Welcome back!</h1>
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
@@ -54,11 +77,9 @@
         </div>
                 <button type="submit" class="block w-full bg-indigo-600 mt-4 py-2 button-18">Login</button>
                 <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span>
-      </form>
+      </form> {% endcomment %}
     </div>
   </div>
 </section>
-
 {% endblock content%}
-
 
