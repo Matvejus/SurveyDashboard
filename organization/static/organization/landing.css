@@ -367,7 +367,6 @@
 }
 
 .scrollable-box {
-  max-height: 500px; /* Adjust this value as needed */
   overflow-y: auto; /* Enable vertical scrolling when necessary */
   overflow-x: auto;
 }
