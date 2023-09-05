@@ -3,10 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView
 from django.utils.decorators import method_decorator
-from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash, authenticate, login
-from django.contrib.auth.models import Group
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import user_passes_test, login_required
 from .forms import CustomUserCreationForm
 
