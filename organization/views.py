@@ -65,8 +65,8 @@ def dashboardpage(request, org_id):
     
     return render(request, 'organization/org_page.html', context)
 
-def profile(request):
-    user = get_object_or_404(CustomUser, id=request.user.id) 
+def profile(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)  # needs to find user based on ID
     org = user.organization  
     network = user.collaboration_network 
     collaborators = CustomUser.objects.filter(collaboration_network=network).exclude(id=user.id)
@@ -85,12 +85,3 @@ def profile(request):
     }
 
     return render(request, 'organization/profile.html', context)
-
-
-
-
-
-
-
-
-    

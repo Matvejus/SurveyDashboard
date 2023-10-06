@@ -2,7 +2,7 @@
 <section>
     <div class="max-w-screen-xl px-4 py-12 mx-auto sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto text-center">
-            <a  href="{% url 'organization:profile'%}">    <h1
+            <a  href="{% url 'organization:profile' user_id=user.id %}">    <h1
                     class="text-3xl font-extrabold text-transparent sm:text-6xl bg-clip-text bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"
             >
                 {% trans 'Collaborative Networks For Sustainability' %}

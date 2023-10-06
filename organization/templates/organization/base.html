@@ -70,7 +70,7 @@
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
               <li class="nav-item">
-                <a href="{% url 'organization:profile'%}" class="nav-link link-dark" aria-current="page">
+                <a href="{% url 'organization:profile' user_id=user.id %}" class="nav-link link-dark" aria-current="page">
                   <svg class="bi me-2" width="10" height="10">
                     <img src="{% static 'images/sb_user.svg'%}" />
                     <use xlink:href="#profile"></use>
