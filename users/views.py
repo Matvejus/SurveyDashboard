@@ -39,7 +39,7 @@ class update_user_profile(View):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, request.user)
-            return redirect(reverse('organization:profile'))  # Redirect and Reverse to the profile page
+            return redirect(reverse('organization:profile', kwargs={'user_id': request.user.id})) # Redirect and Reverse to the profile page
 
     def get(self, request):
         form = CustomUserCreationForm(instance=request.user)
