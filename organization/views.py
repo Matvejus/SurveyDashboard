@@ -84,4 +84,4 @@ def profile(request, user_id):
         'collaborators': collaborators,
     }
 
-    return render(request, 'organization/profile.html', context)
+    return render(request, 'organization/profile_page.html', context)
