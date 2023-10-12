@@ -1,29 +1,36 @@
 {% load i18n %}
 <!-- Navbar goes here -->
-<nav class="bg-white shadow-lg">
+<nav class="bg-white shadow-sm">
     <div class="max-w-6xl mx-auto px-4">
         <div class="flex justify-between">
             <div class="flex space-x-7">
                 <div>
                     <!-- Website Logo -->
-                    <a href="{% url "djf_surveys:index" %}" class="flex items-center py-4 px-2">
-                        <span class="font-semibold text-gray-500 text-lg">{% trans "Home" %}</span>
+                    <a href="{% url "organization:index" %}" class="flex items-center py-4 px-2">
+                        <span class="font-semibold text-black-500 text-lg">{% trans "CONESU" %}</span>
                     </a>
                 </div>
                 <!-- Primary Navbar items -->
                 <div class="hidden md:flex items-center space-x-1">
+                    <a href="{% url 'organization:orgpage' 1 %}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Dashboard" %}</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-1">
                     <a href="{% url 'djf_surveys:admin_survey' %}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Surveys" %}</a>
                 </div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{% url 'organization:profile' user_id=user.id%}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Profile" %}</a>
+                </div>
+                
             </div>
             <!-- Secondary Navbar items -->
-            <div class="hidden md:flex items-center space-x-3 ">
+            {% comment %} <div class="hidden md:flex items-center space-x-3 ">
                 <a href="{% url 'organization:orgpage' 1 %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-gray-500 hover:stroke-white" fill="none"
                          viewBox="0 0 24 24" stroke="currentColor">#}
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </a>
-            </div>
+            </div> {% endcomment %}
             <!-- Mobile menu button -->
             <div class="md:hidden flex items-center">
                 <button class="outline-none mobile-menu-button">
