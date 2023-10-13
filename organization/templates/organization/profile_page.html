@@ -15,7 +15,7 @@
 
 {% block content%}
 <div class="bg-gray-100">
-    <div class="container ml-auto p-5">
+    <div class="container mx-auto p-10">
         <div class="md:flex no-wrap md:-mx-2 ">
             <!-- Left Side -->
             <div class="w-full md:w-3/12 md:mx-2">
@@ -81,104 +81,118 @@
                         <div class="grid md:grid-cols-2 text-sm">
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">First Name</div>
-                                <div class="px-4 py-2">Jane</div>
+                                <div class="px-4 py-2 overflow-hidden block">{{ user.first_name }}</div>
+                            </div>
+                            <div class="grid grid-cols-2">
+                                <div class="px-4 py-2 font-semibold">Organization</div>
+                                <div class="px-4 py-2 overflow-hidden block">{{ org.title }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Last Name</div>
-                                <div class="px-4 py-2">Doe</div>
+                                <div class="px-4 py-2 overflow-hidden block">{{ user.last_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Gender</div>
-                                <div class="px-4 py-2">Female</div>
+                                <div class="px-4 py-2 font-semibold">Position</div>
+                                <div class="px-4 py-2 overflow-hidden block">{{ user.position }}</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Contact No.</div>
-                                <div class="px-4 py-2">+11 998001001</div>
-                            </div>
-                            <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Current Address</div>
-                                <div class="px-4 py-2">Beech Creek, PA, Pennsylvania</div>
-                            </div>
-                            <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Permanant Address</div>
-                                <div class="px-4 py-2">Arlington Heights, IL, Illinois</div>
-                            </div>
-                            <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Email.</div>
-                                <div class="px-4 py-2">
-                                    <a class="text-blue-800" href="mailto:jane@example.com">jane@example.com</a>
+                                <div class="px-4 py-2 font-semibold">Email</div>
+                                <div class="px-4 py-2 overflow-hidden block">
+                                    <a class="text-blue-800" href="mailto:{{ user.email }}">{{ user.email }}</a> <!-- check if mail to works-->
                                 </div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Birthday</div>
-                                <div class="px-4 py-2">Feb 06, 1998</div>
+                                <div class="px-4 py-2 font-semibold"> Network </div>
+                                <div class="px-4 py-2 overflow-hidden block"> {{ network.title }} </div>
+                            </div>
+                            <div class="grid grid-cols-2">
+                                <div class="px-4 py-2 font-semiboldk">Start Date</div>
+                                <div class="px-4 py-2 overflow-hidden block"> {{ user.date_joined|date:"F d, Y" }}</div>
+                            </div>
+                            <div class="grid grid-cols-2">
+                                <div class="px-4 py-2 font-semibold">Network Stage</div>
+                                <div class="px-4 py-2 overflow-hidden block"> {{network.stage}} </div>
                             </div>
                         </div>
                     </div>
-                    <button
-                        class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Show
-                        Full Information</button>
                 </div>
                 <!-- End of about section -->
 
                 <div class="my-4"></div>
 
                 <!-- Experience and education -->
-                <div class="bg-white p-3 shadow-sm rounded-sm">
+                <div x-data="{ openTab: 1 }" class="bg-white p-3 shadow-sm rounded-sm">
 
+                    <!-- Tab Buttons -->
+                    <div class="mb-4 flex">
+                        <button :class="{ 'border-b-2 border-green-500': openTab === 1 }" @click="openTab = 1" class="px-4 py-2 mr-3 font-semibold text-gray-900 focus:outline-none">Organization</button>
+                        <button :class="{ 'border-b-2 border-green-500': openTab === 2 }" @click="openTab = 2" class="px-4 py-2 font-semibold text-gray-900 focus:outline-none">Network</button>
+                    </div>
+                
+                    <!-- Tab Content -->
                     <div class="grid grid-cols-2">
-                        <div>
+                        <!-- Experience Tab Content -->
+                        <div x-show="openTab === 1">
                             <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
-                                <span clas="text-green-500">
-                                    <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                <span class="text-green-500">
+                                    <!-- SVG icon -->
+                                    <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path fill="#fff" stroke-width="2" d="M20,3 L20,23 L4,23 L4,3 L20,3 Z M8.042,9 L10.042,9 L10.042,7 L8.042,7 L8.042,9 Z M14,9 L16,9 L16,7 L14,7 L14,9 Z M8.042,15 L10.042,15 L10.042,13 L8.042,13 L8.042,15 Z M10.042,23 L14.042,23 L14.042,19 L10.042,19 L10.042,23 Z M14,15 L16,15 L16,13 L14,13 L14,15 Z M2,3 L22,3 L22,1 L2,1 L2,3 Z"/>
                                     </svg>
                                 </span>
-                                <span class="tracking-wide">Experience</span>
+                                <span class="tracking-wide">Organization</span>
                             </div>
                             <ul class="list-inside space-y-2">
                                 <li>
-                                    <div class="text-teal-600">Owner at Her Company Inc.</div>
-                                    <div class="text-gray-500 text-xs">March 2020 - Now</div>
+                                    <div class="text-teal-600">{{ org.title }}</div>
+                                    <div class="text-gray-500 text-s"> Organization </div>
                                 </li>
                                 <li>
-                                    <div class="text-teal-600">Owner at Her Company Inc.</div>
-                                    <div class="text-gray-500 text-xs">March 2020 - Now</div>
+                                    <div class="text-teal-600"> {{ org.get_org_type_display }} </div>
+                                    <div class="text-gray-500 text-s"> Organization Type</div>
                                 </li>
                                 <li>
-                                    <div class="text-teal-600">Owner at Her Company Inc.</div>
-                                    <div class="text-gray-500 text-xs">March 2020 - Now</div>
+                                    <div class="text-teal-600"> {{ org.founded }}</div>
+                                    <div class="text-gray-500 text-s"> Founded in</div>
                                 </li>
                                 <li>
-                                    <div class="text-teal-600">Owner at Her Company Inc.</div>
-                                    <div class="text-gray-500 text-xs">March 2020 - Now</div>
+                                    <div class="text-teal-600"> {{ org.vision }}</div>
+                                    <div class="text-gray-500 text-s"> Vision </div>
                                 </li>
+                                <li>
+                                    <div class="text-teal-600"> {{ org.num_employees }}</div>
+                                    <div class="text-gray-500 text-s"> Number of Employees</div>
+                                </li> 
                             </ul>
                         </div>
-                        <div>
+                
+                        <!-- Education Tab Content -->
+                        <div x-show="openTab === 2">
                             <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
-                                <span clas="text-green-500">
-                                    <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path fill="#fff" d="M12 14l9-5-9-5-9 5 9 5z" />
-                                        <path fill="#fff"
-                                            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                                    </svg>
+                                <span class="text-green-500">
+                                    <!-- SVG icon -->
+                                    <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1024 1024" stroke="currentColor">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path fill="#22c55e" d="M372.288 745.792a394.048 394.048 0 0 0 113.728 102.848v-127.744a390.08 390.08 0 0 0-113.728 24.896z m-51.584 24.192a392.96 392.96 0 0 0-60.16 41.6h-1.28a390.336 390.336 0 0 0 205.696 89.6 450.24 450.24 0 0 1-144.256-131.2z m-24.704-230.016c3.968 56.768 20.096 110.208 45.696 157.696a445.696 445.696 0 0 1 144.32-32.896v-124.8h-190.08z m-56.128 0H120.96a390.4 390.4 0 0 0 98.56 233.024c22.208-19.2 46.272-36.224 71.808-50.752a445.312 445.312 0 0 1-51.456-182.272z m445.824 158.784c25.984-47.808 42.24-101.568 46.336-158.72H540.992v124.864c51.072 3.2 99.776 14.976 144.704 33.92z m50.24 24.96c24.448 14.08 47.552 30.464 68.928 48.896a390.4 390.4 0 0 0 98.176-232.576h-114.88a445.312 445.312 0 0 1-52.224 183.68z m-194.944 125.44a394.048 394.048 0 0 0 113.92-102.4 389.888 389.888 0 0 0-113.92-25.728v128.192z m23.104 51.392a390.4 390.4 0 0 0 200.704-88.96h-0.512a392.96 392.96 0 0 0-57.92-40.32 450.24 450.24 0 0 1-142.272 129.28zM341.76 326.144a389.632 389.632 0 0 0-45.76 157.824h190.016V358.976a445.696 445.696 0 0 1-144.256-32.768z m-50.368-24.576a449.216 449.216 0 0 1-71.808-50.56 390.4 390.4 0 0 0-98.56 232.96h118.848a445.312 445.312 0 0 1 51.52-182.4z m194.56-126.208A394.048 394.048 0 0 0 372.48 278.016a390.08 390.08 0 0 0 113.536 24.768V175.36z m-20.992-52.544a390.272 390.272 0 0 0-205.312 89.152h0.512c18.88 15.872 39.168 29.888 60.608 41.92a450.24 450.24 0 0 1 144.192-131.072z m189.76 154.048a394.048 394.048 0 0 0-113.728-102.08v127.808a389.952 389.952 0 0 0 113.728-25.728z m51.392-24.576a392.96 392.96 0 0 0 57.856-40.32h0.384A390.336 390.336 0 0 0 564.16 123.52a450.24 450.24 0 0 1 141.952 128.832z m25.92 231.68a389.632 389.632 0 0 0-46.528-159.168 445.568 445.568 0 0 1-144.512 33.92v125.248h191.04z m56.128 0h114.88a390.4 390.4 0 0 0-98.56-232.96 449.28 449.28 0 0 1-68.736 48.896c29.824 55.424 48.32 117.76 52.416 184.128zM512 960A448 448 0 1 1 512 64a448 448 0 0 1 0 896z" />
+                                        </g>
+                                    </svg>                                    
                                 </span>
-                                <span class="tracking-wide">Education</span>
+                                <span class="tracking-wide">Network</span>
                             </div>
                             <ul class="list-inside space-y-2">
                                 <li>
-                                    <div class="text-teal-600">Masters Degree in Oxford</div>
-                                    <div class="text-gray-500 text-xs">March 2020 - Now</div>
+                                    <div class="text-teal-600"> {{network.title}}</div>
+                                    <div class="text-gray-500 text-s"> Title</div>
                                 </li>
                                 <li>
-                                    <div class="text-teal-600">Bachelors Degreen in LPU</div>
-                                    <div class="text-gray-500 text-xs">March 2020 - Now</div>
+                                    <div class="text-teal-600">{{network.stage}}</div>
+                                    <div class="text-gray-500 text-s"> Stage</div>
+                                </li>
+                                <li>
+                                    <div class="text-teal-600"> {{network.orchestrator}} </div>
+                                    <div class="text-gray-500 text-s">Orchestrator</div>
                                 </li>
                             </ul>
                         </div>
