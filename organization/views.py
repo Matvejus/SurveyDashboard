@@ -66,10 +66,10 @@ def dashboardpage(request, org_id):
     return render(request, 'organization/org_page.html', context)
 
 def profile(request, user_id):
-    user = get_object_or_404(CustomUser, id=user_id)  # needs to find user based on ID
-    org = user.organization  
-    network = user.collaboration_network 
-    collaborators = CustomUser.objects.filter(collaboration_network=network).exclude(id=user.id)
+    viewed_user = get_object_or_404(CustomUser, id=user_id)  
+    org = viewed_user.organization  
+    network = viewed_user.collaboration_network 
+    collaborators = CustomUser.objects.filter(collaboration_network=network).exclude(id=viewed_user.id)
 
     # Subquery that checks if a user answer exists for each user.
     has_answer = UserAnswer.objects.filter(user=OuterRef('pk')).values('user')
@@ -78,7 +78,7 @@ def profile(request, user_id):
     collaborators = collaborators.annotate(has_answer=Exists(has_answer))
 
     context = {
-        'user': user,
+        'viewed_user': viewed_user,
         'org': org, 
         'network': network,
         'collaborators': collaborators,

@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
     collaboration_network = models.ForeignKey('organization.CollaborationNetwork', null=True, on_delete=models.SET_NULL)
     position = models.CharField(max_length=150, verbose_name='Position')
     avatar = models.ImageField(upload_to="avatars", blank = True, null = True)
+    biography = models.CharField(max_length=150, blank=True)
 
     class Meta:
         order_with_respect_to = 'organization'

@@ -1,14 +1,10 @@
-from django.views import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView
-from django.utils.decorators import method_decorator
-from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash, authenticate, login
-from django.contrib.auth.models import Group
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import user_passes_test, login_required
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .models import CustomUser
 
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
@@ -21,9 +17,9 @@ def redirectgroup(request):
     if user.groups.filter(name='Supervisor').exists():
         return redirect('djf_surveys:admin_survey')
     elif user.groups.filter(name='Orchestrator').exists():
-        return redirect('organization:profile')
+        return redirect('organization:profile', user_id=user.id)
     else:
-        return redirect('organization:profile')        
+        return redirect('organization:profile', user_id=user.id)      
     
 def group_required(group_names):
     def check_group(user):
@@ -32,16 +28,20 @@ def group_required(group_names):
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required(['Collaborator', 'Orchestrator','Supervisor'])], name='dispatch')
-class update_user_profile(View):
-    def post(self, request):
-        form = CustomUserCreationForm(request.POST, request.FILES, instance=request.user)
+@login_required
+@group_required(['Collaborator', 'Orchestrator', 'Supervisor'])
+def edit_profile(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            update_session_auth_hash(request, request.user)
-            return redirect(reverse('organization:profile', kwargs={'user_id': request.user.id})) # Redirect and Reverse to the profile page
 
-    def get(self, request):
-        form = CustomUserCreationForm(instance=request.user)
-        return render(request, 'user_profiles/edit_profile.html', {'form': form})
+            update_session_auth_hash(request, user)
 
+            return redirect(reverse('organization:profile', args=[user.id]))
+    else:
+        form = CustomUserChangeForm(instance=user)
+    
+    return render(request, 'user_profiles/edit_profile.html', {'form': form})
