@@ -23,11 +23,11 @@
                 <div class="bg-white p-3 border-t-4 border-black-400">
                     <div class="image overflow-hidden">
                         <img class="h-auto w-auto mx-auto"
-                            src="{{ user.avatar.url }}" alt="User avatar">
+                            src="{{ viewed_user.avatar.url }}" alt="User avatar">
                     </div>
-                    <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">{{ user.first_name }} {{ user.last_name }}</h1>
-                    <h3 class="text-gray-600 font-lg leading-6">{{ user.position }} at {{ org.title }}</h3>
-                    <p class="text-sm text-gray-500 hover:text-gray-600 leading-6 break-words overflow-ellipsis">{{ user.biography }}</p>
+                    <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">{{ viewed_user.first_name }} {{ viewed_user.last_name }}</h1>
+                    <h3 class="text-gray-600 font-lg leading-6">{{ viewed_user.position }} at {{ org.title }}</h3>
+                    <p class="text-sm text-gray-500 hover:text-gray-600 leading-6 break-words overflow-ellipsis">{{ viewed_user.biography }}</p>
                 </div>
                 <!-- End of profile card -->
                 <div class="my-4"></div>
@@ -84,7 +84,7 @@
                         <div class="grid md:grid-cols-2 text-sm">
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">First Name</div>
-                                <div class="px-4 py-2 overflow-hidden block">{{ user.first_name }}</div>
+                                <div class="px-4 py-2 overflow-hidden block">{{ viewed_user.first_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Organization</div>
@@ -92,16 +92,16 @@
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Last Name</div>
-                                <div class="px-4 py-2 overflow-hidden block">{{ user.last_name }}</div>
+                                <div class="px-4 py-2 overflow-hidden block">{{ viewed_user.last_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Position</div>
-                                <div class="px-4 py-2 overflow-hidden block">{{ user.position }}</div>
+                                <div class="px-4 py-2 overflow-hidden block">{{ viewed_user.position }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Email</div>
                                 <div class="px-4 py-2 overflow-hidden block">
-                                    <a class="text-blue-800" href="mailto:{{ user.email }}">{{ user.email }}</a> <!-- check if mail to works-->
+                                    <a class="text-blue-800" href="mailto:{{ viewed_user.email }}">{{ viewed_user.email }}</a> <!-- check if mail to works-->
                                 </div>
                             </div>
                             <div class="grid grid-cols-2">
@@ -109,8 +109,8 @@
                                 <div class="px-4 py-2 overflow-hidden block"> {{ network.title }} </div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semiboldk">Start Date</div>
-                                <div class="px-4 py-2 overflow-hidden block"> {{ user.date_joined|date:"F d, Y" }}</div>
+                                <div class="px-4 py-2 font-semibold§">Start Date</div>
+                                <div class="px-4 py-2 overflow-hidden block"> {{ viewed_user.date_joined|date:"F d, Y" }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Network Stage</div>
