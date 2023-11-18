@@ -1,0 +1,78 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
+<canvas id="graph"></canvas>
+
+
+
+
+
+
+<script>
+
+Chart.register( ChartDataLabels );
+
+const legendLabelColors = ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)", "rgb(54, 162, 88)"];
+
+const config = {
+    type: "polarArea",
+    data: {
+        labels: ['Co-creating solutions', 'Establishing legitimacy', 'Brokering relations', 'Facilitating activities'],
+        datasets: [
+            {
+                label: 'Network',
+                data: [40, 40, 40, 40],
+                backgroundColor: ["rgba(255, 99, 132, 0.5)", "rgba(255, 159, 64, 0.5)", "rgba(255, 205, 86, 0.5)", "rgba(75, 192, 192, 0.5)", "rgba(54, 162, 235, 0.5)", "rgba(153, 102, 255, 0.5)", "rgba(201, 203, 207, 0.5)", "rgba(54, 162, 88, 0.5)"],
+                datalabels: {
+                   formatter: (value, context) => value + '%',
+                   color: "#ffffff"
+                },
+            },
+            {
+                helper: true,
+                data: [100, 100, 100, 100],
+                backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)", "rgba(54, 162, 88, 0.2)"],
+                datalabels: {
+                   display: false
+                }
+            }
+        ]
+    },
+    options: {
+        layout: {
+          padding: 20
+        },
+        scales: {
+            r: {
+                angleLines: {
+                    display: true
+                },
+                ticks: {
+                    display: false
+                },
+                pointLabels: {
+                  display: false
+                }
+            }
+        },
+        scale: {
+            min: 0,
+            max: 100
+        },
+        plugins: {
+            labels: {
+              arc: true,
+              fontColor: '#000',
+              position: 'outside',
+              fontSize: 14,
+              render: (args) => args.dataset.helper ? args.label : '',
+              fontColor: (args) => legendLabelColors[args.index] 
+            },
+            legend: {display: false}
+        }
+    }
+}
+
+const chart = new Chart( 'graph', config );
+
+</script>

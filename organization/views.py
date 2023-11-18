@@ -44,7 +44,7 @@ class NewOrgView(CreateView):
     success_url = '/users/register'
 
 #page of collaboraton
-def dashboardpage(request, org_id):
+def dashboardpage(request):
     user = get_object_or_404(CustomUser, id=request.user.id) 
     org = user.organization  
     network = user.collaboration_network 
@@ -63,7 +63,7 @@ def dashboardpage(request, org_id):
         'collaborators': collaborators,
     }
     
-    return render(request, 'organization/org_page.html', context)
+    return render(request, 'organization/dashboard.html', context)
 
 def profile(request, user_id):
     viewed_user = get_object_or_404(CustomUser, id=user_id)  
