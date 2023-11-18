@@ -15,7 +15,7 @@ class RegisterView(CreateView):
 def redirectgroup(request):
     user = request.user
     if user.groups.filter(name='Supervisor').exists():
-        return redirect('djf_surveys:admin_survey')
+        return redirect('organization:dashboard')
     elif user.groups.filter(name='Orchestrator').exists():
         return redirect('organization:profile', user_id=user.id)
     else:
