@@ -3,6 +3,7 @@ from io import StringIO
 
 from django.utils.text import capfirst
 from django.utils.translation import gettext, gettext_lazy as _
+from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
@@ -11,7 +12,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-from django.http import JsonResponse, HttpResponse, Http404, HttpResponseServerError
+from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib import messages
 from django.template.loader import render_to_string
 
@@ -344,7 +345,6 @@ class DownloadResponseSurveyView(DetailView):
         response['Content-Disposition'] = f'attachment; filename={survey.slug}.csv'
         return response
 
-
 def group_required(group_names):
     def check_group(user):
         user_groups = user.groups.values_list('name', flat=True)
@@ -362,4 +362,28 @@ class SummaryResponseSurveyView(ContextTitleMixin, DetailView):
         context = super().get_context_data(**kwargs)
         summary = SummaryResponse(survey=self.get_object())
         context['summary'] = summary
+        return context
+    
+class DimensionSubdimensionSummaryView(TemplateView):
+    template_name = "djf_surveys/admins/dimension_subdimension_summary.html"
+    title_page = _("Dimension & Subdimension Summary")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        survey_slug = self.kwargs.get('slug')  # Assuming you'll pass the survey's slug in the URL
+        dimension_id = self.kwargs.get('dimension_id')
+        sub_dimension_id = self.kwargs.get('sub_dimension_id')
+
+        survey = get_object_or_404(Survey, slug=survey_slug)
+        summary_response = SummaryResponse(survey=survey)
+
+        if dimension_id:
+            dimension = get_object_or_404(Dimension, id=dimension_id)
+            context['summaries'] = summary_response.generate_for_dimension(dimension.id)
+        elif sub_dimension_id:
+            sub_dimension = get_object_or_404(SubDimension, id=sub_dimension_id)
+            context['summaries'] = summary_response.generate_for_sub_dimension(sub_dimension.id)
+        else:
+            context['summaries'] = summary_response.generate_overall()
+
         return context
