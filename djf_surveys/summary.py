@@ -166,8 +166,9 @@ class ChartBarRating(ChartBar):
 
 class SummaryResponse:
 
-    def __init__(self, survey: Survey):
+    def __init__(self, survey: Survey, dimension_id=None):
         self.survey = survey
+        self.dimension_id = dimension_id
     
     def _process_radio_type(self, question: Question) -> str:
         pie_chart = ChartPie(chart_id=f"chartpie_{question.id}", chart_name=question.label)
@@ -223,23 +224,30 @@ class SummaryResponse:
         bar_chart.data = data
         return bar_chart.render()
 
-    def generate(self):
+    def generate(self, dimension_id=None, subdimension_id=None):
         html_str = []
-        for question in self.survey.questions.all():
+        questions = self.survey.questions.all()
+
+        if dimension_id:
+            questions = questions.filter(dimension__id=dimension_id)
+        if subdimension_id:
+            questions = questions.filter(subdimension__id=subdimension_id)
+
+        for question in questions:
             if question.type_field == TYPE_FIELD.radio or question.type_field == TYPE_FIELD.select:
                 html_str.append(self._process_radio_type(question))
             elif question.type_field == TYPE_FIELD.multi_select:
                 html_str.append(self._process_multiselect_type(question))
             elif question.type_field == TYPE_FIELD.rating:
                 html_str.append(self._process_rating_type(question))
+
         if not html_str:
-            input_types = ', '.join(str(x[1]) for x in models.Question.TYPE_FIELD if
-                      x[0] in (models.TYPE_FIELD.radio, models.TYPE_FIELD.select, models.TYPE_FIELD.multi_select, models.TYPE_FIELD.rating))
-            return """
-<div class="bg-yellow-100 space-y-1 py-5 rounded-md border border-yellow-200 text-center shadow-xs mb-2">
-    <h1 class="text-2xl font-semibold">{}</h1>
-    <h5 class="mb-0 mt-1 text-sm p-2">{}</h5>
-</div>
-""".format(gettext("No summary"), gettext("Summary is available only for input type: %ss") % input_types)
+            input_types = ', '.join(str(x[1]) for x in models.Question.TYPE_FIELD if x[0] in (
+                models.TYPE_FIELD.radio,
+                models.TYPE_FIELD.select,
+                models.TYPE_FIELD.multi_select,
+                models.TYPE_FIELD.rating
+            ))
+            return f"<div>No summary data available for input types: {input_types}</div>"
 
         return " ".join(html_str)

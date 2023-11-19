@@ -4,36 +4,92 @@
 {% block extra_css %}
     {{ chart_js_src|safe }}
     <link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
-    <link rel="stylesheet" href="{% static 'djf_surveys/css/rating.css' %}"/>
+    <link rel="stylesheet" href="{% static 'djf_surveys/css/rating.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="container px-5 py-5 ">
+<div class="container px-5 py-5 ">
+    <div class="grid grid-cols-3 gap-4">
 
-        <section>
-            <div class="py-6 lg:items-end justify-between flex">
-                <h2 class="max-w-xl text-2xl font-bold sm:text-3xl">
-                    {% trans "Summary" %} - {{ object.name }}
-                </h2>
-
-                <div class="flex -space-x-4 hover:space-x-1 float-right">
-                    <a href="{% url 'djf_surveys:detail' object.slug %}"
-                       class="z-20 block p-4 text-green-700 transition-all bg-green-100 border-2 border-white rounded-full active:bg-green-50 hover:scale-110 focus:outline-none focus:ring"
-                       type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <div class="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {{ summary.generate|safe }}
+        <!-- Column 1 of Row 1 -->
+        <div class="col-span-1">
+            <h2 class="max-w-xl text-2xl font-bold sm:text-3xl">
+                {% trans "Summary" %} - {{ object.name }}
+            </h2>
         </div>
 
+        <!-- Column 2 of Row 1 -->
+        <div class="col-span-1">
+            <!-- Dimension Filter Form -->
+            <form method="get" action="">
+                <select id="dimension" name="dimension" class="w-full px-4 py-2 mt-4 border border-gray-300 rounded-md focus:outline-none focus:border-green-500">
+                    <option value="">{% trans "Select Dimension" %}</option>
+                    {% for dimension in dimensions %}
+                        <option value="{{ dimension.id }}" {% if selected_dimension == dimension.id %}selected{% endif %}>
+                            {{ dimension.label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        <!-- Column 3 of Row 1 -->
+        <div class="col-span-1">
+            <form method="get" action="">
+                <select id="subdimension" name="subdimension" class="w-full px-4 py-2 mt-4 border border-gray-300 rounded-md focus:outline-none focus:border-green-500">
+                    <option value="">{% trans "Select Subdimension" %}</option>
+                    {% for subdimension in subdimensions %}
+                        <option value="{{ subdimension.id }}" {% if selected_subdimension == subdimension.id %}selected{% endif %}
+                            data-dimension="{{ subdimension.dimension.id }}"> <!-- Set data-dimension to subdimension.dimension.id -->
+                            {{ subdimension.label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        <!-- Graphs on the second row -->
+        <div class="col-span-3">
+            <div class="summary-content">
+                {% if selected_dimension %}
+                    <!-- Render the summary for the selected dimension -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {{ dimension_summary|safe }}
+                    </div>
+                {% else %}
+                    <!-- Render the full survey summary -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {{ full_summary|safe }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get references to the dimension and subdimension dropdowns
+        const dimensionDropdown = document.getElementById("dimension");
+        const subdimensionDropdown = document.getElementById("subdimension");
+
+        // Add an event listener to the dimension dropdown
+        dimensionDropdown.addEventListener("change", function() {
+            const selectedDimensionId = dimensionDropdown.value;
+
+            // Clear the subdimension dropdown
+            subdimensionDropdown.innerHTML = '<option value="">{% trans "Select Subdimension" %}</option>';
+
+            // Filter subdimension options based on the selected dimension
+            const subdimensionOptions = document.querySelectorAll('#subdimension option');
+            subdimensionOptions.forEach(function(option) {
+                const subdimensionDimensionId = option.getAttribute('data-dimension');
+                if (selectedDimensionId === "" || selectedDimensionId === subdimensionDimensionId) {
+                    subdimensionDropdown.appendChild(option.cloneNode(true));
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}

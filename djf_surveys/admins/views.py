@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-from django.http import JsonResponse, HttpResponse, Http404, HttpResponseServerError
+from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib import messages
 from django.template.loader import render_to_string
 
@@ -38,15 +38,25 @@ class AdminCreateSurveyView(ContextTitleMixin, CreateView):
     template_name = 'djf_surveys/admins/form.html'
     title_page = _("Add New Survey")
 
+    def get_success_url(self):
+        return reverse_lazy("djf_surveys:admin_forms_survey", args=[self.object.slug])
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, gettext("%(page_action_name)s succeeded.") % {'page_action_name': capfirst(self.title_page.lower())})
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, _("There were some errors in your form. Please correct them."))
+        return super().form_invalid(form)
+
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            survey = form.save()
-            self.success_url = reverse("djf_surveys:admin_forms_survey", args=[survey.slug])
-            messages.success(self.request, gettext("%(page_action_name)s succeeded.") % dict(page_action_name=capfirst(self.title_page.lower())))
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+        return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title_page'] = self.title_page
+        return context
 
 
 def group_required(group_names):
@@ -128,12 +138,13 @@ class AdminDeleteSurveyView(DetailView):
     
 def load_dimensions(request):
     level_id = request.GET.get('level')
-    dimensions = Dimension.objects.filter(level_id=level_id).order_by('id')
+    dimensions = Dimension.objects.filter(level__id=level_id).order_by('id')
     return render(request, 'admins/dimension_dropdown_list_options.html', {'dimensions': dimensions})
 
 def load_subdimensions(request):
     dimension_id = request.GET.get('dimension')
-    subdimensions = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
+    dimension = Dimension.objects.get(id=dimension_id)
+    subdimensions = dimension.sub_dimensions.all().order_by('id')
     return render(request, 'admins/sub_dimension_dropdown_list_options.html', {'subdimensions': subdimensions})
 
 
@@ -152,11 +163,10 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     survey = None
     type_field_id = None
 
-    
     def dispatch(self, request, *args, **kwargs):
         self.survey = get_object_or_404(Survey, id=kwargs['pk'])
         self.type_field_id = kwargs['type_field']
-        self.object = None  # Add this line
+        self.object = None
         if self.type_field_id not in TYPE_FIELD:
             raise Http404
         return super().dispatch(request, *args, **kwargs)
@@ -171,9 +181,9 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
 
-        if 'dimension' in form.data:
-            dimension_id = form.data.get('dimension')
-            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id)
+        if 'dimension' in request.POST:
+            dimension_id = request.POST.get('dimension')
+            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension__id=dimension_id)
 
         if form.is_valid():
             question = form.save(commit=False)
@@ -181,7 +191,7 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
             question.type_field = self.type_field_id
             question.save()
             self.object = question
-            messages.success(self.request, gettext("%(page_action_name)s succeeded.") % dict(page_action_name=capfirst(self.title_page.lower())))
+            messages.success(request, gettext("%(page_action_name)s succeeded.") % {'page_action_name': capfirst(self.title_page.lower())})
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -199,19 +209,11 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     def get_sub_title_page(self):
         return gettext("Type Field %s") % Question.TYPE_FIELD[self.type_field_id][1]
 
-
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
-
-    return user_passes_test(check_group)
-
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
     model = Question
     template_name = 'djf_surveys/admins/question_form.html'
-    success_url = SURVEYS_ADMIN_BASE_PATH
+    success_url = reverse_lazy("djf_surveys:")
     title_page = _("Edit Question")
     survey = None
     type_field_id = None
@@ -232,13 +234,13 @@ class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
 
-        if 'dimension' in form.data:
-            dimension_id = form.data.get('dimension')
-            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id)
+        if 'dimension' in request.POST:
+            dimension_id = request.POST.get('dimension')
+            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension__id=dimension_id)
 
         if form.is_valid():
             self.object = form.save()
-            messages.success(self.request, gettext("%(page_action_name)s succeeded.") % dict(page_action_name=capfirst(self.title_page.lower())))
+            messages.success(request, gettext("%(page_action_name)s succeeded.") % {'page_action_name': capfirst(self.title_page.lower())})
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -353,13 +355,29 @@ def group_required(group_names):
     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
-class SummaryResponseSurveyView(ContextTitleMixin, DetailView):
+class SummaryResponseSurveyView(DetailView):
     model = Survey
     template_name = "djf_surveys/admins/summary.html"
-    title_page = _("Summary")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        summary = SummaryResponse(survey=self.get_object())
-        context['summary'] = summary
+        survey = self.get_object()
+        context['dimensions'] = Dimension.objects.filter(questions__survey=survey).distinct()
+        context['subdimensions'] = SubDimension.objects.filter(dimension__questions__survey=survey).distinct()
+
+        dimension_id = self.request.GET.get('dimension')
+        subdimension_id = self.request.GET.get('subdimension')
+        
+        summary = SummaryResponse(survey=survey)
+        context['full_summary'] = summary.generate()
+
+        if subdimension_id:
+            context['selected_subdimension'] = subdimension_id
+            context['summary_content'] = summary.generate(subdimension_id=subdimension_id)
+        elif dimension_id:
+            context['selected_dimension'] = dimension_id
+            context['summary_content'] = summary.generate(dimension_id=dimension_id)
+        else:
+            context['summary_content'] = summary.generate()
+
         return context
