@@ -158,7 +158,7 @@ class DimensionAdmin(admin.ModelAdmin):
 
 @admin.register(SubDimension)
 class SubDimensionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'label', 'description', 'get_dimension')
+    list_display = ('id', 'label', 'description', 'get_dimensions')
     search_fields = ('id', 'label', 'description')
     actions = ['duplicate_subdimensions']
 
