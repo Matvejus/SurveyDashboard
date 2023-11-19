@@ -130,17 +130,19 @@ class LevelAdmin(admin.ModelAdmin):
             level.save()
     duplicate_levels.short_description = "Duplicate selected levels"
 
-
 @admin.register(Dimension)
 class DimensionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'label', 'description', 'level', 'subdimension_count')
+    list_display = ('id', 'label', 'description', 'get_levels', 'subdimension_count')
     search_fields = ('id', 'label', 'description')
-    list_filter = ('level',)
     actions = ['duplicate_dimensions']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.annotate(_subdimension_count=Count('sub_dimensions', distinct=True))
+
+    def get_levels(self, obj):
+        return ", ".join([level.label for level in obj.levels.all()])
+    get_levels.short_description = 'Levels'
 
     def subdimension_count(self, obj):
         return obj._subdimension_count
@@ -154,13 +156,15 @@ class DimensionAdmin(admin.ModelAdmin):
             dimension.save()
     duplicate_dimensions.short_description = "Duplicate selected dimensions"
 
-
 @admin.register(SubDimension)
 class SubDimensionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'label', 'description', 'dimension')
+    list_display = ('id', 'label', 'description', 'get_dimensions')
     search_fields = ('id', 'label', 'description')
-    list_filter = ('dimension',)
     actions = ['duplicate_subdimensions']
+
+    def get_dimensions(self, obj):
+        return ", ".join([dimension.label for dimension in obj.dimensions.all()])
+    get_dimensions.short_description = 'Dimensions'
 
     def duplicate_subdimensions(self, request, queryset):
         for subdimension in queryset:

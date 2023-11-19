@@ -89,7 +89,7 @@ class Dimension(models.Model):
     id = models.CharField(max_length=40, primary_key=True)
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    level = models.ForeignKey(Level, on_delete=models.CASCADE, related_name='dimensions')
+    levels = models.ManyToManyField(Level, related_name='dimensions')
 
     def __str__(self):
         return self.id
@@ -99,7 +99,7 @@ class SubDimension(models.Model):
     id = models.CharField(max_length=40, primary_key=True)
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    dimension = models.ForeignKey(Dimension, on_delete=models.CASCADE, related_name='sub_dimensions')
+    dimensions = models.ManyToManyField(Dimension, related_name='sub_dimensions')
 
     def __str__(self):
         return self.id
