@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView
 from django.contrib.auth import update_session_auth_hash
@@ -10,6 +11,12 @@ class RegisterView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("organization:index")
     template_name = "registration/registration.html"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        profile_url = reverse('organization:profile', kwargs={'user_id': self.object.id})
+        return HttpResponseRedirect(profile_url)
+    
 
 @login_required
 def redirectgroup(request):

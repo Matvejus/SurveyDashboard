@@ -26,8 +26,8 @@
         "model": "djf_surveys.dimension",
         "pk": "1",
         "fields": {
-            "label": "Co-creating solutions",
-            "level": "1"
+            "label": "Co-creating Solutions",
+            "levels": [1, 2, 3]
         }
     },
     {
@@ -35,7 +35,7 @@
         "pk": "2",
         "fields": {
             "label": "Facilitating Activities",
-            "level": "1"
+            "levels": [1, 2, 3]
         }
     },
     {
@@ -43,7 +43,7 @@
         "pk": "3",
         "fields": {
             "label": "Brokering Partnerships",
-            "level": "1"
+            "levels": [1, 2, 3]
         }
     },
     {
@@ -51,7 +51,7 @@
         "pk": "4",
         "fields": {
             "label": "Establishing Legitimacy",
-            "level": "1"
+            "levels": [1, 2]
         }
     },
 
@@ -61,7 +61,7 @@
         "pk": "1",
         "fields": {
             "label": "Collaborative opportunities",
-            "dimension": "1"
+            "dimensions": "1"
         }
     },
     {
@@ -69,7 +69,7 @@
         "pk": "2",
         "fields": {
             "label": "Sharing and learning",
-            "dimension": "2"
+            "dimensions": "2"
         }
     },
     {
@@ -77,7 +77,7 @@
         "pk": "3",
         "fields": {
             "label": "Fair and equal interactions",
-            "dimension": "3"
+            "dimensions": "3"
         }
     },
     {
@@ -85,41 +85,7 @@
         "pk": "4",
         "fields": {
             "label": "Visibility",
-            "dimension": "4"
-        }
-    },
-
-
-    {
-        "model": "djf_surveys.dimension",
-        "pk": "5",
-        "fields": {
-            "label": "Co-creating solutions",
-            "level": "2"
-        }
-    },
-    {
-        "model": "djf_surveys.dimension",
-        "pk": "6",
-        "fields": {
-            "label": "Facilitating Activities",
-            "level": "2"
-        }
-    },
-    {
-        "model": "djf_surveys.dimension",
-        "pk": "7",
-        "fields": {
-            "label": "Brokering Partnerships",
-            "level": "2"
-        }
-    },
-    {
-        "model": "djf_surveys.dimension",
-        "pk": "8",
-        "fields": {
-            "label": "Establishing Legitimacy",
-            "level": "2"
+            "dimensions": "4"
         }
     },
 
@@ -129,7 +95,7 @@
         "pk": "5",
         "fields": {
             "label": "Adopting collaborative solutions",
-            "dimension": "5"
+            "dimensions": "1"
         }
     },
     {
@@ -137,7 +103,7 @@
         "pk": "6",
         "fields": {
             "label": "Organizational learning",
-            "dimension": "6"
+            "dimensions": "2"
         }
     },
     {
@@ -145,7 +111,7 @@
         "pk": "7",
         "fields": {
             "label": "Partnership building",
-            "dimension": "7"
+            "dimensions": "3"
         }
     },  
     {
@@ -153,43 +119,16 @@
         "pk": "8",
         "fields": {
             "label": "Positive reputation",
-            "dimension": "8"
+            "dimensions": "4"
         }
     },
-
-
-    {
-        "model": "djf_surveys.dimension",
-        "pk": "9",
-        "fields": {
-            "label": "Co-creating solutions",
-            "level": "3"
-        }
-    },
-    {
-        "model": "djf_surveys.dimension",
-        "pk": "10",
-        "fields": {
-            "label": "Facilitating Activities",
-            "level": "3"
-        }
-    },
-    {
-        "model": "djf_surveys.dimension",
-        "pk": "11",
-        "fields": {
-            "label": "Brokering partnerships",
-            "level": "3"
-        }
-    },
-
 
     {
         "model": "djf_surveys.subdimension",
         "pk": "9",
         "fields": {
             "label": "Collaborative Output",
-            "dimension": "9"
+            "dimensions": "1"
         }
     }, 
     {
@@ -197,7 +136,7 @@
         "pk": "10",
         "fields": {
             "label": "Resource mobilization",
-            "dimension": "10"
+            "dimensions": "2"
         }
     },
     {
@@ -205,7 +144,7 @@
         "pk": "11",
         "fields": {
             "label": "Network access",
-            "dimension": "11"
+            "dimensions": "3"
         }
     }
 ]
