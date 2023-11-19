@@ -116,7 +116,7 @@ class LevelAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.annotate(_dimension_count=Count('dimensions', distinct=True))
+        return qs.annotate(_dimension_count=Count('dimension', distinct=True))
 
     def dimension_count(self, obj):
         return obj._dimension_count
@@ -134,7 +134,7 @@ class LevelAdmin(admin.ModelAdmin):
 class DimensionAdmin(admin.ModelAdmin):
     list_display = ('id', 'label', 'description', 'get_levels', 'subdimension_count')
     search_fields = ('id', 'label', 'description')
-    actions = ['duplicate_dimensions']
+    actions = ['duplicate_dimension']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -149,16 +149,16 @@ class DimensionAdmin(admin.ModelAdmin):
     subdimension_count.admin_order_field = '_subdimension_count'
     subdimension_count.short_description = 'Number of SubDimensions'
 
-    def duplicate_dimensions(self, request, queryset):
+    def duplicate_dimension(self, request, queryset):
         for dimension in queryset:
             dimension.pk = None  # Clear the primary key to create a new object
             dimension.label = f'Copy of {dimension.label}'
             dimension.save()
-    duplicate_dimensions.short_description = "Duplicate selected dimensions"
+    duplicate_dimension.short_description = "Duplicate selected dimensions"
 
 @admin.register(SubDimension)
 class SubDimensionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'label', 'description', 'get_dimensions')
+    list_display = ('id', 'label', 'description', 'get_dimension')
     search_fields = ('id', 'label', 'description')
     actions = ['duplicate_subdimensions']
 
