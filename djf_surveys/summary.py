@@ -222,24 +222,36 @@ class SummaryResponse:
         bar_chart.labels = labels
         bar_chart.data = data
         return bar_chart.render()
+    
+    def _process_question(self, question: Question) -> str:
+        if question.type_field == TYPE_FIELD.radio or question.type_field == TYPE_FIELD.select:
+            return self._process_radio_type(question)
+        elif question.type_field == TYPE_FIELD.multi_select:
+            return self._process_multiselect_type(question)
+        elif question.type_field == TYPE_FIELD.rating:
+            return self._process_rating_type(question)
+        else:
+            return f"<p>Unsupported question type: {question.type_field}</p>"
 
-    def generate(self):
+    def generate_summary_for_question(self, question: Question) -> str:
+        return self._process_question(question)
+
+    def generate_for_dimension(self, dimension_id: str) -> dict:
+        summaries = {}
+        questions = Question.objects.filter(survey=self.survey, dimension__id=dimension_id)
+        for question in questions:
+            summaries[question.id] = self.generate_summary_for_question(question)
+        return summaries
+
+    def generate_for_sub_dimension(self, sub_dimension_id: str) -> dict:
+        summaries = {}
+        questions = Question.objects.filter(survey=self.survey, subdimension__id=sub_dimension_id)
+        for question in questions:
+            summaries[question.id] = self.generate_summary_for_question(question)
+        return summaries
+
+    def generate_overall(self) -> str:
         html_str = []
         for question in self.survey.questions.all():
-            if question.type_field == TYPE_FIELD.radio or question.type_field == TYPE_FIELD.select:
-                html_str.append(self._process_radio_type(question))
-            elif question.type_field == TYPE_FIELD.multi_select:
-                html_str.append(self._process_multiselect_type(question))
-            elif question.type_field == TYPE_FIELD.rating:
-                html_str.append(self._process_rating_type(question))
-        if not html_str:
-            input_types = ', '.join(str(x[1]) for x in models.Question.TYPE_FIELD if
-                      x[0] in (models.TYPE_FIELD.radio, models.TYPE_FIELD.select, models.TYPE_FIELD.multi_select, models.TYPE_FIELD.rating))
-            return """
-<div class="bg-yellow-100 space-y-1 py-5 rounded-md border border-yellow-200 text-center shadow-xs mb-2">
-    <h1 class="text-2xl font-semibold">{}</h1>
-    <h5 class="mb-0 mt-1 text-sm p-2">{}</h5>
-</div>
-""".format(gettext("No summary"), gettext("Summary is available only for input type: %ss") % input_types)
-
+            html_str.append(self._process_question(question))
         return " ".join(html_str)

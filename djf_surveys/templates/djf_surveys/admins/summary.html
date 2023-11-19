@@ -31,7 +31,11 @@
         </section>
 
         <div class="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {{ summary.generate|safe }}
+            {% for question_id, summary in summaries.items %}
+                <div id="question-summary-{{ question_id }}">
+                    {{ summary|safe }}
+                </div>
+            {% endfor %}
         </div>
 
     </div>

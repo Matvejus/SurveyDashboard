@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-from django.http import JsonResponse, HttpResponse, Http404, HttpResponseServerError
+from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib import messages
 from django.template.loader import render_to_string
 
@@ -344,7 +344,6 @@ class DownloadResponseSurveyView(DetailView):
         response['Content-Disposition'] = f'attachment; filename={survey.slug}.csv'
         return response
 
-
 def group_required(group_names):
     def check_group(user):
         user_groups = user.groups.values_list('name', flat=True)
@@ -353,13 +352,27 @@ def group_required(group_names):
     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
-class SummaryResponseSurveyView(ContextTitleMixin, DetailView):
+class SummaryResponseSurveyView(DetailView):
     model = Survey
     template_name = "djf_surveys/admins/summary.html"
     title_page = _("Summary")
 
+    def get_object(self, queryset=None):
+        return None
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        summary = SummaryResponse(survey=self.get_object())
-        context['summary'] = summary
+        survey_pk = self.kwargs.get('survey_pk')
+        dimension_id = self.kwargs.get('dimension_id')
+        sub_dimension_id = self.kwargs.get('sub_dimension_id')
+        survey = get_object_or_404(Survey, pk=survey_pk)
+        summary_response = SummaryResponse(survey=survey)
+
+        if dimension_id is not None:
+            context['summaries'] = summary_response.generate_for_dimension(dimension_id)
+        elif sub_dimension_id is not None:
+            context['summaries'] = summary_response.generate_for_sub_dimension(sub_dimension_id)
+        else:
+            pass
+
         return context
