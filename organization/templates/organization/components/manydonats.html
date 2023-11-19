@@ -1,171 +1,113 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-<script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
-<canvas id="myChart"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
 
+  <canvas id="myChart"></canvas>
 
-
-{% comment %} <script>
-
+  <script>
     var ctx = document.getElementById('myChart');
     var data = {
-  labels: [
-  "Positive reputation",
-  "Adopting collaborative solutions",
-  "Organizational learning",
-  "Partnership building",
-  "Visibility",
-  "Collaboration Opportunities",
-  "Learning & sharing",
-  "Brokering Relations",
-  "Credibility",
-  "Collaborative output",
-  "Resource mobilization",
-  "Network access"
-],
-  datasets: [
-    {
-      data: [25, 25, 25, 25, null, null, null, null],
-      backgroundColor: ['#ff6384', '#ff6384', '#ff6384', '#ff6384', null, 'tomato', 'pink', 'gray'],
-      filter: ["kekeke", "kakakakka", "kikikiki", "pipaaa", null, null, null, null],
-    },
-    {
-      data: [null, null, 25, 25, 25, 25],
-      backgroundColor: [null, null, 'gray', 'gray', 'gray', 'gray'],
-      filter: [null, null, 5, 6, 7, 8],
-    },
-    {
-      data: [null, null, null, null, 25, 25, 25, 25],
-      backgroundColor: [null, null, null, null, 'pink', 'pink', 'pink', 'pink'],
-      filter: [null, null, null, null, 9, 10, 11, 12],
-    },
-  ],
-};
+      labels: [
+        "Collaborative",
+        "Organizational",
+        "Individual",
+        "Co-creating solutions",
+        "Facilitating activities",
+        "Brokering partnerships",
+        "Establishing legitimacy",
+        "Collaborative output",
+        "Adopting solutions",
+        "Collab Opportunities",
+        "Resource mobilization",
+        "Learning & sharing",
+        "Organizational learning",
+        "Network access",
+        "Partnership building",
+        "Credibility",
+        "Positive reputation",
+        "Visibility"
+      ],
+      datasets: [
+        {
+          data: [null, 1],
+          backgroundColor: ['green'],
+        },
+        {
+          data: [null, null, null, null, null, null, null, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 12, 12],
+          backgroundColor: ['yellow'],
+        },
+        {
+          data: [null, null, 1],
+          backgroundColor: ['green'],
+        },
+        {
+          data: [null, null, null, 25, 25, 25, 25, null, null, null, null],
+          backgroundColor: ['#ff6384', '#ff6384', '#ff6384', '#ff6384'],
+        },
+        {
+          data: [1],
+          backgroundColor: ['green'],
+        },
+      ],
+    };
 
-var options = {
-    onClick: function(e, clickData) {
-        window.open("localhost:8000")
-    },
-    responsive: true,
-    plugins: {
+    var options = {
+      onClick: function (event, clickedData) {
+        if (clickedData.length > 0) {
+          // Handle click event and generate the URL based on the clicked data
+          const dataIndex = clickedData[0].index;
+          const labelName = data.labels[dataIndex];
+          const joinedLabel = labelName.replace(/[^a-zA-Z]/g, '').split(' ').join('');
 
-    labels: {
-        render: 'label',
-        arc: true,
-        position: 'inside'
+          // Define the base URL
+          const baseUrl = "http://localhost:8000/surveys/dashboard/summary/survey/conesu/";
+
+          // Check if the clicked data belongs to a Dimension or SubDimension
+          const dimensionUrls = {
+            "Co-creating Solutions": "dimension/1/",
+            "Facilitating Activities": "dimension/2/",
+            "Brokering Partnerships": "dimension/3/",
+            "Establishing Legitimacy": "dimension/4/",
+          };
+
+          const subDimensionUrls = {
+            "Collaborative Opportunities": "sub-dimension/1/",
+            "Sharing and Learning": "sub-dimension/2/",
+            "Fair and Equal Interactions": "sub-dimension/3/",
+            "Visibility": "sub-dimension/4/",
+            "Adopting Collaborative Solutions": "sub-dimension/5/",
+            "Organizational Learning": "sub-dimension/6/",
+            "Partnership Building": "sub-dimension/7/",
+            "Positive Reputation": "sub-dimension/8/",
+            "Collaborative Output": "sub-dimension/9/",
+            "Resource Mobilization": "sub-dimension/10/",
+            "Network Access": "sub-dimension/11/",
+          };
+
+          // Determine if it's a Dimension or SubDimension label
+          if (dimensionUrls[labelName]) {
+            window.open(baseUrl + dimensionUrls[labelName] + joinedLabel);
+          } else if (subDimensionUrls[labelName]) {
+            window.open(baseUrl + subDimensionUrls[labelName] + joinedLabel);
+          }
+        }
       },
+      responsive: true,
+      plugins: {
+        labels: {
+          render: 'label',
+          arc: true,
+          position: 'inside'
+        },
+        legend: {
+          display: false
+        },
+      },
+    };
 
-    legend: {
-        display: false
-    },
-  },
-};
-
-var myDoughnutChart = new Chart(ctx, {
-  type: 'doughnut',
-  data,
-  options,
-});
-    
-
-</script>  {% endcomment %}
-
-
-<script>
-
-  var ctx = document.getElementById('myChart');
-  var data = {
-labels: [
-
-"Collaborative",
-"Organizational",
-"Individual",
-
-
-"Co-creating solutions",
-"Facilitating activities",
-"Brokering partnerships",
-"Establishing legitimacy",
-
-"Collaborative output",
-"Adopting solutions",
-"Collab Opportunities",
-"Resource mobilization",
-"Learning & sharing",
-"Organizational learning",
-"Network access",
-"Partnership building",
-"Credibility",
-"Positive reputation",
-"Visibility",
-
-],
-datasets: [
-  {
-    data: [null,1],
-    backgroundColor: ['green',],
-    
-  },
-  {
-    data: [null,null,null, null, null, null,null, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 8.33333333, 12, 12],
-    backgroundColor: ['yellow',],
-  },
-  {
-    data: [null,null,1],
-    backgroundColor: ['green',],
-  },
-  {
-    data: [null,null,null, 25, 25, 25, 25, null, null, null,null],
-    backgroundColor: ['#ff6384', '#ff6384', '#ff6384', '#ff6384',],
-  },
-  {
-    data: [1],
-    backgroundColor: ['green',],
-  },
-  
-  
-],
-};
-
-var options = {
-
-  onClick: function(event, clickedData) {
-    if (clickedData.length > 0) {
-      var dataIndex = clickedData[0].index;
-      var labelName = data.labels[dataIndex];
-      var joinedLabel = labelName.replace(/[^a-zA-Z]/g, '').split(' ').join('');
-      window.open("localhost:8000/" + joinedLabel);
-    }
-  },
-  responsive: true,
-  plugins: {
-
-  labels: {
-      render: 'label',
-      arc: true,
-      position: 'inside'
-    },
-
-  legend: {
-      display: false
-  },
-},
-};
-
-var myDoughnutChart = new Chart(ctx, {
-type: 'doughnut',
-data,
-options,
-});
-
-
-  
-
-</script> 
-
-
-
-
-
-
-
+    var myDoughnutChart = new Chart(ctx, {
+      type: 'doughnut',
+      data,
+      options,
+    });
+  </script>

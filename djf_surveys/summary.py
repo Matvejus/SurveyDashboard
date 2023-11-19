@@ -235,6 +235,13 @@ class SummaryResponse:
 
     def generate_summary_for_question(self, question: Question) -> str:
         return self._process_question(question)
+    
+    def generate_for_level(self, level_id: str) -> dict:
+        summaries = {}
+        questions = Question.objects.filter(survey=self.survey, level__id=level_id)
+        for question in questions:
+            summaries[question.id] = self.generate_summary_for_question(question)
+        return summaries
 
     def generate_for_dimension(self, dimension_id: str) -> dict:
         summaries = {}
