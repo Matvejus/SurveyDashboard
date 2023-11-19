@@ -205,7 +205,7 @@ class QuestionForm(forms.ModelForm):
         cleaned_data = super().clean()
         if 'dimension' in cleaned_data:
             dimension_id = cleaned_data.get('dimension').id
-            self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
+            SubDimension.objects.filter(dimension=dimension_id).order_by('id')
 
         elif self.instance.pk:
             self.fields['subdimension'].queryset = self.instance.dimension.subdimension_set.order_by('id')
@@ -226,7 +226,7 @@ class QuestionWithChoicesForm(forms.ModelForm):
         cleaned_data = super().clean()
         if 'dimension' in cleaned_data:
             dimension_id = cleaned_data.get('dimension').id
-            self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
+            SubDimension.objects.filter(dimension=dimension_id).order_by('id')
 
         elif self.instance.pk:
             self.fields['subdimension'].queryset = self.instance.dimension.subdimension_set.order_by('id')
