@@ -13,21 +13,20 @@
         <section>
             <div class="py-6 lg:items-end justify-between flex">
                 <h2 class="max-w-xl text-2xl font-bold sm:text-3xl">
-                    {% if dimension_id %}
-                        {% trans "Dimension Summary" %}
-                    {% elif sub_dimension_id %}
-                        {% trans "Subdimension Summary" %}
+                    {% if dimension_label %}
+                        {{ dimension_label|capfirst }} {% trans "Summary" %}
+                    {% elif sub_dimension_label %}
+                        {{ sub_dimension_label|capfirst }} {% trans "Summary" %}
+                    {% else %}
+                        {% trans "Summary" %}
                     {% endif %}
-                    - {{ object.name }}
+                    {{ object.name }}
                 </h2>
-                <!-- Navigation buttons or other elements can go here -->
             </div>
         </section>
 
         <div class="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- This is where the summary charts will be displayed -->
             {% for key, summary_html in summaries.items %}
-                <!-- Output the summary HTML safely for each chart -->
                 {{ summary_html|safe }}
             {% endfor %}
         </div>
