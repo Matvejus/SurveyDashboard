@@ -361,7 +361,7 @@ class SummaryResponseSurveyView(ContextTitleMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         summary = SummaryResponse(survey=self.get_object())
-        context['summary'] = summary
+        context['summary_overall'] = summary.generate_overall()
         return context
     
 class DimensionSubdimensionSummaryView(TemplateView):
@@ -379,9 +379,11 @@ class DimensionSubdimensionSummaryView(TemplateView):
 
         if dimension_id:
             dimension = get_object_or_404(Dimension, id=dimension_id)
+            context['dimension_label'] = dimension.label
             context['summaries'] = summary_response.generate_for_dimension(dimension.id)
         elif sub_dimension_id:
             sub_dimension = get_object_or_404(SubDimension, id=sub_dimension_id)
+            context['sub_dimension_label'] = sub_dimension.label
             context['summaries'] = summary_response.generate_for_sub_dimension(sub_dimension.id)
         else:
             context['summaries'] = summary_response.generate_overall()
