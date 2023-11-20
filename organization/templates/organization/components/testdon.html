@@ -1,0 +1,146 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
+<canvas id="myChart"></canvas>
+
+<script>
+
+    {% comment %} var ctx = document.getElementById('myChart');
+    var data = {
+  labels: [
+  
+  "Collaborative",
+
+  
+  ],
+  datasets: [
+    {
+      data: [1],
+      backgroundColor: ['green',],
+    },
+    
+  ],
+  };
+  
+  var options = {
+  
+    onClick: function(event, clickedData) {
+      if (clickedData.length > 0) {
+        var dataIndex = clickedData[0].index;
+        var labelName = data.labels[dataIndex];
+        var joinedLabel = labelName.replace(/[^a-zA-Z]/g, '').split(' ').join('');
+        console.log(labelName)
+      }
+    },
+    responsive: true,
+    plugins: {
+  
+    labels: {
+        render: 'label',
+        arc: true,
+        position: 'inside'
+      },
+  
+    legend: {
+        display: false
+    },
+  },
+  };
+  
+  var myDoughnutChart = new Chart(ctx, {
+  type: 'doughnut',
+  data,
+  options,
+  }); {% endcomment %}
+
+
+
+
+  var data = [  //levels
+                {vX:20, n:'Organizational', link: "summary/survey/conesu/level/2/"}, 
+                {vX:20, n:'Individual', link: "summary/survey/conesu/level/1/"}, 
+                {vX:20, n:'Collaborative', link: "summary/survey/conesu/level/3/"},
+                //dimensions 
+                {vX:20, n:'Co-creating Solutions', level: "dimension", link: "summary/survey/conesu/dimension/1/"},
+                {vX:20, n:'Facilitating Activities', level: "dimension", link: "summary/survey/conesu/dimension/2/"},
+                {vX:20, n:'Brokering Partnerships', level: "dimension", link: "summary/survey/conesu/dimension/3/"},
+                {vX:20, n:'Establishing Legitimacy', level: "dimension", link: "summary/survey/conesu/dimension/4/"},
+                //subdimensions 
+                {vX:20, n:'Collaborative opportunities', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/1/"}, 
+                {vX:20, n:'Sharing and learning', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/2/"}, 
+                {vX:20, n:'Fair and equal interactions', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/3/"}, 
+                {vX:20, n:'Visibility', level: "sub-dimension", link: "summary/survey/conesu/dimension/4/"}, 
+                {vX:20, n:'Adopting collaborative solutions', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/5/"}, 
+                {vX:20, n:'Organizational learning', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/6/"}, 
+                {vX:20, n:'Partnership building', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/7/"}, 
+                {vX:20, n:'Positive reputation', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/8/"}, 
+                {vX:20, n:'Collaborative Output', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/9/"}, 
+                {vX:20, n:'Resource mobilization', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/10/"}, 
+                {vX:20, n:'Network access', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/11/"}, 
+                ];
+
+  new Chart('myChart', {
+    type: 'doughnut',
+    data: {
+      labels: data.map(v => v.n),
+      datasets: [
+      {
+        label: 'Organizational',
+        data: data.map(v => (v.n === 'Organizational' ? v.vX : null)),
+        borderWidth: 1,
+        backgroundColor: 'rgba(255, 99, 132, 0.5)', 
+      },
+      {
+        label: 'Sub-dimensions',
+        data: data.map(v => (v.level === 'sub-dimension' ? v.vX : null)),
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        cutoutPercentage: 400
+      },
+      {
+        label: 'Individual',
+        data: data.map(v => (v.n === 'Individual' ? v.vX : null)),
+        borderWidth: 1,
+        backgroundColor: 'rgba(54, 162, 235, 0.5)', 
+      },
+      {
+        label: 'Dimensions',
+        data: data.map(v => (v.level === 'dimension' ? v.vX : null)),
+        borderWidth: 1,
+        backgroundColor: 'rgba(145, 206, 86, 0.5)', 
+      },
+      {
+        label: '# of Votes - Collaborative',
+        data: data.map(v => (v.n === 'Collaborative' ? v.vX : null)),
+        borderWidth: 1,
+        backgroundColor: 'rgba(255, 206, 86, 0.5)',
+      },
+      ]
+    },
+    options: {
+        onClick: function (event, clickedData) {
+          if (clickedData.length > 0) {
+            var dataIndex = clickedData[0].index;
+            var labelName = data[dataIndex].n;
+            var link = data[dataIndex].link;
+            var joinedLabel = labelName.replace(/[^a-zA-Z]/g, '').split(' ').join('');
+            console.log("http://localhost:8000/surveys/dashboard/" + link);
+            window.open("http://localhost:8000/surveys/dashboard/" + link);
+          }
+        },
+        plugins: {
+          labels: {
+            render: 'label',
+            arc: true,
+            position: 'inside'
+          },
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  
+  
+    
+  
+  </script> 
