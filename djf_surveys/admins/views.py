@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.template.loader import render_to_string
 
 from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
-from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Dimension, SubDimension
+from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Level, Dimension, SubDimension
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.views import SurveyListView
 from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm
@@ -363,21 +363,28 @@ class SummaryResponseSurveyView(ContextTitleMixin, DetailView):
         summary = SummaryResponse(survey=self.get_object())
         context['summary_overall'] = summary.generate_overall()
         return context
-    
+
+
+
 class DimensionSubdimensionSummaryView(TemplateView):
     template_name = "djf_surveys/admins/dimension_subdimension_summary.html"
     title_page = _("Dimension & Subdimension Summary")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        survey_slug = self.kwargs.get('slug')  # Assuming you'll pass the survey's slug in the URL
+        survey_slug = self.kwargs.get('slug')
+        level_id = kwargs.get('level_id')
         dimension_id = self.kwargs.get('dimension_id')
         sub_dimension_id = self.kwargs.get('sub_dimension_id')
 
         survey = get_object_or_404(Survey, slug=survey_slug)
         summary_response = SummaryResponse(survey=survey)
 
-        if dimension_id:
+        if level_id:
+            level = get_object_or_404(Level, id=level_id)
+            context['level_label'] = level.label
+            context['summaries'] = summary_response.generate_for_level(level_id)
+        elif dimension_id:
             dimension = get_object_or_404(Dimension, id=dimension_id)
             context['dimension_label'] = dimension.label
             context['summaries'] = summary_response.generate_for_dimension(dimension.id)
