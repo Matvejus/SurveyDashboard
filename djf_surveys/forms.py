@@ -36,7 +36,7 @@ class SurveyForm(forms.ModelForm):
            )
    
     
-    org_type = forms.MultipleChoiceField(choices=CHOICES, widget=forms.CheckboxSelectMultiple())
+    org_type = forms.MultipleChoiceField(choices=CHOICES, widget=CheckboxSelectMultipleSurvey())
 
     class Meta:
         model = Survey
