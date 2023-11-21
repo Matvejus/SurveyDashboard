@@ -1,7 +1,7 @@
 {% extends 'organization/base.html' %}
 {% load bootstrap5 %}
 {%load static%}
-{% block page_title %}<title>Wheel dash</title>{% endblock page_title %}
+{% block page_title %}<title>Dashboard</title>{% endblock page_title %}
 
 {%block css_files%}
 {% comment %} <link rel="stylesheet" href="{% static 'organization/keen-dashboards.css' %}" type="text/css" media="screen"> {% endcomment %}
@@ -13,28 +13,16 @@
 {% block content %}
 
 <body>  
-      {% comment %}   <div class="grid grid-rows-3 grid-cols-6 gap-4">
-        <div class='chart-wrapper container row-span-3 col-span-3'>
-          <div class =""><canvas class id="polar"/></div>
-        </div>
-          <div class='col-span-3'>
-            <div class="grid grid-cols-3 gap-4 grid-flow-col auto-cols-max ">
-            <div class='chart-wrapper container'>
-            <div><canvas class="" id="donutChart"/></div>  
-          </div> {% endcomment %}
-          <div class="grid grid-rows-2 grid-cols-6 gap-4">
-            <div class='container row-span-3 col-span-3 rotate-180'>
-              {% include 'organization/components/testdon.html'%}
+    <div class="grid grid-rows-2 grid-cols-6 gap-4">
+      <div class='container row-span-3 col-span-3 rotate-180'>
+        {% include 'organization/components/testdon.html'%}
             </div>
       
-            <!--Entire Block for Collaboration Network-->
-            <div class="row-span-2 col-span-3">
-              {% include 'organization/components/CollaboratorsTable.html'%}
-            </div>
-         </div>
+      <!--Entire Block for Collaboration Network-->
+      <div class=" container row-span-3 col-span-3">
+        {% include 'djf/components/CollaboratorsTable.html'%}
       </div>
     </div>
-  </div>
 
 </body>  
   {% block scripts %}
