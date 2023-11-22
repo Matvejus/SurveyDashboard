@@ -129,12 +129,12 @@ class AdminDeleteSurveyView(DetailView):
     
 def load_dimensions(request):
     level_id = request.GET.get('level')
-    dimensions = Dimension.objects.filter(level_id=level_id).order_by('id')
+    dimensions = Dimension.objects.filter(level__id=level_id).order_by('id')
     return render(request, 'admins/dimension_dropdown_list_options.html', {'dimensions': dimensions})
 
 def load_subdimensions(request):
     dimension_id = request.GET.get('dimension')
-    subdimensions = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
+    subdimensions = SubDimension.objects.filter(dimension__id=dimension_id).order_by('id')
     return render(request, 'admins/sub_dimension_dropdown_list_options.html', {'subdimensions': subdimensions})
 
 
