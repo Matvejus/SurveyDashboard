@@ -1,0 +1,44 @@
+{% extends 'organization/base.html' %}
+{% load djf_survey_tags i18n %}
+{% load static %}
+
+
+{%block css_files%}
+<link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
+<link rel='stylesheet' href="{% static 'organization/style.css'%}">
+<link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
+
+{% endblock css_files%}
+
+{% block page_title %}
+  <title>Register organization</title>
+{% endblock page_title %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+<section class="bg-customgray-50 dark:bg-gray-900 justify-center items-center min-h-screen">
+  <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
+      <div class="max-w-lg mx-auto">
+          <h1 class="text-center text-3xl">Collaboration</h1>
+          <div class="p-8 mt-6 mb-0 space-y-4 bg-customgrey">
+              <form method="post"  action="{% url 'organization:new_collab' %}" id="OrgForm" class="w-150">
+                  {% csrf_token %}
+                  {% for field in form %}
+                  <div class="mb-5" id="section_field_{{ field.auto_id }}">
+                    <label for="email" class="text-base font-medium">{{ field.label }}</label>
+                    <div class="mt-1">
+                        {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
+                    </div>
+                </div>                              
+                  {% endfor %}
+                  <button type="submit" class="block w-full mt-2 px-5 py-3 text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-lg ho">
+                    {% trans "Add collaboration network" %}
+                  </button>
+              </form>
+          </div>
+      </div>
+  </div>
+</section>
+
+{% endblock content%}
