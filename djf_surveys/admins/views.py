@@ -174,7 +174,7 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
 
         if 'dimension' in form.data:
             dimension_id = form.data.get('dimension')
-            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id)
+            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension = dimension_id)
 
         if form.is_valid():
             question = form.save(commit=False)

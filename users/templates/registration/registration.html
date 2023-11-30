@@ -1,35 +1,55 @@
-{% extends "organization/base.html" %}
-{% load bootstrap5 %}
+{% extends 'organization/base.html' %}
+{% load djf_survey_tags i18n %}
+{% load static %}
+
+
+{%block css_files%}
+<link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
+<link rel='stylesheet' href="{% static 'organization/style.css'%}">
+<link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
+
+{% endblock css_files%}
+
+{% block page_title %}
+  <title>Register</title>
+{% endblock page_title %}
 
 {% block header %}
 {% endblock %}
-
 {% block content %}
-<div class="container" style="max-width:600px">
-  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Register</h1>
-      <div class="py-5">
-        <div class="row">
-          <div class="col-12">
-            <form method="post" action="{% url 'users:register' %}" class="form"  enctype="multipart/form-data">
-              {% csrf_token %}
-              {% bootstrap_form form %}
-              {% buttons %}
-                <button name="submit" class="btn btn-primary">register</button>
-              {% endbuttons %}
-            </form>
+<section class="bg-customgray-50 dark:bg-gray-900 justify-center items-center min-h-screen">
+  <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
+      <div class="max-w-lg mx-auto">
+          <h1 class="text-center text-3xl">Register</h1>
+          <div class="p-8 mt-6 mb-0 space-y-4 bg-customgrey">
+              <form method="post" id="LoginForm" class="w-100" action="{% url 'users:register' %}" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {% for field in form %}
+                  {% if field.label == 'Organization'%}
+                      <div class="mb-5" id="section_field_{{ field.auto_id }}">
+                          <label for="email" class="text-base font-medium">{{ field.label }}</label>
+                          <div class="mt-1">
+                              {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
+                          </div>
+                          <a href="{% url 'organization:neworg' %}" class="py-4 px-2 text-gray-500 hover:border-blue-500 hover:text-blue-500 font-semibold">Don't see your organization?</a>
+                      </div>
+                  {% else %}
+                  <div class="mb-5" id="section_field_{{ field.auto_id }}">
+                    <label for="email" class="text-base font-medium">{{ field.label }}</label>
+                    <div class="mt-1">
+                        {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
+                    </div>
+                </div>            
+                  {% endif %}                  
+                  {% endfor %}
+                  <button type="submit" class="block w-full mt-2 px-5 py-3 text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-lg ho">
+                  {% trans "Register" %}
+                  </button>
+              </form>
           </div>
-        </div>
       </div>
-  </div>  
-{% endblock content %}
-    
+  </div>
+</section>
 
-
-
-
-
-
-
-
+{% endblock content%}
 

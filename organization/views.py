@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView
 from .forms import ContactForm
-from .models import OrgProfile
+from .models import OrgProfile, CollaborationNetwork
 from django.db.models import OuterRef, Exists
 from users.models import CustomUser
 from djf_surveys.models import UserAnswer
@@ -36,11 +36,18 @@ def group_required(group_names):
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required([ 'Orchestrator','Supervisor'])], name='dispatch')
+#@method_decorator([login_required, group_required([ 'Orchestrator','Supervisor'])], name='dispatch')
 class NewOrgView(CreateView):
     model = OrgProfile
     fields = '__all__'
     template_name = 'new_org.html'
+    success_url = '/new_collaboration'
+
+
+class NewCollab(CreateView):
+    model = CollaborationNetwork
+    fields = "__all__"
+    template_name = 'new_collaboration.html'
     success_url = '/users/register'
 
 #page of collaboraton

@@ -48,7 +48,7 @@ class CollaborationNetwork(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=160)
     stage = models.CharField(max_length = 20, choices=NetworkStage.choices)
-    orchestrator = models.ForeignKey('users.CustomUser', on_delete=models.DO_NOTHING, related_name='orchestrator')
+    orchestrator = models.ForeignKey('users.CustomUser', on_delete=models.DO_NOTHING, related_name='orchestrator',)
     collaborators = models.ManyToManyField('users.CustomUser', related_name='collaborators',)
 
     def __str__(self):
