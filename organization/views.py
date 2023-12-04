@@ -4,7 +4,7 @@ from .forms import ContactForm
 from .models import OrgProfile, CollaborationNetwork
 from django.db.models import OuterRef, Exists
 from users.models import CustomUser
-from djf_surveys.models import UserAnswer
+from djf_surveys.models import UserAnswer, Survey
  
 
 # Create your views here.
@@ -63,11 +63,18 @@ def dashboardpage(request):
     # Annotate each collaborator with whether they have an answer or not.
     collaborators = collaborators.annotate(has_answer=Exists(has_answer))
 
+    #to return the slug of the survey of collaboration for wheel
+    surveys_for_user_network = Survey.objects.filter(collaboration_network=network)
+
+    # Accessing the slug for each survey in the filtered queryset
+    survey_slugs = [survey.slug for survey in surveys_for_user_network]
+
     context = {
         'user': user,
         'org': org, 
         'network': network,
         'collaborators': collaborators,
+        'survey_slug': survey_slugs[0],
     }
     
     return render(request, 'organization/dashboard.html', context)

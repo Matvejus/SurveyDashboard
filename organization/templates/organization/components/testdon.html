@@ -57,26 +57,26 @@
 
 
   var data = [  //levels
-                {vX:20, n:'Organizational', link: "summary/survey/conesu/level/2/"}, 
-                {vX:20, n:'Individual', link: "summary/survey/conesu/level/1/"}, 
-                {vX:20, n:'Collaborative', link: "summary/survey/conesu/level/3/"},
+                {vX:20, n:'Organizational', link: "/level/2/"}, 
+                {vX:20, n:'Individual', link: "/level/1/"}, 
+                {vX:20, n:'Collaborative', link: "/level/3/"},
                 //dimensions 
-                {vX:20, n:'Co-creating Solutions', level: "dimension", link: "summary/survey/conesu/dimension/1/"},
-                {vX:20, n:'Facilitating Activities', level: "dimension", link: "summary/survey/conesu/dimension/2/"},
-                {vX:20, n:'Brokering Partnerships', level: "dimension", link: "summary/survey/conesu/dimension/3/"},
-                {vX:20, n:'Establishing Legitimacy', level: "dimension", link: "summary/survey/conesu/dimension/4/"},
+                {vX:20, n:'Co-creating Solutions', level: "dimension", link: "/dimension/1/"},
+                {vX:20, n:'Facilitating Activities', level: "dimension", link: "/dimension/2/"},
+                {vX:20, n:'Brokering Partnerships', level: "dimension", link: "/dimension/3/"},
+                {vX:20, n:'Establishing Legitimacy', level: "dimension", link: "/dimension/4/"},
                 //subdimensions 
-                {vX:20, n:'Collaborative opportunities', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/1/"}, 
-                {vX:20, n:'Sharing and learning', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/2/"}, 
-                {vX:20, n:'Fair and equal interactions', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/3/"}, 
-                {vX:20, n:'Visibility', level: "sub-dimension", link: "summary/survey/conesu/dimension/4/"}, 
-                {vX:20, n:'Adopting collaborative solutions', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/5/"}, 
-                {vX:20, n:'Organizational learning', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/6/"}, 
-                {vX:20, n:'Partnership building', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/7/"}, 
-                {vX:20, n:'Positive reputation', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/8/"}, 
-                {vX:20, n:'Collaborative Output', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/9/"}, 
-                {vX:20, n:'Resource mobilization', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/10/"}, 
-                {vX:20, n:'Network access', level: "sub-dimension", link: "summary/survey/conesu/sub-dimension/11/"}, 
+                {vX:20, n:'Collaborative opportunities', level: "sub-dimension", link: "/sub-dimension/1/"}, 
+                {vX:20, n:'Sharing and learning', level: "sub-dimension", link: "/sub-dimension/2/"}, 
+                {vX:20, n:'Fair and equal interactions', level: "sub-dimension", link: "/sub-dimension/3/"}, 
+                {vX:20, n:'Visibility', level: "sub-dimension", link: "/sub-dimension/4/"}, 
+                {vX:20, n:'Adopting collaborative solutions', level: "sub-dimension", link: "/sub-dimension/5/"}, 
+                {vX:20, n:'Organizational learning', level: "sub-dimension", link: "/sub-dimension/6/"}, 
+                {vX:20, n:'Partnership building', level: "sub-dimension", link: "/sub-dimension/7/"}, 
+                {vX:20, n:'Positive reputation', level: "sub-dimension", link: "/sub-dimension/8/"}, 
+                {vX:20, n:'Collaborative Output', level: "sub-dimension", link: "/sub-dimension/9/"}, 
+                {vX:20, n:'Resource mobilization', level: "sub-dimension", link: "/sub-dimension/10/"}, 
+                {vX:20, n:'Network access', level: "sub-dimension", link: "/sub-dimension/11/"}, 
                 ];
 
   new Chart('myChart', {
@@ -119,12 +119,13 @@
     options: {
         onClick: function (event, clickedData) {
           if (clickedData.length > 0) {
+            var survey_slug = "{{survey_slug}}";
             var dataIndex = clickedData[0].index;
             var labelName = data[dataIndex].n;
             var link = data[dataIndex].link;
             var joinedLabel = labelName.replace(/[^a-zA-Z]/g, '').split(' ').join('');
-            console.log("http://localhost:8000/surveys/dashboard/" + link);
-            window.open("http://localhost:8000/surveys/dashboard/" + link);
+            console.log(survey_slug + link);
+            window.open("http://localhost:8000/surveys/dashboard/summary/survey/" + survey_slug + link);
           }
         },
         plugins: {

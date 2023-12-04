@@ -13,6 +13,7 @@ from djf_surveys.utils import create_star
 
 
 
+
 TYPE_FIELD = namedtuple(
     'TYPE_FIELD', 'text number radio select multi_select text_area url email date rating'
 )._make(range(10))
@@ -58,6 +59,7 @@ class Survey(BaseModel):
     private_response = models.BooleanField(_("private response"), default=False, help_text=_("If True, only admin and owner can access."))
     can_anonymous_user = models.BooleanField(_("anonymous submission"), default=False, help_text=_("If True, user without authentatication can submit."))
     org_type = models.CharField(_("Organization type"), blank = True, max_length = 200)
+    collaboration_network = models.ForeignKey('organization.CollaborationNetwork', related_name="network", on_delete=models.CASCADE, verbose_name=_("Collaboration Network"))
     
     class Meta:
         verbose_name = _("survey")

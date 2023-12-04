@@ -41,7 +41,7 @@ class SurveyForm(forms.ModelForm):
     class Meta:
         model = Survey
         fields = [
-            'name', 'description', 'org_type', 'editable', 'deletable',
+            'name', 'description', 'collaboration_network', 'org_type', 'editable', 'deletable',
             'duplicate_entry', 'private_response', 'can_anonymous_user',
         ]
 
