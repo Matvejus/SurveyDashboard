@@ -1,0 +1,16 @@
+{% extends 'djf_surveys/admins/master.html' %}
+{% load djf_survey_tags static i18n %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'djf_surveys/css/rating.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+{% for question in questions  %}
+
+<div>{{question}}</div>
+
+{% endfor %}
+
+{% endblock content %}

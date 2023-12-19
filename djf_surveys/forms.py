@@ -42,7 +42,7 @@ class SurveyForm(forms.ModelForm):
         model = Survey
         fields = [
             'name', 'description', 'collaboration_network', 'org_type', 'editable', 'deletable',
-            'duplicate_entry', 'private_response', 'can_anonymous_user',
+            'duplicate_entry', 'private_response', 'can_anonymous_user', 'questions',
         ]
 
 

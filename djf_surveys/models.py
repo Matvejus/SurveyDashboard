@@ -49,36 +49,6 @@ class BaseModel(models.Model):
         ordering = ['created_at']
 
 
-class Survey(BaseModel):
-    name = models.CharField(_("name"), max_length=200)
-    description = models.TextField(_("description"), default='')
-    slug = models.SlugField(_("slug"), max_length=225, default='')
-    editable = models.BooleanField(_("editable"), default=True, help_text=_("If False, user can't edit record."))
-    deletable = models.BooleanField(_("deletable"), default=True, help_text=_("If False, user can't delete record."))
-    duplicate_entry = models.BooleanField(_("mutiple submissions"), default=False, help_text=_("If True, user can resubmit."))
-    private_response = models.BooleanField(_("private response"), default=False, help_text=_("If True, only admin and owner can access."))
-    can_anonymous_user = models.BooleanField(_("anonymous submission"), default=False, help_text=_("If True, user without authentatication can submit."))
-    org_type = models.CharField(_("Organization type"), blank = True, max_length = 200)
-    collaboration_network = models.ForeignKey('organization.CollaborationNetwork', related_name="network", on_delete=models.CASCADE, verbose_name=_("Collaboration Network"))
-    
-    class Meta:
-        verbose_name = _("survey")
-        verbose_name_plural = _("surveys")
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if self.slug:
-            self.slug = generate_unique_slug(Survey, self.slug, self.id)
-        else:
-            self.slug = generate_unique_slug(Survey, self.name, self.id)
-        super().save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = _("survey")
-        verbose_name_plural = _("surveys")
-
 class Level(models.Model):
     id = models.CharField(max_length=20, primary_key=True)
     label = models.CharField(max_length=255)
@@ -125,7 +95,6 @@ class Question(BaseModel):
     subdimension = models.ForeignKey(SubDimension, on_delete=models.CASCADE, related_name='questions')
     key = models.CharField(_("key"), max_length=225, unique=True, null=True, blank=True,
                            help_text=_("Unique key for this question, fill in the blank if you want to use for automatic generation."))
-    survey = models.ForeignKey(Survey, related_name='questions', on_delete=models.CASCADE, verbose_name=_("survey"))
     label = models.CharField(_("label"), max_length=500, help_text=_("Enter your question in here."))
     type_field = models.PositiveSmallIntegerField(_("type of input field"), choices=TYPE_FIELD)
     choices = models.TextField(
@@ -147,7 +116,7 @@ class Question(BaseModel):
         ordering = ["ordering"]    
 
     def __str__(self):
-        return f"{self.label}-survey-{self.survey.id}"
+        return self.label
 
     def save(self, *args, **kwargs):
         if self.key:
@@ -156,6 +125,38 @@ class Question(BaseModel):
             self.key = generate_unique_slug(Question, self.label, self.id, "key")
             
         super(Question, self).save(*args, **kwargs)
+
+
+class Survey(BaseModel):
+    name = models.CharField(_("name"), max_length=200)
+    description = models.TextField(_("description"), default='')
+    slug = models.SlugField(_("slug"), max_length=225, default='')
+    editable = models.BooleanField(_("editable"), default=True, help_text=_("If False, user can't edit record."))
+    deletable = models.BooleanField(_("deletable"), default=True, help_text=_("If False, user can't delete record."))
+    duplicate_entry = models.BooleanField(_("mutiple submissions"), default=False, help_text=_("If True, user can resubmit."))
+    private_response = models.BooleanField(_("private response"), default=False, help_text=_("If True, only admin and owner can access."))
+    can_anonymous_user = models.BooleanField(_("anonymous submission"), default=False, help_text=_("If True, user without authentatication can submit."))
+    org_type = models.CharField(_("Organization type"), blank = True, max_length = 200)
+    collaboration_network = models.ForeignKey('organization.CollaborationNetwork', related_name="network", on_delete=models.CASCADE, verbose_name=_("Collaboration Network"))
+    questions = models.ManyToManyField(Question, related_name='surveys', verbose_name=_("questions"), blank=True, help_text=_("Select questions for this survey."))
+    
+    class Meta:
+        verbose_name = _("survey")
+        verbose_name_plural = _("surveys")
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.slug:
+            self.slug = generate_unique_slug(Survey, self.slug, self.id)
+        else:
+            self.slug = generate_unique_slug(Survey, self.name, self.id)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = _("survey")
+        verbose_name_plural = _("surveys")
 
 
 class UserAnswer(BaseModel):
