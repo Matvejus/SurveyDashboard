@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="flex py-1 fixed bottom-10 right-10">
+    {% comment %} <div class="flex py-1 fixed bottom-10 right-10">
         <button
             class="z-20 block p-4 text-blue-100 transition-all bg-blue-700 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
             data-te-toggle="modal"
@@ -16,6 +16,18 @@
             type="button">
             {% include "djf_surveys/buttons/add_button.html" with size=6 %}
             <span class="items-center float-right"> {% trans 'Question' %} </span>
+        </button>
+    </div> {% endcomment %}
+    <div class="flex py-1 fixed bottom-10 right-10">
+        <button
+            class="z-20 block p-4 text-blue-100 transition-all bg-blue-700 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
+            data-te-toggle="modal"
+            data-te-target="#selectQuestions"
+            data-te-ripple-init
+            data-te-ripple-color="light"
+            type="button">
+            {% include "djf_surveys/buttons/add_button.html" with size=6 %}
+            <span class="items-center float-right"> {% trans 'Questions1' %} </span>
         </button>
     </div>
 
@@ -93,6 +105,7 @@
 
         {% include 'djf_surveys/components/modal_delete.html' %}
         {% include 'djf_surveys/components/modal_choice_field_type.html' %}
+        {% include 'djf_surveys/components/modal_question_list.html' %}
     </div>
 
 {% endblock %}
