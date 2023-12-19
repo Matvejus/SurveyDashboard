@@ -35,8 +35,10 @@ class SurveyForm(forms.ModelForm):
                ("OTHER", "Other civil society organization"),
            )
    
-    
     org_type = forms.MultipleChoiceField(choices=CHOICES, widget = CheckboxSelectMultipleSurvey())
+    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
+
+
 
     class Meta:
         model = Survey
