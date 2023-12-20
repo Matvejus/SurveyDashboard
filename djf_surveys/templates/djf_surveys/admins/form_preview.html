@@ -18,7 +18,7 @@
             <span class="items-center float-right"> {% trans 'Question' %} </span>
         </button>
     </div> {% endcomment %}
-    <div class="flex py-1 fixed bottom-10 right-10">
+    {% comment %} <div class="flex py-1 fixed bottom-10 right-10">
         <button
             class="z-20 block p-4 text-blue-100 transition-all bg-blue-700 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
             data-te-toggle="modal"
@@ -29,6 +29,9 @@
             {% include "djf_surveys/buttons/add_button.html" with size=6 %}
             <span class="items-center float-right"> {% trans 'Questions1' %} </span>
         </button>
+    </div> {% endcomment %}
+    <div class="flex py-1 fixed bottom-10 right-10">
+        <input type="button" class="profile-edit-btn border-solid border-1 border-green-500 bg-gray-100 rounded-full px-4 py-1" name="btnAddMore" value="Add questions" onclick="location.href='{% url 'djf_surveys:select_questions' survey.slug %}';">
     </div>
 
     <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">

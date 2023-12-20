@@ -1,0 +1,21 @@
+{% extends 'djf_surveys/admins/master.html' %}
+{% load djf_survey_tags static i18n %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'djf_surveys/css/rating.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
+    <form method="post" id="QuestionForm" data-dimensions-url="{% url 'djf_surveys:ajax_load_dimensions' %}" data-subdimensions-url="{% url 'djf_surveys:ajax_load_subdimensions' %}" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+            {{field}}
+        {% endfor %}
+
+        <button type="submit" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
+            {% trans "Submit" %}
+        </button>
+    </form>
+</div>
+{% endblock content %}

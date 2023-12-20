@@ -233,3 +233,12 @@ class QuestionWithChoicesForm(forms.ModelForm):
         elif self.instance.pk:
             self.fields['subdimension'].queryset = self.instance.dimension.subdimension_set.order_by('id')
         return cleaned_data
+    
+
+class SelectQuestionsForm(forms.ModelForm):
+
+    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
+
+    class Meta:
+        model = Survey
+        fields = ['questions']
