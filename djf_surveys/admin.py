@@ -32,8 +32,8 @@ class SubDimensionAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('label', 'survey', 'type_field', 'required', 'ordering')
-    list_filter = ('survey', 'type_field', 'required')
+    list_display = ('label', 'type_field', 'required', 'ordering')
+    list_filter = ('type_field', 'required')
     search_fields = ('label', 'help_text')
 
 @admin.register(UserAnswer)
@@ -45,7 +45,6 @@ class UserAnswerAdmin(admin.ModelAdmin):
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ('question', 'value_display', 'user_answer')
-    list_filter = ('question__survey',)
     search_fields = ('value', 'question__label')
     readonly_fields = ('value_display',)
 

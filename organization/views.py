@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView
 from .forms import ContactForm
-from .models import OrgProfile
+from .models import OrgProfile, CollaborationNetwork
 from django.db.models import OuterRef, Exists
 from users.models import CustomUser
-from djf_surveys.models import UserAnswer
+from djf_surveys.models import UserAnswer, Survey
  
 
 # Create your views here.
@@ -36,11 +36,18 @@ def group_required(group_names):
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required([ 'Orchestrator','Supervisor'])], name='dispatch')
+#@method_decorator([login_required, group_required([ 'Orchestrator','Supervisor'])], name='dispatch')
 class NewOrgView(CreateView):
     model = OrgProfile
     fields = '__all__'
     template_name = 'new_org.html'
+    success_url = '/new_collaboration'
+
+
+class NewCollab(CreateView):
+    model = CollaborationNetwork
+    fields = "__all__"
+    template_name = 'new_collaboration.html'
     success_url = '/users/register'
 
 #page of collaboraton
@@ -56,11 +63,22 @@ def dashboardpage(request):
     # Annotate each collaborator with whether they have an answer or not.
     collaborators = collaborators.annotate(has_answer=Exists(has_answer))
 
+    #to return the slug of the survey of collaboration for wheel
+    surveys_for_user_network = Survey.objects.filter(collaboration_network=network)
+
+    # Accessing the slug for each survey in the filtered queryset
+    survey_slugs = [survey.slug for survey in surveys_for_user_network]
+    if len(survey_slugs) >=1:
+        slug = survey_slugs[0]
+    else:
+        slug = ""
+
     context = {
         'user': user,
         'org': org, 
         'network': network,
         'collaborators': collaborators,
+        'survey_slug': slug,
     }
     
     return render(request, 'organization/dashboard.html', context)

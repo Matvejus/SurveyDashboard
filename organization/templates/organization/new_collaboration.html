@@ -11,30 +11,29 @@
 {% endblock css_files%}
 
 {% block page_title %}
-  <title>Login</title>
+  <title>Register organization</title>
 {% endblock page_title %}
 
 {% block header %}
 {% endblock %}
 {% block content %}
-<section class="bg-customgray-50 dark:bg-gray-900 flex justify-center items-center min-h-screen">
+<section class="bg-customgray-50 dark:bg-gray-900 justify-center items-center min-h-screen">
   <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
       <div class="max-w-lg mx-auto">
-          <h1 class="text-center text-3xl">Welcome back!</h1>
+          <h1 class="text-center text-3xl">Collaboration</h1>
           <div class="p-8 mt-6 mb-0 space-y-4 bg-customgrey">
-              <form method="post" id="LoginForm" class="w-80">
+              <form method="post"  action="{% url 'organization:new_collab' %}" id="OrgForm" class="w-150">
                   {% csrf_token %}
                   {% for field in form %}
-                      <div class="mb-5" id="section_field_{{ field.auto_id }}">
-                          <label for="email" class="text-base font-medium">{{ field.label }}</label>
-                          <div class="mt-1">
-                              {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
-                          </div>
-                      </div>
+                  <div class="mb-5" id="section_field_{{ field.auto_id }}">
+                    <label for="email" class="text-base font-medium">{{ field.label }}</label>
+                    <div class="mt-1">
+                        {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
+                    </div>
+                </div>                              
                   {% endfor %}
-                  <a href="{% url 'users:register' %}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">Register</a>
                   <button type="submit" class="block w-full mt-2 px-5 py-3 text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-lg ho">
-                    {% trans "LOG IN" %}
+                    {% trans "Add collaboration network" %}
                   </button>
               </form>
           </div>
@@ -43,4 +42,3 @@
 </section>
 
 {% endblock content%}
-

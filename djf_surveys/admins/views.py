@@ -20,7 +20,7 @@ from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
 from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Level, Dimension, SubDimension
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.views import SurveyListView
-from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm
+from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm, SelectQuestionsForm
 from djf_surveys.summary import SummaryResponse
 
 
@@ -174,7 +174,7 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
 
         if 'dimension' in form.data:
             dimension_id = form.data.get('dimension')
-            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id)
+            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension = dimension_id)
 
         if form.is_valid():
             question = form.save(commit=False)
@@ -396,3 +396,38 @@ class DimensionSubdimensionSummaryView(TemplateView):
             context['summaries'] = summary_response.generate_overall()
 
         return context
+#function to open form and select questions from the list: used in edit survey functionality   
+def add_questions(request, slug):
+    survey = get_object_or_404(Survey, slug=slug)
+    levels = Level.objects.all()
+    dims = Dimension.objects.all()
+    
+    if request.method == 'POST':
+        form = SelectQuestionsForm(request.POST, instance=survey)
+        if form.is_valid():
+            form.save()
+            return redirect("djf_surveys:admin_forms_survey", slug=survey.slug)
+    else:
+        form = SelectQuestionsForm(instance=survey)
+
+    context = {
+        "form":form,
+        "levels": levels,
+        "dims": dims,
+    }
+    
+    return render(request, 'djf_surveys/admins/select_questions_form.html', context)
+
+
+def questionlist_test(request):
+    levels  = Level.objects.all()
+    dims = Dimension.objects.all()
+    questions = Question.objects.all()
+
+    context = {
+        "levels":levels,
+        "dims": dims,
+        "questions": questions,
+    }
+
+    return render(request, 'djf_surveys/admins/questionlist_test.html', context )

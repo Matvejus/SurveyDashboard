@@ -1,0 +1,278 @@
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    
+  var ctx = document.getElementById('polar');
+    var myChart = new Chart(ctx, {
+    type: 'polarArea',
+      data: {
+      labels: ['Co-creating solutions', 'Establishing legitimacy', 'Brokering relations', 'Facilitating activities'],
+      datasets: [
+      {
+        label: 'Network',
+        data: [
+          { id: 'COLL-OUTPUT', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/COLL-OUTPUT' } },
+          { id: 'RES-MOBIL', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/RES-MOBIL' } },
+          { id: 'NET-ACC', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/NET-ACC' } },
+          { id: 'POS-REP', value: { number: 40, link: 'localhost:8000/surveys/dashboard/summary/survey/main/' } },
+        ],
+        
+        parsing: {
+          key: 'value.number'
+        },
+
+        backgroundColor: [
+        "#FFD041",
+    
+        ],
+        borderWidth: 0,
+      },
+      {
+        label: 'Network Text',
+        data: [
+          { id: 'COLL-OUTPUT', value: { number: 60, link: 'localhost:8000/surveys/dashboard/summary/survey/main/COLL-OUTPUT' } },
+          { id: 'RES-MOBIL', value: { number: 60, link: 'localhost:8000/surveys/dashboard/summary/survey/main/RES-MOBIL' } },
+          { id: 'NET-ACC', value: { number: 60, link: 'localhost:8000/surveys/dashboard/summary/survey/main/NET-ACC' } },
+          { id: 'POS-REP', value: { number: 60, link: 'localhost:8000/surveys/dashboard/summary/survey/main/' } },
+        ],
+        
+        parsing: {
+          key: 'value.number'
+        },
+
+        backgroundColor: [
+        "#F4D8A5",
+    
+        ],
+        borderWidth: 0,
+      },
+      {
+        label: 'Organizational',
+        data: [
+          { id: 'ACS', value: { number: 80, link: 'localhost:8000/surveys/dashboard/summary/survey/main/ACS' } },
+          { id: 'ORG-LEARN', value: { number: 80, link: 'localhost:8000/surveys/dashboard/summary/survey/main/ORG-LEARN' } },
+          { id: 'BUILD-PART', value: { number: 80, link: 'localhost:8000/surveys/dashboard/summary/survey/main/BUILD-PART' } },
+          { id: 'ACS', value: { number: 80, link: 'localhost:8000/surveys/dashboard/summary/survey/main/ACS' } },
+        ],
+        
+        parsing: {
+          key: 'value.number'
+        },
+
+        backgroundColor: [
+        "#FFFFFF",
+        ],
+        borderWidth: 5,
+        borderColor: 'rgba(255, 99, 132, 0.9)', // Red,
+      },
+      {
+        label: 'Individual',
+        data: [
+          { id: 'COLL-OP', value: { number: 120, link: 'localhost:8000/surveys/dashboard/summary/survey/main/COLL-OP' } },
+          { id: 'SHARE-LEARN', value: { number: 120, link: 'localhost:8000/surveys/dashboard/summary/survey/main/SHARE-LEARN' } },
+          { id: 'FEI', value: { number: 120, link: 'localhost:8000/surveys/dashboard/summary/survey/main/FEI'} },
+          { id: 'VISIB', value: { number: 120, link: 'localhost:8000/surveys/dashboard/summary/survey/main/VISIB'} },
+          ],
+
+          parsing: {
+            key: 'value.number'
+          },
+
+          backgroundColor: [
+          "#FFFFFF",
+            
+          ],
+          borderWidth: 5,
+          borderColor: 'rgba(255, 99, 132, 0.9)', // Red,
+        },
+        {
+          label: 'Levels',
+          data: [
+            { id: 'COLL-OUTPUT', value: { number: 140, link: 'localhost:8000/surveys/dashboard/summary/survey/main/COLL-OUTPUT' } },
+            { id: 'RES-MOBIL', value: { number: 140, link: 'localhost:8000/surveys/dashboard/summary/survey/main/RES-MOBIL' } },
+            { id: 'NET-ACC', value: { number: 140, link: 'localhost:8000/surveys/dashboard/summary/survey/main/NET-ACC' } },
+            { id: 'POS-REP', value: { number: 140, link: 'localhost:8000/surveys/dashboard/summary/survey/main/' } },
+          ],
+          
+          parsing: {
+            key: 'value.number'
+          },
+  
+          backgroundColor: [
+          "#F4D8A5",
+      
+          ],
+          borderWidth: 0,
+        },]},
+        options: {
+          scale: {
+            display: false
+        },
+          responsive: true,
+          scales: {
+            r: {
+              pointLabels: {
+                display: false,
+                centerPointLabels: true,
+                arc: true,
+                font: {
+                  size: 24
+                }
+              }
+            },
+          },
+           onClick: function(e, clickData) {
+            window.open("http://localhost:8000/surveys/dashboard/summary/survey/conesu/")
+          },
+        plugins: {
+          legend: {
+            display: false,
+          },
+          labels: {
+            render: 'label',
+            arc: true,
+            fontColor: '#000',
+            position: 'inside',
+          },
+        }
+      },
+    });
+
+   {% comment %}  function chartOpen(click) {
+     const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
+     console.log(points);
+    }
+    
+   // ctx.onclick = chartOpen; {% endcomment %}
+         
+    </script>
+
+    <script>
+ 
+      var ctx = document.getElementById('donut');
+      var myChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['Time', 'Statisfaction', 'Projects', 'Surveys', 'Responses', 'Collaborators'],
+          datasets: [{
+            label: 'Blue',
+            data: [11, 8.0, 17, 10, 23, 15],
+            fill: true,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 0.2)',
+            pointBackgroundColor: 'rgb(255, 99, 132)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(255, 99, 132)'
+          },{
+            label: 'Red',
+            data: [15, 6.0, 11, 8, 17, 10],
+            fill: true,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgb(255, 99, 132)',
+            pointBackgroundColor: 'rgb(255, 99, 132)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(255, 99, 132)'
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+          }
+        },
+      });
+      
+  </script>
+
+  <script>
+
+      var ctx = document.getElementById('donutChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Collaborators', 'Orchestrator', 'Supervisor', 'Advisor'],
+          datasets: [{
+            data: [10, 20, 15, 5], // Dummy dataset values
+            backgroundColor: [
+              'rgb(255, 99, 132, 0.2)',
+              'rgb(54, 162, 235, 0.2)',
+              'rgb(255, 206, 86, 0.2)',
+              'rgb(75, 192, 192, 0.2)'
+            ],
+            borderColor: [
+              'rgb(255, 99, 132, 1)',
+              'rgb(54, 162, 235, 1)',
+              'rgb(255, 206, 86, 1)',
+              'rgb(75, 192, 192, 1)',
+            ],
+            borderWidth: 1,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false,
+            },
+            title: {
+              display: true,
+              text: 'Responses'
+            }
+          },
+        }
+      });
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  {% comment %}
+  <script>
+    // Wait for the DOM content to load
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get all the grid items
+    var gridItems = document.querySelectorAll(".chart-wrapper");
+
+    // Loop through each grid item
+    gridItems.forEach(function(item) {
+      // Create a timeline for the animation
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: "top 80%", // Adjust the scroll trigger start position as needed
+          toggleActions: "play none none reverse"
+        }
+      });
+
+      // Define the animation
+      tl.fromTo(
+        item,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6 }
+      );
+
+      // Add hover effect
+      item.addEventListener("mouseenter", function() {
+        gsap.to(item, { scale: 1.05, duration: 0.3 });
+      });
+
+      item.addEventListener("mouseleave", function() {
+        gsap.to(item, { scale: 1, duration: 0.3 });
+      });
+    });
+  });
+
+    </script> 
+  {% endcomment %}

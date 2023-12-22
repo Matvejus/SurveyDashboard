@@ -1,0 +1,165 @@
+[
+    {
+        "model": "djf_surveys.question",
+        "pk": "7",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "1",
+            "dimension": "1",
+            "subdimension": "1",
+            "key": "collab_output",
+            "label": "Rate the collaborative output of your team.",
+            "type_field": 3,
+            "choices": "",
+            "help_text": "Rate from 1 to 10",
+            "required": true,
+            "ordering": 5
+        }
+    },
+    {
+        "model": "djf_surveys.question",
+        "pk": "8",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "1",
+            "dimension": "1",
+            "subdimension": "2",
+            "key": "hows_life",
+            "label": "Hows life?",
+            "type_field": 3,
+            "choices": "Good, very Good",
+            "help_text": "Rate",
+            "required": true,
+            "ordering": 2
+        }
+    },
+    {
+        "model": "djf_surveys.question",
+        "pk": "9",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "1",
+            "dimension": "2",
+            "subdimension": "1",
+            "key": "input",
+            "label": "Are you willing to work?",
+            "type_field": 3,
+            "choices": "Of course",
+            "help_text": "Rate from 1 to 10",
+            "required": true,
+            "ordering": 5
+        }
+    },
+    {
+        "model": "djf_surveys.question",
+        "pk": "10",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "1",
+            "dimension": "3",
+            "subdimension": "1",
+            "key": "apple",
+            "label": "Do you work better in teams or alone?",
+            "type_field": 3,
+            "choices": "Team, Alone",
+            "help_text": "Rate from 1 to 10",
+            "required": true,
+            "ordering": 6
+        }
+    },
+    {
+        "model": "djf_surveys.question",
+        "pk": "11",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "2",
+            "dimension": "1",
+            "subdimension": "1",
+            "key": "greencar",
+            "label": "What transport do you use?",
+            "type_field": 3,
+            "choices": "Personal, Public",
+            "help_text": "Choose",
+            "required": true,
+            "ordering": 5
+        }
+    },
+    {
+        "model": "djf_surveys.question",
+        "pk": "12",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "2",
+            "dimension": "4",
+            "subdimension": "1",
+            "key": "twofour",
+            "label": "Do you like answering those questions?",
+            "type_field": 3,
+            "choices": "",
+            "help_text": "Rate from 1 to 10",
+            "required": true,
+            "ordering": 5
+        }
+    },
+    {
+        "model": "djf_surveys.question",
+        "pk": "13",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "2",
+            "dimension": "1",
+            "subdimension": "1",
+            "key": "notcool",
+            "label": "How big is your group?",
+            "type_field": 3,
+            "choices": "",
+            "help_text": "Rate from 1 to 10",
+            "required": true,
+            "ordering": 5
+        }
+    },
+    {
+        "model": "djf_surveys.question",
+        "pk": "14",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "3",
+            "dimension": "1",
+            "subdimension": "1",
+            "key": "keyboardgobrr",
+            "label": "Do you share knowldege?",
+            "type_field": 3,
+            "choices": "",
+            "help_text": "Rate from 1 to 10",
+            "required": true,
+            "ordering": 5
+        }
+    },
+    {
+        "model": "djf_surveys.question",
+        "pk": "15",
+        "fields": {
+            "created_at": "2023-12-21T12:00:00Z",
+            "updated_at": "2023-12-21T12:00:00Z",
+            "level": "3",
+            "dimension": "2",
+            "subdimension": "1",
+            "key": "scooter",
+            "label": "Is it Dave?",
+            "type_field": 3,
+            "choices": "",
+            "help_text": "Rate from 1 to 10",
+            "required": true,
+            "ordering": 5
+        }
+    }
+
+]

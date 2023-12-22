@@ -35,14 +35,16 @@ class SurveyForm(forms.ModelForm):
                ("OTHER", "Other civil society organization"),
            )
    
-    
-    org_type = forms.MultipleChoiceField(choices=CHOICES, widget=forms.CheckboxSelectMultiple())
+    org_type = forms.MultipleChoiceField(choices=CHOICES, widget = CheckboxSelectMultipleSurvey())
+    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
+
+
 
     class Meta:
         model = Survey
         fields = [
-            'name', 'description', 'org_type', 'editable', 'deletable',
-            'duplicate_entry', 'private_response', 'can_anonymous_user',
+            'name', 'description', 'collaboration_network', 'org_type', 'editable', 'deletable',
+            'duplicate_entry', 'private_response', 'can_anonymous_user', 'questions',
         ]
 
 
@@ -231,3 +233,12 @@ class QuestionWithChoicesForm(forms.ModelForm):
         elif self.instance.pk:
             self.fields['subdimension'].queryset = self.instance.dimension.subdimension_set.order_by('id')
         return cleaned_data
+    
+
+class SelectQuestionsForm(forms.ModelForm):
+
+    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
+
+    class Meta:
+        model = Survey
+        fields = ['questions']

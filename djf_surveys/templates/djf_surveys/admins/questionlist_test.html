@@ -1,0 +1,45 @@
+{% extends 'djf_surveys/admins/master.html' %}
+{% load djf_survey_tags static i18n %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'djf_surveys/css/rating.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="relative p-4">
+    <section>
+        <ul class="bg-slate-50 p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 text-sm leading-6">
+            {% for level in levels %}
+            <li class="flex">
+                <a class="bg-yellow-100 hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full flex flex-col items-center justify-center rounded-md border-2 border-slate-300 text-sm leading-6 text-slate-900 font-bold py-3">
+                    <h3> {{level}} </h3>
+                </a>
+            </li>
+            {% for dim in dims %}
+            <li class="flex">
+                <a class="bg-blue-100 hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full flex flex-col items-left justify-left rounded-md border-2 border-slate-300 text-sm leading-6 text-slate-900 font-medium px-3 py-3">
+                    <h3> {{dim}} </h3>
+                </a>
+            </li>
+            {% for question in questions %}
+            {% if question.level == level and question.dimension == dim%}
+            <li class="flex">
+                <a class=" bg-red-50 hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full flex flex-col items-left justify-left rounded-md border-2 border-slate-300 text-sm leading-6 text-slate-900 font-medium px-3 py-3">
+                    <h3> <input type="" name=""  class="w-6 h-6 border border-gray-200 rounded-md">
+                    <span class="ml-3 font-medium"></span> {{question.label}} | {{question.choices }} </h3>
+                    {% endif %}
+                </a>
+            </li>
+            {% endfor %}
+            {% endfor %}
+            {% endfor %}
+        </ul>
+      </section>
+</div>
+
+{% endblock content %}
+
+
+
+
