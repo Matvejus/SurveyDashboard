@@ -396,7 +396,7 @@ class DimensionSubdimensionSummaryView(TemplateView):
             context['summaries'] = summary_response.generate_overall()
 
         return context
-    
+#function to open form and select questions from the list: used in edit survey functionality   
 def add_questions(request, slug):
     survey = get_object_or_404(Survey, slug=slug)
     levels = Level.objects.all()
@@ -417,4 +417,17 @@ def add_questions(request, slug):
     }
     
     return render(request, 'djf_surveys/admins/select_questions_form.html', context)
-    # return redirect(reverse_lazy("djf_surveys:create", kwargs={'slug': survey.slug}))
+
+
+def questionlist_test(request):
+    levels  = Level.objects.all()
+    dims = Dimension.objects.all()
+    questions = Question.objects.all()
+
+    context = {
+        "levels":levels,
+        "dims": dims,
+        "questions": questions,
+    }
+
+    return render(request, 'djf_surveys/admins/questionlist_test.html', context )

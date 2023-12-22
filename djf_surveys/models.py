@@ -65,7 +65,7 @@ class Dimension(models.Model):
     level = models.ManyToManyField(Level, related_name='dimensions')
 
     def __str__(self):
-        return self.id
+        return self.label
 
 
 class SubDimension(models.Model):
