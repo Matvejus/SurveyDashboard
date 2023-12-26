@@ -1,10 +1,13 @@
 from typing import List, Tuple
 
 from django import forms
+from django.db.models.base import Model
 from organization.models import OrgProfile
 from .models import Survey
 from django.db import transaction
 from django.core.validators import MaxLengthValidator
+from django.forms.models import modelform_factory
+
 
 from django.utils.translation import gettext_lazy as _
 from djf_surveys.models import Answer, TYPE_FIELD, UserAnswer, Question, Level, Dimension, SubDimension
@@ -235,10 +238,43 @@ class QuestionWithChoicesForm(forms.ModelForm):
         return cleaned_data
     
 
+
+class CustomQuestionList(forms.ModelChoiceField):
+
+    def label_from_instance(self, question):
+        return f"{question.level} {question.dimension} {question.label} {question.choices}" 
+
+
 class SelectQuestionsForm(forms.ModelForm):
 
-    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
+    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), 
+                                    widget = CheckboxSelectMultipleSurvey())
 
     class Meta:
         model = Survey
         fields = ['questions']
+
+
+# Assuming the Question model has a 'question_text' field
+
+def create_question_form():
+    questions = Question.objects.all()
+
+    fields = {}
+    for question in questions:
+        field_name = f"question_{question.id}" 
+        fields[field_name] = forms.ModelChoiceField(
+            queryset=Question.objects.filter(id=question.id),
+            widget=CheckboxSelectMultipleSurvey(),
+            required=False,
+            label=question.label,
+        )
+
+    # Create the form class using modelform_factory
+    QuestionForm = modelform_factory(Question, fields=fields.items(), form=forms.Form)
+    QuestionForm.base_fields = fields
+
+    return QuestionForm
+
+
+

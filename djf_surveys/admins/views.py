@@ -20,7 +20,7 @@ from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
 from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Level, Dimension, SubDimension
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.views import SurveyListView
-from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm, SelectQuestionsForm
+from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm, SelectQuestionsForm, create_question_form
 from djf_surveys.summary import SummaryResponse
 
 
@@ -420,14 +420,19 @@ def add_questions(request, slug):
 
 
 def questionlist_test(request):
-    levels  = Level.objects.all()
-    dims = Dimension.objects.all()
+    levels = Level.objects.all()
+    dimensions = Dimension.objects.all()
+    QuestionForm = create_question_form()
     questions = Question.objects.all()
+    
 
     context = {
-        "levels":levels,
-        "dims": dims,
-        "questions": questions,
+        'form':QuestionForm,
+        'levels': levels,
+        'dims': dimensions,
+        'questions': questions
     }
 
+
     return render(request, 'djf_surveys/admins/questionlist_test.html', context )
+

@@ -33,6 +33,9 @@
     <div class="flex py-1 fixed bottom-10 right-10">
         <input type="button" class="profile-edit-btn border-solid border-1 border-green-500 bg-gray-100 rounded-full px-4 py-1" name="btnAddMore" value="Add questions" onclick="location.href='{% url 'djf_surveys:select_questions' survey.slug %}';">
     </div>
+    <div class="flex py-1 fixed bottom-10 ">
+        <input type="button" class="profile-edit-btn border-solid border-1 border-green-500 bg-gray-100 rounded-full px-4 py-1" name="btnAddMore" value="Question list" onclick="location.href='{% url 'djf_surveys:question_list' %}';">
+    </div>
 
     <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
         <div class="max-w-lg mx-auto">
