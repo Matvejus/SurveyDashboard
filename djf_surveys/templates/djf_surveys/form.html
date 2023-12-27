@@ -13,17 +13,17 @@
         <div class="max-w-lg mx-auto">
             <h1 class="text-2xl font-bold text-center text-blue-500 sm:text-3xl">{{ title_page }}</h1>
             <p class="max-w-md mx-auto mt-4 text-center text-gray-500">{{ sub_title_page }}</p>
-            <div x-data="{ openTab: 2 }" class="bg-white p-3 shadow-sm rounded-sm">
+            <div x-data="{ openTab: 1 }" class="bg-white p-3 shadow-sm rounded-sm">
                 <!-- Tab Buttons -->
-                <div class="mb-4 flex">
-                    <button :class="{ 'border-b-2 border-green-500': openTab === 1 }" @click="openTab = 1" class="px-4 py-2 mr-3 font-semibold text-gray-900 focus:outline-none">Organizational</button>
-                    <button :class="{ 'border-b-2 border-green-500': openTab === 2 }" @click="openTab = 2" class="px-4 py-2 font-semibold text-gray-900 focus:outline-none">Individual</button>
-                    <button :class="{ 'border-b-2 border-green-500': openTab === 3 }" @click="openTab = 3" class="px-4 py-2 font-semibold text-gray-900 focus:outline-none">Collaborative</button>
+                <div class="items-center justify-center mb-4 flex">
+                    <button :class="{ 'border-b-2 border-blue-500': openTab === 1 }" @click="openTab = 1" class="px-4 py-2 mr-3 font-semibold text-gray-900 focus:outline-none">Organizational</button>
+                    <button :class="{ 'border-b-2 border-blue-500': openTab === 2 }" @click="openTab = 2" class="px-4 py-2 font-semibold text-gray-900 focus:outline-none">Individual</button>
+                    <button :class="{ 'border-b-2 border-blue-500': openTab === 3 }" @click="openTab = 3" class="px-4 py-2 font-semibold text-gray-900 focus:outline-none">Collaborative</button>
                 </div>
            
             <form method="post">
                 {% csrf_token %}
-                        <!-- Individual Tab Content -->
+                        <!-- Organizational Tab Content -->
                         <div x-show="openTab === 1">
                             {% for question in questions  %}
                             {% for field in form %}
@@ -49,6 +49,9 @@
                             {% endif %}
                             {% endfor %}
                             {% endfor %}
+                            <button @click="openTab = 2" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
+                                {% trans "To Individual" %}
+                            </button>
                         </div>
                 
                         <!-- Individual Tab Content -->
@@ -76,9 +79,12 @@
                             {% endif %}
                             {% endfor %}
                             {% endfor %}
+                            <button @click="openTab = 3" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
+                                {% trans "To Network" %}
+                            </button>
                         </div>
             
-                        <!-- Individual Tab Content -->
+                        <!-- Collaborative Tab Content -->
                         <div x-show="openTab === 3">
                             {% for question in questions  %}
                             {% for field in form %}
