@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 
-from djf_surveys.models import Survey, UserAnswer
+from djf_surveys.models import Survey, UserAnswer, Level, Dimension, Question
 from djf_surveys.forms import CreateSurveyForm, EditSurveyForm
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys import app_settings
@@ -59,6 +59,21 @@ class CreateSurveyFormView(ContextTitleMixin, SurveyFormView):
     form_class = CreateSurveyForm
     success_url = reverse_lazy("djf_surveys:index")
     title_page = _("Add Survey")
+
+    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        survey_instance = get_object_or_404(Survey, slug=self.kwargs['slug'])
+        questions = []
+        
+        for question in survey_instance.questions.all():
+            questions.append(question)
+
+        context['questions'] = questions
+        
+        return context
+        
 
     def dispatch(self, request, *args, **kwargs):
         survey = self.get_object()

@@ -1,10 +1,13 @@
 from typing import List, Tuple
 
 from django import forms
+from django.db.models.base import Model
 from organization.models import OrgProfile
 from .models import Survey
 from django.db import transaction
 from django.core.validators import MaxLengthValidator
+from django.forms.models import modelform_factory
+
 
 from django.utils.translation import gettext_lazy as _
 from djf_surveys.models import Answer, TYPE_FIELD, UserAnswer, Question, Level, Dimension, SubDimension
@@ -38,16 +41,13 @@ class SurveyForm(forms.ModelForm):
     org_type = forms.MultipleChoiceField(choices=CHOICES, widget = CheckboxSelectMultipleSurvey())
     questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
 
-
-
     class Meta:
         model = Survey
         fields = [
             'name', 'description', 'collaboration_network', 'org_type', 'editable', 'deletable',
             'duplicate_entry', 'private_response', 'can_anonymous_user', 'questions',
         ]
-
-
+     
 
 class BaseSurveyForm(forms.Form):
 
@@ -235,10 +235,50 @@ class QuestionWithChoicesForm(forms.ModelForm):
         return cleaned_data
     
 
+
+class CustomQuestionList(forms.ModelChoiceField):
+
+    def label_from_instance(self, question):
+        return f"{question.level} {question.dimension} {question.label} {question.choices}" 
+
+
 class SelectQuestionsForm(forms.ModelForm):
 
-    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
+    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), 
+                                    widget = CheckboxSelectMultipleSurvey())
 
     class Meta:
         model = Survey
         fields = ['questions']
+
+
+
+
+def create_question_form(self):
+    questions = Question.objects.all()  # Get all questions from the database
+
+    fields = {}
+    for question in questions:
+        field_name = f"question_{question.id}"  # Generate unique field name for each question
+        fields[field_name] = forms.ModelChoiceField(
+            queryset=Question.objects.filter(id=question.id),
+            widget=CheckboxSelectMultipleSurvey(),
+            required=False,
+            label=question.label,
+        )  # Create a checkbox for each question
+
+    # Create the form class using modelform_factory
+    QuestionForm = modelform_factory(Question, fields=fields, form=forms.Form)
+    QuestionForm.base_fields = fields
+
+    # Set the questions for the form
+    initial_questions = []  # Create an empty list to store selected questions
+    for question in self.questions.all():
+        initial_questions.append(question.pk)
+    form = QuestionForm(initial=initial_questions)  # Initialize the form with the selected questions
+
+    return form
+
+
+
+
