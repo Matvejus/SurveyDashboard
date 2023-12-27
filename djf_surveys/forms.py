@@ -41,16 +41,13 @@ class SurveyForm(forms.ModelForm):
     org_type = forms.MultipleChoiceField(choices=CHOICES, widget = CheckboxSelectMultipleSurvey())
     questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
 
-
-
     class Meta:
         model = Survey
         fields = [
             'name', 'description', 'collaboration_network', 'org_type', 'editable', 'deletable',
             'duplicate_entry', 'private_response', 'can_anonymous_user', 'questions',
         ]
-
-
+     
 
 class BaseSurveyForm(forms.Form):
 
@@ -255,26 +252,33 @@ class SelectQuestionsForm(forms.ModelForm):
         fields = ['questions']
 
 
-# Assuming the Question model has a 'question_text' field
 
-def create_question_form():
-    questions = Question.objects.all()
+
+def create_question_form(self):
+    questions = Question.objects.all()  # Get all questions from the database
 
     fields = {}
     for question in questions:
-        field_name = f"question_{question.id}" 
+        field_name = f"question_{question.id}"  # Generate unique field name for each question
         fields[field_name] = forms.ModelChoiceField(
             queryset=Question.objects.filter(id=question.id),
             widget=CheckboxSelectMultipleSurvey(),
             required=False,
             label=question.label,
-        )
+        )  # Create a checkbox for each question
 
     # Create the form class using modelform_factory
-    QuestionForm = modelform_factory(Question, fields=fields.items(), form=forms.Form)
+    QuestionForm = modelform_factory(Question, fields=fields, form=forms.Form)
     QuestionForm.base_fields = fields
 
-    return QuestionForm
+    # Set the questions for the form
+    initial_questions = []  # Create an empty list to store selected questions
+    for question in self.questions.all():
+        initial_questions.append(question.pk)
+    form = QuestionForm(initial=initial_questions)  # Initialize the form with the selected questions
+
+    return form
+
 
 
 

@@ -11,7 +11,7 @@ urlpatterns = [
     path('question/add/<int:pk>/<int:type_field>', admin_views.AdminCreateQuestionView.as_view(),
          name='admin_create_question'),
     path('<str:slug>/select-questions/', admin_views.add_questions, name='select_questions'),
-    path('select-questions/', admin_views.questionlist_test, name='question_list'),
+    path('select-questions/<str:slug>', admin_views.questionlist_test, name='question_list'),
     path('question/edit/<int:pk>/', admin_views.AdminUpdateQuestionView.as_view(), name='admin_edit_question'),
     path('question/delete/<int:pk>/', admin_views.AdminDeleteQuestionView.as_view(), name='admin_delete_question'),
     path('question/ordering/', admin_views.AdminChangeOrderQuestionView.as_view(), name='admin_change_order_question'),

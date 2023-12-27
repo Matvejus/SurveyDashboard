@@ -15,6 +15,7 @@ from django.views.generic import View
 from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.views.generic.edit import FormView
 
 from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
 from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Level, Dimension, SubDimension
@@ -50,12 +51,12 @@ class AdminCreateSurveyView(ContextTitleMixin, CreateView):
             return self.form_invalid(form)
 
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminEditSurveyView(ContextTitleMixin, UpdateView):
@@ -72,24 +73,24 @@ class AdminEditSurveyView(ContextTitleMixin, UpdateView):
         return reverse("djf_surveys:admin_forms_survey", args=[survey.slug])
 
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminSurveyListView(SurveyListView):
     template_name = 'djf_surveys/admins/survey_list.html'
 
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminSurveyFormView(ContextTitleMixin, FormMixin, DetailView):
@@ -109,12 +110,12 @@ class AdminSurveyFormView(ContextTitleMixin, FormMixin, DetailView):
         return self.object.description
 
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminDeleteSurveyView(DetailView):
@@ -201,12 +202,12 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
         return gettext("Type Field %s") % Question.TYPE_FIELD[self.type_field_id][1]
 
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
@@ -258,12 +259,12 @@ class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
         return gettext("Type Field %s") % self.object.get_type_field_display()
 
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminDeleteQuestionView(DetailView):
@@ -282,12 +283,12 @@ class AdminDeleteQuestionView(DetailView):
         return redirect("djf_surveys:admin_forms_survey", slug=self.survey.slug)
 
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminChangeOrderQuestionView(View):
@@ -305,12 +306,12 @@ class AdminChangeOrderQuestionView(View):
         return JsonResponse(data, status=200)
 
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class DownloadResponseSurveyView(DetailView):
@@ -345,12 +346,12 @@ class DownloadResponseSurveyView(DetailView):
         response['Content-Disposition'] = f'attachment; filename={survey.slug}.csv'
         return response
 
-def group_required(group_names):
-    def check_group(user):
-        user_groups = user.groups.values_list('name', flat=True)
-        return any(group_name in user_groups for group_name in group_names)
+# def group_required(group_names):
+#     def check_group(user):
+#         user_groups = user.groups.values_list('name', flat=True)
+#         return any(group_name in user_groups for group_name in group_names)
 
-    return user_passes_test(check_group)
+#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class SummaryResponseSurveyView(ContextTitleMixin, DetailView):
@@ -419,15 +420,25 @@ def add_questions(request, slug):
     return render(request, 'djf_surveys/admins/select_questions_form.html', context)
 
 
-def questionlist_test(request):
+def questionlist_test(request, slug):
+    survey = get_object_or_404(Survey, slug=slug)
     levels = Level.objects.all()
     dimensions = Dimension.objects.all()
-    QuestionForm = create_question_form()
     questions = Question.objects.all()
+    QuestionForm = create_question_form()
     
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            selected_questions = form.cleaned_data.get('selected_questions')  # Adjust the field name based on your form
+            survey.questions.set(selected_questions)
+            survey.save() 
+            return redirect("djf_surveys:admin_forms_survey", slug=survey.slug)
+    else:
+        form = QuestionForm()
 
     context = {
-        'form':QuestionForm,
+        'form': form,
         'levels': levels,
         'dims': dimensions,
         'questions': questions
