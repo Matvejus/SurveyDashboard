@@ -9,13 +9,17 @@ from .models import CustomUser
 
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy("organization:index")
+    success_url = reverse_lazy("organization:index")  
     template_name = "registration/registration.html"
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        profile_url = reverse('organization:profile', kwargs={'user_id': self.object.id})
-        return HttpResponseRedirect(profile_url)
+        user = form.save()
+        if user:
+            profile_url = reverse('organization:profile', kwargs={'user_id': user.id})
+            return HttpResponseRedirect(profile_url)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
     
 
 @login_required

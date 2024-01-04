@@ -39,13 +39,12 @@ class SurveyForm(forms.ModelForm):
            )
    
     org_type = forms.MultipleChoiceField(choices=CHOICES, widget = CheckboxSelectMultipleSurvey())
-    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), widget = CheckboxSelectMultipleSurvey())
 
     class Meta:
         model = Survey
         fields = [
             'name', 'description', 'collaboration_network', 'org_type', 'editable', 'deletable',
-            'duplicate_entry', 'private_response', 'can_anonymous_user', 'questions',
+            'duplicate_entry', 'private_response', 'can_anonymous_user',
         ]
      
 

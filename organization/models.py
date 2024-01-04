@@ -1,13 +1,25 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from users.models import CustomUser
 import datetime
 import uuid
 
 from django.utils.translation import gettext_lazy as _
 
+class License(models.Model):
+    code = models.UUIDField(blank=True, null=True)
+    used_for_org = models.BooleanField(default=False)
+    used_for_network = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
 
+    def is_fully_used(self):
+        return self.used_for_org and self.used_for_network
 
+    def deactivate(self):
+        self.active = False
+        self.save()
+
+    def __str__(self):
+        return str(self.code)
 
 #Model for organization (stakeholder)
 class OrgProfile(models.Model):
@@ -31,6 +43,7 @@ class OrgProfile(models.Model):
         num_employees = models.CharField(max_length=20)
         founded = models.PositiveIntegerField(validators=[MinValueValidator(1000), MaxValueValidator(datetime.datetime.now().year)])
         email = models.EmailField(max_length=255, blank=False)
+        license = models.ForeignKey(License, on_delete=models.CASCADE)
 
         def __str__(self):
             return f"{self.title}"
@@ -50,6 +63,7 @@ class CollaborationNetwork(models.Model):
     stage = models.CharField(max_length = 20, choices=NetworkStage.choices)
     orchestrator = models.ForeignKey('users.CustomUser', on_delete=models.DO_NOTHING, related_name='orchestrator',)
     collaborators = models.ManyToManyField('users.CustomUser', related_name='collaborators',)
+    license = models.ForeignKey(License, on_delete=models.CASCADE)
 
     def __str__(self):
             return f"{self.title} - Orchestrator: {self.orchestrator}"
@@ -65,5 +79,3 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.name} {self.organization}-{self.role}"
-
-
