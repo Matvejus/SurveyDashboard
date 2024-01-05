@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from .forms import ContactForm
-from .models import OrgProfile, CollaborationNetwork
+from .forms import ContactForm, NewOrgForm, NewCollaborationForm
+from .models import OrgProfile, CollaborationNetwork, License
 from django.db.models import OuterRef, Exists
 from users.models import CustomUser
 from djf_surveys.models import UserAnswer, Survey
@@ -39,16 +40,54 @@ def group_required(group_names):
 #@method_decorator([login_required, group_required([ 'Orchestrator','Supervisor'])], name='dispatch')
 class NewOrgView(CreateView):
     model = OrgProfile
-    fields = '__all__'
+    form_class = NewOrgForm
     template_name = 'new_org.html'
-    success_url = '/new_collaboration'
+    success_url = reverse_lazy('users:register')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        license_code = form.cleaned_data['license_code']
+        try:
+            license_obj = License.objects.get(code=license_code)
+        except License.DoesNotExist:
+            form.add_error('license_code', 'Invalid license code provided.')
+            return self.form_invalid(form)
+
+        license_obj.used_for_org = True
+        if license_obj.used_for_network:
+            license_obj.active = False
+        license_obj.save()
+
+        self.object.license = license_obj
+        self.object.save()
+
+        return response
 
 
 class NewCollab(CreateView):
     model = CollaborationNetwork
-    fields = "__all__"
+    form_class = NewCollaborationForm
     template_name = 'new_collaboration.html'
-    success_url = '/users/register'
+    success_url = reverse_lazy('users:register')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        license_code = form.cleaned_data['license_code']
+        try:
+            license_obj = License.objects.get(code=license_code)
+        except License.DoesNotExist:
+            form.add_error('license_code', 'Invalid license code provided.')
+            return self.form_invalid(form)
+
+        license_obj.used_for_network = True
+        if license_obj.used_for_org:
+            license_obj.active = False
+        license_obj.save()
+
+        self.object.license = license_obj
+        self.object.save()
+
+        return response
 
 #page of collaboraton
 def dashboardpage(request):
