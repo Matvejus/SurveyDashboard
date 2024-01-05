@@ -5,7 +5,10 @@ register = Library()
 
 @register.filter(name='addclass')
 def addclass(field, class_attr):
-    return field.as_widget(attrs={'class': class_attr})
+    if hasattr(field, 'as_widget'):
+        return field.as_widget(attrs={'class': class_attr})
+    else:
+        return field
 
 
 @register.filter(name='get_id_field')

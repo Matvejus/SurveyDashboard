@@ -45,12 +45,13 @@ class AdminCreateSurveyView(ContextTitleMixin, CreateView):
     title_page = _("Add New Survey")
 
     def post(self, request, *args, **kwargs):
+        self.object = None
         form = self.get_form()
         if form.is_valid():
-            survey = form.save()
-            self.success_url = reverse("djf_surveys:admin_forms_survey", args=[survey.slug])
-            messages.success(self.request, gettext("%(page_action_name)s succeeded.") % dict(page_action_name=capfirst(self.title_page.lower())))
-            return self.form_valid(form)
+            self.object = form.save()
+            self.success_url = reverse("djf_surveys:admin_forms_survey", args=[self.object.slug])
+            messages.success(self.request, gettext("%(page_action_name)s succeeded.") % {'page_action_name': capfirst(self.title_page.lower())})
+            return redirect(self.success_url)
         else:
             return self.form_invalid(form)
 

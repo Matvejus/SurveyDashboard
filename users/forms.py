@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser
-from organization.models import OrgProfile
+from organization.models import OrgProfile, CollaborationNetwork
 from .utils import setup_groups_permissions
 
 class CustomUserCreationForm(UserCreationForm):
@@ -12,7 +12,6 @@ class CustomUserCreationForm(UserCreationForm):
             "email",
             "first_name",
             "last_name",
-            "username",
             "organization",
             "collaboration_network",
             "position",
@@ -22,16 +21,18 @@ class CustomUserCreationForm(UserCreationForm):
     def clean(self):
         cleaned_data = super().clean()
         organization = cleaned_data.get('organization')
+        collaborationnetwork = cleaned_data.get('collaboration_network')
         
-        if organization:
-            if not OrgProfile.objects.filter(title=organization.title).exists():
-                raise forms.ValidationError("Invalid organization selected.")
+        if organization and not OrgProfile.objects.filter(id=organization.id).exists():
+            raise forms.ValidationError("Invalid organization selected.")
         
+        if collaborationnetwork and not CollaborationNetwork.objects.filter(id=collaborationnetwork.id).exists():
+            raise forms.ValidationError("Invalid Network selected.")
+
         return cleaned_data
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.organization = OrgProfile.objects.get(title=self.cleaned_data.get('organization').title)
         if commit:
             user.save()
             setup_groups_permissions(user)
