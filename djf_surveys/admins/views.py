@@ -21,8 +21,12 @@ from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
 from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Level, Dimension, SubDimension
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.views import SurveyListView
-from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm, SelectQuestionsForm, create_question_form
+from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm, SelectQuestionsForm, create_question_form, save_survey_from_form
 from djf_surveys.summary import SummaryResponse
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -395,8 +399,11 @@ class DimensionSubdimensionSummaryView(TemplateView):
             context['summaries'] = summary_response.generate_for_sub_dimension(sub_dimension.id)
         else:
             context['summaries'] = summary_response.generate_overall()
+        
+        context['survey_name'] = survey.name
 
         return context
+    
 #function to open form and select questions from the list: used in edit survey functionality   
 def add_questions(request, slug):
     survey = get_object_or_404(Survey, slug=slug)
@@ -425,15 +432,25 @@ def questionlist_test(request, slug):
     levels = Level.objects.all()
     dimensions = Dimension.objects.all()
     questions = Question.objects.all()
-    QuestionForm = create_question_form()
+    QuestionForm = create_question_form(questions)
     
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
-            selected_questions = form.cleaned_data.get('selected_questions')  # Adjust the field name based on your form
-            survey.questions.set(selected_questions)
-            survey.save() 
+            logger.debug("Form is valid")
+            # Extract the form data for debugging
+            logger.debug(f"Form data: {form.data}")
+            
+            # Save the survey based on the form data
+            save_survey_from_form(survey, form.data)
+
+            # Log the associated questions after saving the survey
+            logger.debug(f"Associated questions: {survey.questions.all()}")
+
             return redirect("djf_surveys:admin_forms_survey", slug=survey.slug)
+        else:
+            # Log form errors for debugging in case of form validation failure
+            logger.error(f"Form errors: {form.errors}")
     else:
         form = QuestionForm()
 
@@ -444,6 +461,6 @@ def questionlist_test(request, slug):
         'questions': questions
     }
 
+    return render(request, 'djf_surveys/admins/questionlist_test.html', context)
 
-    return render(request, 'djf_surveys/admins/questionlist_test.html', context )
 

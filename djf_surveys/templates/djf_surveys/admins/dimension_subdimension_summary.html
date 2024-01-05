@@ -14,7 +14,7 @@
             <div class="py-6 lg:items-end justify-between flex">
                 <h2 class="max-w-xl text-2xl font-bold sm:text-3xl">
                     {% if level_label %}
-                        {{ level_label|capfirst }} {% trans "Summary" %}
+                       {{survey_name}} {{ level_label|capfirst }} {% trans "Summary" %}
                     {% elif dimension_label %}
                         {{ dimension_label|capfirst }} {% trans "Summary" %}
                     {% elif sub_dimension_label %}

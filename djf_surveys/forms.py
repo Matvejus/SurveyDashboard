@@ -236,12 +236,6 @@ class QuestionWithChoicesForm(forms.ModelForm):
     
 
 
-class CustomQuestionList(forms.ModelChoiceField):
-
-    def label_from_instance(self, question):
-        return f"{question.level} {question.dimension} {question.label} {question.choices}" 
-
-
 class SelectQuestionsForm(forms.ModelForm):
 
     questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), 
@@ -254,30 +248,85 @@ class SelectQuestionsForm(forms.ModelForm):
 
 
 
-def create_question_form(self):
-    questions = Question.objects.all()  # Get all questions from the database
-
+def create_question_form(questions):
+    
     fields = {}
     for question in questions:
-        field_name = f"question_{question.id}"  # Generate unique field name for each question
+        field_name = f"question_{question.id}"
         fields[field_name] = forms.ModelChoiceField(
             queryset=Question.objects.filter(id=question.id),
-            widget=CheckboxSelectMultipleSurvey(),
             required=False,
+            widget= CheckboxSelectMultipleSurvey,
             label=question.label,
-        )  # Create a checkbox for each question
+        )
 
     # Create the form class using modelform_factory
-    QuestionForm = modelform_factory(Question, fields=fields, form=forms.Form)
-    QuestionForm.base_fields = fields
+    QuestionForm = type('QuestionForm', (forms.Form,), fields)
+    return QuestionForm
 
-    # Set the questions for the form
-    initial_questions = []  # Create an empty list to store selected questions
-    for question in self.questions.all():
-        initial_questions.append(question.pk)
-    form = QuestionForm(initial=initial_questions)  # Initialize the form with the selected questions
+def save_survey_from_form(survey, form_data):
+    question_ids = [int(key.split('_')[1]) for key, value in form_data.items() if value == 'on']
+    selected_questions = Question.objects.filter(id__in=question_ids)
 
-    return form
+    # Log the selected question IDs for debugging
+    print(f"Selected Question IDs: {question_ids}")
+
+    for question in selected_questions:
+        survey.questions.add(question)
+        # Log each question being added to the survey
+
+
+    # Save the survey object
+    survey.save()
+    print(f"Survey '{survey.name}' saved with updated questions: {survey.questions.all()}")
+
+    # Ensure that the survey object has the questions associated after saving
+
+
+class SurveyQuestionsForm(forms.ModelForm):
+    class Meta:
+        model = Survey
+        fields = ('questions',)
+
+    # Representing the many to many related field in Pizza
+    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all())
+
+    # Overriding __init__ here allows us to provide initial
+    # data for 'toppings' field
+    def __init__(self, *args, **kwargs):
+        # Only in case we build the form from an instance
+        # (otherwise, 'toppings' list should be empty)
+        if kwargs.get('instance'):
+            # We get the 'initial' keyword argument or initialize it
+            # as a dict if it didn't exist.                
+            initial = kwargs.setdefault('initial', {})
+            # The widget for a ModelMultipleChoiceField expects
+            # a list of primary key for the selected data.
+            initial['questions'] = [q.pk for q in kwargs['instance'].question_set.all()]
+
+        forms.ModelForm.__init__(self, *args, **kwargs)
+
+    # Overriding save allows us to process the value of 'toppings' field    
+    def save(self, commit=True):
+        # Get the unsave Pizza instance
+        instance = forms.ModelForm.save(self, False)
+
+        # Prepare a 'save_m2m' method for the form,
+        old_save_m2m = self.save_m2m
+        def save_m2m():
+           old_save_m2m()
+           # This is where we actually link the pizza with toppings
+           instance.question_set.clear()
+           instance.question_set.add(*self.cleaned_data['toppings'])
+        self.save_m2m = save_m2m
+
+        # Do we need to save all changes now?
+        if commit:
+            instance.save()
+            self.save_m2m()
+
+        return instance
+    
 
 
 

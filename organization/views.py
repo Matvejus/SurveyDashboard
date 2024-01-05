@@ -68,17 +68,14 @@ def dashboardpage(request):
 
     # Accessing the slug for each survey in the filtered queryset
     survey_slugs = [survey.slug for survey in surveys_for_user_network]
-    if len(survey_slugs) >=1:
-        slug = survey_slugs[0]
-    else:
-        slug = ""
+    
 
     context = {
         'user': user,
         'org': org, 
         'network': network,
         'collaborators': collaborators,
-        'survey_slug': slug,
+        'survey_slug': survey_slugs[0],
     }
     
     return render(request, 'organization/dashboard.html', context)

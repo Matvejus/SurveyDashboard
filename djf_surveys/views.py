@@ -60,8 +60,6 @@ class CreateSurveyFormView(ContextTitleMixin, SurveyFormView):
     success_url = reverse_lazy("djf_surveys:index")
     title_page = _("Add Survey")
 
-    
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         survey_instance = get_object_or_404(Survey, slug=self.kwargs['slug'])
