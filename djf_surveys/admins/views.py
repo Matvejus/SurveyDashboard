@@ -437,6 +437,8 @@ def questionlist_test(request, slug):
     dimensions = Dimension.objects.all()
     questions = Question.objects.all()
     QuestionForm = create_question_form(questions)
+    survey_questions = survey.questions.all()
+    question_labels = [question.label for question in survey_questions]
     
     if request.method == 'POST':
         form = QuestionForm(request.POST)
@@ -459,6 +461,7 @@ def questionlist_test(request, slug):
         form = QuestionForm()
 
     context = {
+        'survey_questions': question_labels,
         'form': form,
         'levels': levels,
         'dims': dimensions,
