@@ -14,13 +14,17 @@
                 <form method="post" id="QuestionForm" data-dimensions-url="{% url 'djf_surveys:ajax_load_dimensions' %}" data-subdimensions-url="{% url 'djf_surveys:ajax_load_subdimensions' %}" novalidate>
                     {% csrf_token %}
                     {% for field in form %}
-                    <div class="mb-5" id="section_field_{{ field.auto_id }}">
-                        <label for="email" class="text-base font-medium">{{ field.label }}</label>
-                        <div class="mt-1">
-                            {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
-                                {{ field }}
-                            {% else %}
-                                {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
+                        <div class="mb-5" id="section_field_{{ field.auto_id }}">
+                            <label for="{{ field.id_for_label }}" class="text-base font-medium">{{ field.label }}</label>
+                            <div class="mt-1">
+                                {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
+                                    {{ field }}
+                                {% else %}
+                                    {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                {% endif %}
+                            </div>
+                            {% if field.help_text %}
+                                <p class="text-xs text-gray-400 mt-2">{{ field.help_text }}</p>
                             {% endif %}
                         </div>
                         <p class="text-xs text-gray-400 mt-2">{{ field.help_text }}</p>
