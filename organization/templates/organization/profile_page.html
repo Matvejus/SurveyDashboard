@@ -48,7 +48,7 @@
                             {% for collaborator in collaborators %}
                                 <div class="text-center my-2" onclick="window.location='{% url 'organization:profile' user_id=collaborator.id %}'" style="cursor: pointer;">
                                     <img class="h-16 w-16 rounded-full mx-auto"
-                                        src="{{ collaborator.avatar.url }}" 
+                                        {% comment %} src="{{ collaborator.avatar.url }}"  {% endcomment %}
                                         alt="{{ collaborator.first_name }} {{ collaborator.last_name }}">
                                     <a href="{% url 'organization:profile' user_id=collaborator.id %}" class="text-main-color">
                                         {{ collaborator.first_name }} {{ collaborator.last_name }}

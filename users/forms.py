@@ -12,6 +12,7 @@ class CustomUserCreationForm(UserCreationForm):
             "email",
             "first_name",
             "last_name",
+            "username",
             "organization",
             "collaboration_network",
             "position",

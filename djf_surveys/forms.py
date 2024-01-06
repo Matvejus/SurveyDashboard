@@ -246,13 +246,12 @@ class SelectQuestionsForm(forms.ModelForm):
 
 
 
-
 def create_question_form(questions):
     
     fields = {}
     for question in questions:
         field_name = f"question_{question.id}"
-        fields[field_name] = forms.ModelChoiceField(
+        fields[field_name] = forms.ModelMultipleChoiceField(
             queryset=Question.objects.filter(id=question.id),
             required=False,
             widget= CheckboxSelectMultipleSurvey,
@@ -264,7 +263,7 @@ def create_question_form(questions):
     return QuestionForm
 
 def save_survey_from_form(survey, form_data):
-    question_ids = [int(key.split('_')[1]) for key, value in form_data.items() if value == 'on']
+    question_ids = [int(value[0]) for key, value in form_data.items() if key.startswith('question_')]
     selected_questions = Question.objects.filter(id__in=question_ids)
 
     # Log the selected question IDs for debugging
@@ -274,59 +273,7 @@ def save_survey_from_form(survey, form_data):
         survey.questions.add(question)
         # Log each question being added to the survey
 
-
     # Save the survey object
     survey.save()
     print(f"Survey '{survey.name}' saved with updated questions: {survey.questions.all()}")
-
-    # Ensure that the survey object has the questions associated after saving
-
-
-class SurveyQuestionsForm(forms.ModelForm):
-    class Meta:
-        model = Survey
-        fields = ('questions',)
-
-    # Representing the many to many related field in Pizza
-    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all())
-
-    # Overriding __init__ here allows us to provide initial
-    # data for 'toppings' field
-    def __init__(self, *args, **kwargs):
-        # Only in case we build the form from an instance
-        # (otherwise, 'toppings' list should be empty)
-        if kwargs.get('instance'):
-            # We get the 'initial' keyword argument or initialize it
-            # as a dict if it didn't exist.                
-            initial = kwargs.setdefault('initial', {})
-            # The widget for a ModelMultipleChoiceField expects
-            # a list of primary key for the selected data.
-            initial['questions'] = [q.pk for q in kwargs['instance'].question_set.all()]
-
-        forms.ModelForm.__init__(self, *args, **kwargs)
-
-    # Overriding save allows us to process the value of 'toppings' field    
-    def save(self, commit=True):
-        # Get the unsave Pizza instance
-        instance = forms.ModelForm.save(self, False)
-
-        # Prepare a 'save_m2m' method for the form,
-        old_save_m2m = self.save_m2m
-        def save_m2m():
-           old_save_m2m()
-           # This is where we actually link the pizza with toppings
-           instance.question_set.clear()
-           instance.question_set.add(*self.cleaned_data['toppings'])
-        self.save_m2m = save_m2m
-
-        # Do we need to save all changes now?
-        if commit:
-            instance.save()
-            self.save_m2m()
-
-        return instance
-    
-
-
-
 

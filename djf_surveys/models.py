@@ -75,7 +75,7 @@ class SubDimension(models.Model):
     dimension = models.ManyToManyField(Dimension, related_name='sub_dimensions')
 
     def __str__(self):
-        return self.id
+        return self.label
 
 class Question(BaseModel):
     TYPE_FIELD = [
