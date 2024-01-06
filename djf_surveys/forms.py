@@ -235,12 +235,6 @@ class QuestionWithChoicesForm(forms.ModelForm):
     
 
 
-class CustomQuestionList(forms.ModelChoiceField):
-
-    def label_from_instance(self, question):
-        return f"{question.level} {question.dimension} {question.label} {question.choices}" 
-
-
 class SelectQuestionsForm(forms.ModelForm):
 
     questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), 
@@ -252,32 +246,34 @@ class SelectQuestionsForm(forms.ModelForm):
 
 
 
-
-def create_question_form(self):
-    questions = Question.objects.all()  # Get all questions from the database
-
+def create_question_form(questions):
+    
     fields = {}
     for question in questions:
-        field_name = f"question_{question.id}"  # Generate unique field name for each question
-        fields[field_name] = forms.ModelChoiceField(
+        field_name = f"question_{question.id}"
+        fields[field_name] = forms.ModelMultipleChoiceField(
             queryset=Question.objects.filter(id=question.id),
-            widget=CheckboxSelectMultipleSurvey(),
             required=False,
+            widget= CheckboxSelectMultipleSurvey,
             label=question.label,
-        )  # Create a checkbox for each question
+        )
 
     # Create the form class using modelform_factory
-    QuestionForm = modelform_factory(Question, fields=fields, form=forms.Form)
-    QuestionForm.base_fields = fields
+    QuestionForm = type('QuestionForm', (forms.Form,), fields)
+    return QuestionForm
 
-    # Set the questions for the form
-    initial_questions = []  # Create an empty list to store selected questions
-    for question in self.questions.all():
-        initial_questions.append(question.pk)
-    form = QuestionForm(initial=initial_questions)  # Initialize the form with the selected questions
+def save_survey_from_form(survey, form_data):
+    question_ids = [int(value[0]) for key, value in form_data.items() if key.startswith('question_')]
+    selected_questions = Question.objects.filter(id__in=question_ids)
 
-    return form
+    # Log the selected question IDs for debugging
+    print(f"Selected Question IDs: {question_ids}")
 
+    for question in selected_questions:
+        survey.questions.add(question)
+        # Log each question being added to the survey
 
-
+    # Save the survey object
+    survey.save()
+    print(f"Survey '{survey.name}' saved with updated questions: {survey.questions.all()}")
 

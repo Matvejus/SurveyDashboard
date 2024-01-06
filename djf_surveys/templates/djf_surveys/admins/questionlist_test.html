@@ -9,6 +9,7 @@
 {% block content %}
 <div class="relative p-4">
     <form method="post">
+        {% csrf_token %}
         <section>
             <ul class="bg-slate-50 p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 text-sm leading-6">
                 {% for level in levels %}
@@ -23,7 +24,7 @@
                                 <h3>{{ dim }}</h3>
                             </a>
                         </li>
-                     {% csrf_token %}
+                     
                             {% for question in questions %}
                                 {% if question.level == level and question.dimension == dim %}
                                 {% for field in form %}

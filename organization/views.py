@@ -89,16 +89,24 @@ class NewCollab(CreateView):
 
         return response
 
+
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+
 #page of collaboraton
 def dashboardpage(request):
     user = get_object_or_404(CustomUser, id=request.user.id) 
     org = user.organization  
     network = user.collaboration_network 
-    collaborators = CustomUser.objects.filter(collaboration_network=network).exclude(id=user.id)
 
+
+    collaborators = CustomUser.objects.filter(collaboration_network=network).exclude(id=user.id)
     # Subquery that checks if a user answer exists for each user.
     has_answer = UserAnswer.objects.filter(user=OuterRef('pk')).values('user')
-
     # Annotate each collaborator with whether they have an answer or not.
     collaborators = collaborators.annotate(has_answer=Exists(has_answer))
 
@@ -107,17 +115,15 @@ def dashboardpage(request):
 
     # Accessing the slug for each survey in the filtered queryset
     survey_slugs = [survey.slug for survey in surveys_for_user_network]
-    if len(survey_slugs) >=1:
-        slug = survey_slugs[0]
-    else:
-        slug = ""
+
+    
 
     context = {
         'user': user,
         'org': org, 
         'network': network,
         'collaborators': collaborators,
-        'survey_slug': slug,
+        'survey_slug': survey_slugs[0] if survey_slugs else None,
     }
     
     return render(request, 'organization/dashboard.html', context)

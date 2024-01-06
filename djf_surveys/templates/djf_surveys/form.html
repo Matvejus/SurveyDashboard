@@ -49,9 +49,9 @@
                             {% endif %}
                             {% endfor %}
                             {% endfor %}
-                            <button @click="openTab = 2" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
+                            <a @click="openTab = 2" class="text-center block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
                                 {% trans "To Individual" %}
-                            </button>
+                            </a>
                         </div>
                 
                         <!-- Individual Tab Content -->
@@ -79,9 +79,9 @@
                             {% endif %}
                             {% endfor %}
                             {% endfor %}
-                            <button @click="openTab = 3" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
+                            <a @click="openTab = 3" class=" text-center block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
                                 {% trans "To Network" %}
-                            </button>
+                            </a>
                         </div>
             
                         <!-- Collaborative Tab Content -->

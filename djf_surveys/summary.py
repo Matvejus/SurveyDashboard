@@ -176,7 +176,7 @@ class SummaryResponse:
         data = []
         for label in labels:
             clean_label = label.strip().replace(' ', '_').lower()
-            count = Answer.objects.filter(question=question, value=clean_label).count()
+            count = Answer.objects.filter(user_answer__survey = self.survey, question=question, value=clean_label).count()
             data.append(count)
 
         pie_chart.labels = labels
@@ -189,10 +189,10 @@ class SummaryResponse:
         
         data = []
         for label in labels:
-            count = Answer.objects.filter(question=question, value=label).count()
+            count = Answer.objects.filter(user_answer__survey = self.survey, question=question, value=label).count()
             data.append(count)
 
-        values_rating = Answer.objects.filter(question=question).values_list('value', flat=True)
+        values_rating = Answer.objects.filter(user_answer__survey = self.survey, question=question).values_list('value', flat=True)
         values_convert = [int(v) for v in values_rating]
         try:
           rating_avg = round(sum(values_convert) / len(values_convert), 1)
@@ -209,7 +209,7 @@ class SummaryResponse:
         labels = question.choices.split(",")
 
         str_value = []
-        for answer in Answer.objects.filter(question=question):
+        for answer in Answer.objects.filter(user_answer__survey = self.survey, question=question):
             str_value.append(answer.value)
         all_value = ",".join(str_value)
         data_value = all_value.split(",")
@@ -238,21 +238,24 @@ class SummaryResponse:
     
     def generate_for_level(self, level_id: str) -> dict:
         summaries = {}
-        questions = Question.objects.filter(survey=self.survey, level__id=level_id)
+        survey = Survey.objects.get(id = self.survey.id)
+        questions = survey.questions.filter(level__id=level_id) 
         for question in questions:
             summaries[question.id] = self.generate_summary_for_question(question)
         return summaries
 
     def generate_for_dimension(self, dimension_id: str) -> dict:
         summaries = {}
-        questions = Question.objects.filter(survey=self.survey, dimension__id=dimension_id)
+        survey = Survey.objects.get(id = self.survey.id)
+        questions = survey.questions.filter(dimension__id=dimension_id)
         for question in questions:
             summaries[question.id] = self.generate_summary_for_question(question)
         return summaries
 
     def generate_for_sub_dimension(self, sub_dimension_id: str) -> dict:
         summaries = {}
-        questions = Question.objects.filter(survey=self.survey, subdimension__id=sub_dimension_id)
+        survey = Survey.objects.get(id = self.survey.id)
+        questions = survey.questions.filter( subdimension__id=sub_dimension_id)
         for question in questions:
             summaries[question.id] = self.generate_summary_for_question(question)
         return summaries
