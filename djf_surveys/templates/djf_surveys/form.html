@@ -31,20 +31,26 @@
             
                             <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                                 <label for="email" class="text-base font-medium">{{ field.label }}</label>
+                                {% if field.field.widget.input_type == 'hidden' %}
+                                <div class="mt-1 scrollable-box grid grid-rows-2">
+                                    {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                    <div class="flex space-x-3 justify-center content-center">
+                                        <span class="text-xs font-semibold w-12">Strongly disagree</span>
+                                        <span class="text-xs font-semibold">Disagree</span>
+                                        <span class="text-xs font-semibold">Neutral</span>
+                                        <span class="text-xs font-semibold">Agree</span>
+                                        <span class="text-xs font-semibold w-12">Strongly agree</span>
+                                    </div>
+                                </div>
+                            {% else %}
                                 <div class="mt-1 scrollable-box">
-                                    {% if field.name == 'org_profiles' %}
-                                        <div style="width: 200px; height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
-                                            {{ field }}
-                                        </div>
-                                    {% elif field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
+                                    {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
                                         {{ field }}
                                     {% else %}
-                                        {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                        {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
                                     {% endif %}
                                 </div>
-                                <p class="text-xs text-gray-400">{{ field.help_text }}</p>
-                                <span class="text-xs text-red-400">{{ field.errors }}</span>
-                            </div>
+                            {% endif %}
             
                             {% endif %}
                             {% endfor %}
@@ -62,17 +68,26 @@
             
                             <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                                 <label for="email" class="text-base font-medium">{{ field.label }}</label>
+                                {% if field.field.widget.input_type == 'hidden' %}
+                                <div class="mt-1 scrollable-box grid grid-rows-2">
+                                    {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                    <div class="flex space-x-3 justify-center content-center">
+                                        <span class="text-xs font-semibold w-12">Strongly disagree</span>
+                                        <span class="text-xs font-semibold">Disagree</span>
+                                        <span class="text-xs font-semibold">Neutral</span>
+                                        <span class="text-xs font-semibold">Agree</span>
+                                        <span class="text-xs font-semibold w-12">Strongly agree</span>
+                                    </div>
+                                </div>
+                            {% else %}
                                 <div class="mt-1 scrollable-box">
-                                {% if field.name == 'org_profiles' %}
-                                        <div style="width: 200px; height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
-                                            {{ field }}
-                                        </div>
-                                    {% elif field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
+                                    {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
                                         {{ field }}
                                     {% else %}
-                                        {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
-                                {% endif %}
+                                        {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                    {% endif %}
                                 </div>
+                            {% endif %}
                                 <p class="text-xs text-gray-400">{{ field.help_text }}</p>
                                 <span class="text-xs text-red-400">{{ field.errors }}</span>
                             </div>
@@ -92,28 +107,35 @@
             
                             <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                                 <label for="email" class="text-base font-medium">{{ field.label }}</label>
+                                {% if field.field.widget.input_type == 'hidden' %}
+                                <div class="mt-1 scrollable-box grid grid-rows-2">
+                                    {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                    <div class="flex space-x-3 justify-center content-center">
+                                        <span class="text-xs font-semibold w-12">Strongly disagree</span>
+                                        <span class="text-xs font-semibold">Disagree</span>
+                                        <span class="text-xs font-semibold">Neutral</span>
+                                        <span class="text-xs font-semibold">Agree</span>
+                                        <span class="text-xs font-semibold w-12">Strongly agree</span>
+                                    </div>
+                                </div>
+                            {% else %}
                                 <div class="mt-1 scrollable-box">
-                                    {% if field.name == 'org_profiles' %}
-                                        <div style="width: 200px; height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
-                                            {{ field }}
-                                        </div>
-                                    {% elif field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
+                                    {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
                                         {{ field }}
                                     {% else %}
-                                        {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                        {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
                                     {% endif %}
                                 </div>
+                            {% endif %}
                                 <p class="text-xs text-gray-400">{{ field.help_text }}</p>
                                 <span class="text-xs text-red-400">{{ field.errors }}</span>
                             </div>
                             {% endif %}
                             {% endfor %}
                             {% endfor %}
-                            <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                                 <button type="submit" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
                                     {% trans "Submit" %}
                                 </button>
-                            </div>
                         </div>
                     </div>
                     <!-- tab end -->

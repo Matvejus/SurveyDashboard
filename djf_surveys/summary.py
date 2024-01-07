@@ -6,6 +6,8 @@ from djf_surveys import models
 from djf_surveys.models import TYPE_FIELD, Survey, Question, Answer
 from djf_surveys.utils import create_star
 
+import numpy as np
+
 
 COLORS = [
   '#64748b', '#a1a1aa', '#374151', '#78716c', '#d6d3d1', '#fca5a5', '#ef4444', '#7f1d1d',
@@ -147,21 +149,46 @@ class ChartBarRating(ChartBar):
     rate_avg = 0
 
     def _base_element_html(self):
+        results = {
+            "Strongly":np.arange(0,1.4, 0.1),
+            "Disagree":np.arange(1.5,2.5,0.1),
+            "Neutral":np.arange(2.5, 3.5, 0.1),
+            "Agree":np.arange(3.5, 4.5, 0.1),
+            "Strongly Agree":np.arange(4.5, 5, 0.1)
+        }
+        opinion = ""
+        for key, value in results.items():
+            if  self.rate_avg in value:
+                opinion = key
+        print(self.rate_avg)
+      
         stars = create_star(active_star=int(self.rate_avg))
         self.element_html = f"""
+
+        
+
 <div class="swiper-slide">
     <blockquote class="p-6 border border-gray-100 rounded-lg shadow-lg bg-white">
-      <div class="bg-yellow-100 space-y-1 py-5 rounded-md border border-yellow-200 text-center shadow-xs mb-2">
-          <h1 class="text-5xl font-semibold"> {self.rate_avg}</h1>
+      <div class="bg-yellow-100 space-y-1 py-5 rounded-md border border-yellow-200 text-center shadow-xs mb-3">
+          <h1 class="text-5xl font-semibold"> {opinion}</h1>
           <div class="flex justify-center">
               {stars}
           </div>
-          <h5 class="mb-0 mt-1 text-sm"> Rate Average</h5>
+           <div class="flex space-x-3 justify-center content-center">
+              <span class="text-xs font-semibold w-12">Strongly disagree</span>
+              <span class="text-xs font-semibold">Disagree</span>
+              <span class="text-xs font-semibold">Neutral</span>
+              <span class="text-xs font-semibold">Agree</span>
+              <span class="text-xs font-semibold w-12">Strongly agree</span>
+          </div>
       </div>
       <canvas id="{self.chart_id}" width="{self.width}" height="{self.height}"></canvas>
     </blocquote>
 </div>
+
+
 """
+
 
 
 class SummaryResponse:

@@ -6,9 +6,24 @@ from django.utils.translation import gettext_lazy as _
 from djf_surveys import models
 
 
+
+# def create_star(active_star: int, id_element: str = '') -> str:
+#     labels = [" Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
+#     elements = [f'<div class="flex justify-center items-center" id="parent_start_{id_element}">']
+#     for i in range(5):
+#         if i < active_star:
+#             elements.append(f'<i class="rating__star rating_active"></i>')
+#         else:
+#             elements.append(f'<i class="rating__star rating_inactive"></i>')
+#         elements.append(f'<span>{labels[i]}</span>')
+#     elements.append('</div>')
+#     return mark_safe(''.join(elements))
+
+
+
 def create_star(active_star: int, id_element: str = '') -> str:
     inactive_star = 5 - active_star
-    elements = [f'<div class="flex content-center" id="parent_start_{id_element}">']
+    elements = [f'<div class="flex py-5 space-x-10 justify-center content-center" id="parent_start_{id_element}">']
     for _ in range(int(active_star)):
         elements.append('<i class ="rating__star rating_active"> </i>')
     for _ in range(inactive_star):

@@ -6,18 +6,15 @@
 {% endblock %}
 
 {% block content %}
-    {% comment %} <div class="flex py-1 fixed bottom-10 right-10">
-        <button
-            class="z-20 block p-4 text-blue-100 transition-all bg-blue-700 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
-            data-te-toggle="modal"
-            data-te-target="#addQuestion"
-            data-te-ripple-init
-            data-te-ripple-color="light"
-            type="button">
-            {% include "djf_surveys/buttons/add_button.html" with size=6 %}
-            <span class="items-center float-right"> {% trans 'Question' %} </span>
-        </button>
-    </div> {% endcomment %}
+<div class="flex py-1 fixed bottom-10 right-10">
+    <a href="{% url 'djf_surveys:question_list' survey.slug %}"
+        class="z-20 block p-4 text-blue-100 transition-all bg-blue-700 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
+        data-te-ripple-init
+        data-te-ripple-color="light">
+        {% include "djf_surveys/buttons/add_button.html" with size=6 %}
+        <span class="items-center float-right">{% trans 'Add questions' %}</span>
+    </a>
+</div>
     {% comment %} <div class="flex py-1 fixed bottom-10 right-10">
         <button
             class="z-20 block p-4 text-blue-100 transition-all bg-blue-700 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
@@ -30,12 +27,12 @@
             <span class="items-center float-right"> {% trans 'Questions1' %} </span>
         </button>
     </div> {% endcomment %}
-    <div class="flex py-1 fixed bottom-10 right-10">
+    {% comment %} <div class="flex py-1 fixed bottom-10 right-10">
         <input type="button" class="profile-edit-btn border-solid border-1 border-green-500 bg-gray-100 rounded-full px-4 py-1" name="btnAddMore" value="Add questions" onclick="location.href='{% url 'djf_surveys:select_questions' survey.slug %}';">
-    </div>
-    <div class="flex py-1 fixed bottom-10 ">
+    </div> {% endcomment %}
+    {% comment %} <div class="flex py-1 fixed bottom-10 ">
         <input type="button" class="profile-edit-btn border-solid border-1 border-green-500 bg-gray-100 rounded-full px-4 py-1" name="btnAddMore" value="Question list" onclick="location.href='{% url 'djf_surveys:question_list' survey.slug %}';">
-    </div>
+    </div> {% endcomment %}
 
     <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
         <div class="max-w-lg mx-auto">
@@ -94,13 +91,26 @@
                         <div class="p-8 mb-6 rounded-lg shadow-md border border-gray-200 bg-white">
                             <label for="email" class="text-base font-medium">{{ field.label }}</label>
 
-                            <div class="mt-1">
-                                {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
-                                    {{ field }}
-                                {% else %}
-                                    {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
-                                {% endif %}
-                            </div>
+                            {% if field.field.widget.input_type == 'hidden' %}
+                                <div class="mt-1 grid grid-rows-2">
+                                    {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                    <div class="flex space-x-3 justify-center content-center">
+                                        <span class="text-xs font-semibold w-12">Strongly disagree</span>
+                                        <span class="text-xs font-semibold">Disagree</span>
+                                        <span class="text-xs font-semibold">Neutral</span>
+                                        <span class="text-xs font-semibold">Agree</span>
+                                        <span class="text-xs font-semibold w-12">Strongly agree</span>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="mt-1">
+                                    {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
+                                        {{ field }}
+                                    {% else %}
+                                        {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                             <p class="text-xs text-gray-400 mt-2">{{ field.help_text }}</p>
                         </div>
                     </div>
