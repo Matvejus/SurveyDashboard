@@ -277,13 +277,13 @@ class AdminDeleteQuestionView(DetailView):
     survey = None
 
     def dispatch(self, request, *args, **kwargs):
-        question = self.get_object()
-        self.survey = question.survey
+        survey_slug = self.kwargs.get('slug') 
+        self.survey = get_object_or_404(Survey, slug=survey_slug)
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         question = self.get_object()
-        question.delete()
+        self.survey.questions.remove(question)
         messages.success(request, gettext("Question %ss succesfully deleted.") % question.label)
         return redirect("djf_surveys:admin_forms_survey", slug=self.survey.slug)
 
