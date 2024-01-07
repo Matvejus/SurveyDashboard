@@ -15,7 +15,7 @@
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="mb-5" id="section_field_{{ field.auto_id }}">
-                            <label for="{{ field.id_for_label }}" class="text-base font-medium">{{ field.label }}</label>
+                            <label for="email" class="text-base font-medium">{{ field.label }}</label>
                             <div class="mt-1">
                                 {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
                                     {{ field }}
@@ -23,12 +23,8 @@
                                     {{ field|addclass:'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm' }}
                                 {% endif %}
                             </div>
-                            {% if field.help_text %}
-                                <p class="text-xs text-gray-400 mt-2">{{ field.help_text }}</p>
-                            {% endif %}
+                            <p class="text-xs text-gray-400 mt-2">{{ field.help_text }}</p>
                         </div>
-                        <p class="text-xs text-gray-400 mt-2">{{ field.help_text }}</p>
-                    </div>
                     {% endfor %}
 
                     <button type="submit" class="block w-full mt-5 px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg">
