@@ -32,7 +32,7 @@
                             <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                                 <label for="email" class="text-base font-medium">{{ field.label }}</label>
                                 {% if field.field.widget.input_type == 'hidden' %}
-                                <div class="mt-1 scrollable-box grid grid-rows-2">
+                                <div class="mt-1 grid grid-rows-2">
                                     {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
                                     <div class="flex space-x-3 justify-center content-center">
                                         <span class="text-xs font-semibold w-12">Strongly disagree</span>
@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <div class="mt-1 scrollable-box">
+                                <div class="mt-1">
                                     {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
                                         {{ field }}
                                     {% else %}
@@ -51,6 +51,9 @@
                                     {% endif %}
                                 </div>
                             {% endif %}
+                                <p class="text-xs text-gray-400">{{ field.help_text }}</p>
+                                <span class="text-xs text-red-400">{{ field.errors }}</span>
+                            </div>
             
                             {% endif %}
                             {% endfor %}
@@ -69,7 +72,7 @@
                             <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                                 <label for="email" class="text-base font-medium">{{ field.label }}</label>
                                 {% if field.field.widget.input_type == 'hidden' %}
-                                <div class="mt-1 scrollable-box grid grid-rows-2">
+                                <div class="mt-1 grid grid-rows-2">
                                     {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
                                     <div class="flex space-x-3 justify-center content-center">
                                         <span class="text-xs font-semibold w-12">Strongly disagree</span>
@@ -80,7 +83,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <div class="mt-1 scrollable-box">
+                                <div class="mt-1">
                                     {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
                                         {{ field }}
                                     {% else %}
@@ -108,7 +111,7 @@
                             <div class="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-md border border-gray-200 bg-white">
                                 <label for="email" class="text-base font-medium">{{ field.label }}</label>
                                 {% if field.field.widget.input_type == 'hidden' %}
-                                <div class="mt-1 scrollable-box grid grid-rows-2">
+                                <div class="mt-1 grid grid-rows-2">
                                     {{ field|addclass:'w-full text-sm border-gray-500 rounded-lg shadow-sm' }}
                                     <div class="flex space-x-3 justify-center content-center">
                                         <span class="text-xs font-semibold w-12">Strongly disagree</span>
@@ -119,7 +122,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <div class="mt-1 scrollable-box">
+                                <div class="mt-1">
                                     {% if field.field.widget.input_type == 'radio' or field.field.widget.input_type == 'checkbox' %}
                                         {{ field }}
                                     {% else %}

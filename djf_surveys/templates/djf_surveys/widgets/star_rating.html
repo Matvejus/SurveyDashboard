@@ -18,6 +18,7 @@
 
         stars.map((star) => {
             star.onclick = () => {
+                console.log(star);
                 i = stars.indexOf(star);
                 if (star.className.indexOf(starClassUnactive_{{ widget.attrs.id }}) !== -1) {
                     for (i; i >= 0; --i) stars[i].className = starClassActive_{{ widget.attrs.id }};
