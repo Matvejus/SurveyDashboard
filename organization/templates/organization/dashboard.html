@@ -4,20 +4,12 @@
 {% block page_title %}<title>Dashboard</title>{% endblock page_title %}
 
 {%block css_files%}
-{% comment %} <link rel="stylesheet" href="{% static 'organization/keen-dashboards.css' %}" type="text/css" media="screen"> {% endcomment %}
 <link rel="stylesheet" href="{% static 'organization/landing.css' %}" type="text/css" media="screen">
 <link rel="stylesheet" href="{% static 'djf_surveys/te-starter/css/tw-elements.min.css' %}">
 {% endblock %}
 
-<style>
-  .hide {
-    display: none;
-  }
-</style>
 
 {% block content %}
-
- <body>  
     <div class="grid grid-rows-2 grid-cols-6 gap-4">
       <div class='container row-span-3 col-span-3'>
         {% include 'organization/components/testdon.html'%}
@@ -28,43 +20,12 @@
         {% include 'organization/components/CollaboratorsTable.html'%}
       </div>
     </div>
-    
+{% endblock content %}
 
-
-</body>  
-  {% block scripts %}
+{% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 <script src="{% static 'djf_surveys/css/tailwindcss-3.3.1.js' %}"></script>
 <script src="{% static 'djf_surveys/css/tailwindcss-plugin-3.3.1.js' %}"></script>
 <script src="{% static 'djf_surveys/te-starter/js/tw-elements.umd.min.js' %}"></script>
-
-<script>
-
-  $(document).on('change', '.div-toggle', function() {
-    var target = $(this).data('target');
-    var show = $("option:selected", this).data('show');
-    $(target).children().addClass('hide');
-    $(show).removeClass('hide');
-  });
-  $(document).ready(function(){
-      $('.div-toggle').trigger('change');
-  });
-$(document).on('change', '.div-toggle', function() {
-  var target = $(this).data('target');
-  var show = $("option:selected", this).data('show');
-  $(target).children().addClass('hide');
-  $(show).removeClass('hide');
-});
-$(document).ready(function(){
-    $('.div-toggle').trigger('change');
-});
-  
-
-</script>
-  {% endblock scripts %}
-
-
-
-{% endblock content %}
-
+{% endblock scripts %}
 
