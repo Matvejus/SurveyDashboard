@@ -6,6 +6,8 @@ from djf_surveys import models
 from djf_surveys.models import TYPE_FIELD, Survey, Question, Answer
 from djf_surveys.utils import create_star
 
+import numpy as np
+
 
 COLORS = [
   '#64748b', '#a1a1aa', '#374151', '#78716c', '#d6d3d1', '#fca5a5', '#ef4444', '#7f1d1d',
@@ -147,21 +149,58 @@ class ChartBarRating(ChartBar):
     rate_avg = 0
 
     def _base_element_html(self):
-        stars = create_star(active_star=int(self.rate_avg))
+        results = {
+            "Strongly disagree":[0,1.0, 1.1, 1.2, 1.3, 1.4],
+            "Disagree":[1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4],
+            "Neutral":[2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4],
+            "Agree":[3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4],
+            "Strongly Agree":[4.5, 4.6, 4.7, 4.8, 4.9, 5.0]
+        }
+        opinion = ""
+        for key, value in results.items():
+            if  self.rate_avg in value:
+                opinion = key
+      
+        # stars = create_star(active_star=int(self.rate_avg))
         self.element_html = f"""
+
+        
+
 <div class="swiper-slide">
     <blockquote class="p-6 border border-gray-100 rounded-lg shadow-lg bg-white">
-      <div class="bg-yellow-100 space-y-1 py-5 rounded-md border border-yellow-200 text-center shadow-xs mb-2">
-          <h1 class="text-5xl font-semibold"> {self.rate_avg}</h1>
-          <div class="flex justify-center">
-              {stars}
-          </div>
-          <h5 class="mb-0 mt-1 text-sm"> Rate Average</h5>
+      <div class=" bg-yellow-100 space-y-1 py-5 rounded-md border border-yellow-200 text-center shadow-xs mb-3">
+          <h1 class="text-3xl font-semibold"> {opinion}</h1>
       </div>
       <canvas id="{self.chart_id}" width="{self.width}" height="{self.height}"></canvas>
     </blocquote>
 </div>
+
+
 """
+
+
+# <div class="swiper-slide">
+#     <blockquote class="p-6 border border-gray-100 rounded-lg shadow-lg bg-white">
+#       <div class="bg-yellow-100 space-y-1 py-5 rounded-md border border-yellow-200 text-center shadow-xs mb-3">
+#           <h1 class="text-5xl font-semibold"> {opinion}</h1>
+#           <div class="flex justify-center">
+#               {stars}
+#           </div>
+#            <div class="flex space-x-3 justify-center content-center">
+#               <span class="text-xs font-semibold w-12">Strongly disagree</span>
+#               <span class="text-xs font-semibold">Disagree</span>
+#               <span class="text-xs font-semibold">Neutral</span>
+#               <span class="text-xs font-semibold">Agree</span>
+#               <span class="text-xs font-semibold w-12">Strongly agree</span>
+#           </div>
+#       </div>
+#       <canvas id="{self.chart_id}" width="{self.width}" height="{self.height}"></canvas>
+#     </blocquote>
+# </div>
+
+
+
+
 
 
 class SummaryResponse:
@@ -199,7 +238,7 @@ class SummaryResponse:
         except ZeroDivisionError:
           rating_avg = 0
         
-        bar_chart.labels = labels
+        bar_chart.labels = ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree']
         bar_chart.data = data
         bar_chart.rate_avg = rating_avg
         return bar_chart.render()

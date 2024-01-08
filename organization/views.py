@@ -127,6 +127,7 @@ def dashboardpage(request):
     }
     
     return render(request, 'organization/dashboard.html', context)
+    
 
 def profile(request, user_id):
     viewed_user = get_object_or_404(CustomUser, id=user_id)  
