@@ -22,8 +22,12 @@
                 <!-- Profile Card -->
                 <div class="bg-white p-3 border-t-4 border-black-400">
                     <div class="image overflow-hidden">
-                        <img class="h-auto w-auto mx-auto"
+                        {% if viewed_user.avatar %}
+                            <img class="h-auto w-auto mx-auto"
                             src="{{ viewed_user.avatar.url }}" alt="User avatar">
+                        {% else %}
+                            <img class="rounded-full h-auto w-auto mx-auto">
+                        {% endif %}
                     </div>
                     <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">{{ viewed_user.first_name }} {{ viewed_user.last_name }}</h1>
                     <h3 class="text-gray-600 font-lg leading-6">{{ viewed_user.position }} at {{ org.title }}</h3>

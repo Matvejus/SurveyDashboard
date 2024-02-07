@@ -11,28 +11,24 @@
                     </a>
                 </div>
                 <!-- Primary Navbar items -->
+                {% if user.is_staff %}
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="{% url 'organization:dashboard' %}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Dashboard" %}</a>
                 </div>
                 <div class="hidden md:flex items-center space-x-1">
-                    {% if user.is_staff %}
                     <a href="{% url 'djf_surveys:admin_survey' %}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Surveys" %}</a>
-                    {% else %}
-                    <button class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold"
-                    data-te-toggle="modal"
-                    data-te-target="#modalDelete">
-                    {% trans "Surveys" %}
-                    </button>                   
-                   
-                   
-                   
-                    {% include 'djf_surveys/components/Modal_NotAuth.html' %}
-                    
-                    {% endif %}
                 </div>
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="{% url 'organization:profile' user_id=user.id%}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Profile" %}</a>
                 </div>
+                {% else %}
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{% url 'djf_surveys:index' %}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Surveys" %}</a>                    
+                </div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{% url 'organization:profile' user_id=user.id%}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Profile" %}</a>
+                </div>
+                {% endif %}
                 
             </div>
             <!-- Secondary Navbar items -->
