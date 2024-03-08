@@ -113,6 +113,7 @@ class BaseSurveyForm(forms.Form):
             self.fields[field_name].required = question.required
             self.fields[field_name].help_text = question.help_text
             self.field_names.append(field_name)
+            self.add_edit_fields(user)
 
     def clean(self):
         cleaned_data = super().clean()
