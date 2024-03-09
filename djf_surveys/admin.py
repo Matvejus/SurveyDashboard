@@ -2,9 +2,6 @@ from django.contrib import admin
 from django import forms
 from .models import Survey, Question, Answer, UserAnswer, Level, Dimension, SubDimension, EditField
 
-class EditFieldInline(admin.TabularInline):
-    model = EditField  # Direct reference to EditField
-    extra = 1
     
 class QuestionAdminForm(forms.ModelForm):
     class Meta:
@@ -20,13 +17,14 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('label', 'type_field', 'required', 'ordering')
     list_filter = ('type_field', 'required')
     search_fields = ('label', 'help_text')
-    inlines = [EditFieldInline, ]
+    # Removed the inlines = [EditFieldInline, ] line since it's incorrect
 
 @admin.register(Survey)
 class SurveyAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'editable', 'deletable', 'duplicate_entry', 'private_response', 'can_anonymous_user', 'org_type')
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)} 
+
 
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):

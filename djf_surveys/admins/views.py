@@ -1,6 +1,7 @@
 import csv
 from io import StringIO
 
+from django.forms import modelformset_factory
 from django.utils.text import capfirst
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic import TemplateView
@@ -18,10 +19,10 @@ from django.template.loader import render_to_string
 from django.views.generic.edit import FormView
 
 from djf_surveys.app_settings import SURVEYS_ADMIN_BASE_PATH
-from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Level, Dimension, SubDimension
+from djf_surveys.models import Survey, Question, UserAnswer, TYPE_FIELD, Level, Dimension, SubDimension, EditField
 from djf_surveys.mixin import ContextTitleMixin
 from djf_surveys.views import SurveyListView
-from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm, SelectQuestionsForm, create_question_form, save_survey_from_form
+from djf_surveys.forms import BaseSurveyForm, SurveyForm, QuestionForm, QuestionWithChoicesForm, SelectQuestionsForm, EditFieldForm,  create_question_form, save_survey_from_form
 from djf_surveys.summary import SummaryResponse
 
 import logging
@@ -144,6 +145,14 @@ def load_subdimensions(request):
     return render(request, 'admins/sub_dimension_dropdown_list_options.html', {'subdimensions': subdimensions})
 
 
+EditFieldFormSet = modelformset_factory(
+    EditField,
+    form=EditFieldForm,
+    fields=('options',),
+    extra=1,
+    can_delete=True 
+)
+
 def group_required(group_names):
     def check_group(user):
         user_groups = user.groups.values_list('name', flat=True)
@@ -206,13 +215,6 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     def get_sub_title_page(self):
         return gettext("Type Field %s") % Question.TYPE_FIELD[self.type_field_id][1]
 
-
-# def group_required(group_names):
-#     def check_group(user):
-#         user_groups = user.groups.values_list('name', flat=True)
-#         return any(group_name in user_groups for group_name in group_names)
-
-#     return user_passes_test(check_group)
 
 @method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
 class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
@@ -428,9 +430,6 @@ def add_questions(request, slug):
     return render(request, 'djf_surveys/admins/select_questions_form.html', context)
 
 
-
-
-
 def questionlist_test(request, slug):
     survey = get_object_or_404(Survey, slug=slug)
     levels = Level.objects.all()
@@ -469,5 +468,3 @@ def questionlist_test(request, slug):
     }
 
     return render(request, 'djf_surveys/admins/questionlist_test.html', context)
-
-

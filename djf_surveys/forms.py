@@ -11,7 +11,7 @@ from django.forms.models import modelform_factory
 
 from django.utils.translation import gettext_lazy as _
 from djf_surveys.models import Answer, TYPE_FIELD, UserAnswer, Question, Level, Dimension, SubDimension, EditField
-from djf_surveys.widgets import CheckboxSelectMultipleSurvey, RadioSelectSurvey, DateSurvey, RatingSurvey, InlineChoiceField
+from djf_surveys.widgets import CheckboxSelectMultipleSurvey, RadioSelectSurvey, DateSurvey, RatingSurvey, InlineChoiceField, InlineEditFieldsWidget
 from djf_surveys.app_settings import DATE_INPUT_FORMAT, SURVEY_FIELD_VALIDATORS
 from djf_surveys.validators import validate_rating
 
@@ -195,16 +195,15 @@ class EditSurveyForm(BaseSurveyForm):
                 answer.save()
 
 class QuestionForm(forms.ModelForm):
-    edit_fields = forms.ModelMultipleChoiceField(
-        queryset=EditField.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,  # Adjust based on your requirement
-        label="Edit Fields"
+    edit_field = forms.CharField(
+        widget=InlineEditFieldsWidget(attrs={'class': 'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm'}, extra=3),
+        required=False,
+        label="Edit Fields",
     )
 
     class Meta:
         model = Question
-        fields = ['label', 'key', 'level', 'dimension', 'subdimension', 'help_text', 'required', 'edit_fields']
+        fields = ['label', 'edit_field', 'key', 'level', 'dimension', 'subdimension', 'help_text', 'required']
 
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
@@ -218,17 +217,37 @@ class QuestionForm(forms.ModelForm):
                 pass  # invalid input from the client; ignore and fallback to empty SubDimension queryset
         elif self.instance.pk:
             self.fields['subdimension'].queryset = self.instance.dimension.sub_dimensions.order_by('id')
+        
+    def save(self, commit=True):
+        instance = super(QuestionForm, self).save(commit=False)
+        edit_field_data = self.cleaned_data.get('edit_field')
+
+        # Example logic for handling edit_field_data
+        # You would need to adjust this logic based on your actual requirements
+        if edit_field_data:
+            # Here you might need to parse edit_field_data, find or create an EditField instance
+            # For demonstration purposes, let's say we create a new EditField instance
+            edit_field_instance, created = EditField.objects.get_or_create(options=edit_field_data)
+            instance.edit_field = edit_field_instance
+
+        if commit:
+            instance.save()
+            self.save_m2m()  # In case there are many-to-many fields to save
+
+        return instance
     
+    
+
 class QuestionWithChoicesForm(forms.ModelForm):
-    edit_fields = forms.ModelMultipleChoiceField(
-        queryset=EditField.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,  # Adjust based on your requirement
-        label="Edit Fields"
+    edit_field = forms.CharField(
+        widget=InlineEditFieldsWidget(attrs={'class': 'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm'}, extra=3),
+        required=False,
+        label="Edit Fields",
     )
+
     class Meta:
         model = Question
-        fields = ('label', 'key', 'level', 'dimension', 'subdimension', 'choices', 'help_text', 'required')
+        fields = ('label', 'edit_field', 'key', 'level', 'dimension', 'subdimension', 'choices', 'help_text', 'required')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -290,3 +309,7 @@ def save_survey_from_form(survey, form_data):
     survey.save()
     print(f"Survey '{survey.name}' saved with updated questions: {survey.questions.all()}")
 
+class EditFieldForm(forms.ModelForm):
+    class Meta:
+        model = EditField
+        fields = ['options']
