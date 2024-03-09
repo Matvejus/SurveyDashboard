@@ -10,7 +10,7 @@ from django.forms.models import modelform_factory
 
 
 from django.utils.translation import gettext_lazy as _
-from djf_surveys.models import Answer, TYPE_FIELD, UserAnswer, Question, Level, Dimension, SubDimension
+from djf_surveys.models import Answer, TYPE_FIELD, UserAnswer, Question, Level, Dimension, SubDimension, EditField
 from djf_surveys.widgets import CheckboxSelectMultipleSurvey, RadioSelectSurvey, DateSurvey, RatingSurvey, InlineChoiceField
 from djf_surveys.app_settings import DATE_INPUT_FORMAT, SURVEY_FIELD_VALIDATORS
 from djf_surveys.validators import validate_rating
@@ -195,25 +195,37 @@ class EditSurveyForm(BaseSurveyForm):
                 answer.save()
 
 class QuestionForm(forms.ModelForm):
+    edit_fields = forms.ModelMultipleChoiceField(
+        queryset=EditField.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,  # Adjust based on your requirement
+        label="Edit Fields"
+    )
+
     class Meta:
         model = Question
-        fields = ('label', 'key', 'level', 'dimension', 'subdimension', 'help_text', 'required')
+        fields = ['label', 'key', 'level', 'dimension', 'subdimension', 'help_text', 'required', 'edit_fields']
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(QuestionForm, self).__init__(*args, **kwargs)
         self.fields['subdimension'].queryset = SubDimension.objects.none()
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if 'dimension' in cleaned_data:
-            dimension_id = cleaned_data.get('dimension').id
-            SubDimension.objects.filter(dimension=dimension_id).order_by('id')
-
+        if 'dimension' in self.data:
+            try:
+                dimension_id = int(self.data.get('dimension'))
+                self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty SubDimension queryset
         elif self.instance.pk:
-            self.fields['subdimension'].queryset = self.instance.dimension.subdimension_set.order_by('id')
-        return cleaned_data
+            self.fields['subdimension'].queryset = self.instance.dimension.sub_dimensions.order_by('id')
     
 class QuestionWithChoicesForm(forms.ModelForm):
+    edit_fields = forms.ModelMultipleChoiceField(
+        queryset=EditField.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,  # Adjust based on your requirement
+        label="Edit Fields"
+    )
     class Meta:
         model = Question
         fields = ('label', 'key', 'level', 'dimension', 'subdimension', 'choices', 'help_text', 'required')

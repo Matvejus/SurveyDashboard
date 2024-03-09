@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load djf_survey_tags %}
+
 <!-- Navbar goes here -->
 <nav class="bg-white shadow-sm">
     <div class="max-w-6xl mx-auto px-4">
@@ -16,19 +18,18 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-1">
                     {% if user.is_staff %}
-                    <a href="{% url 'djf_surveys:admin_survey' %}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Surveys" %}</a>
+                        <a href="{% url 'djf_surveys:admin_survey' %}" ...>{% trans "Surveys" %}</a>
                     {% else %}
-                    <button class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold"
-                    data-te-toggle="modal"
-                    data-te-target="#modalDelete">
-                    {% trans "Surveys" %}
-                    </button>                   
-                   
-                   
-                   
-                    {% include 'djf_surveys/components/Modal_NotAuth.html' %}
-                    
+                        {% if user|has_group:"Supervisor" or user|has_group:"Orchestrator" %}
+                            <a href="{% url 'djf_surveys:admin_survey' %}" ...>{% trans "Surveys" %}</a>
+                        {% elif user|has_group:"collaborator" %}
+                            <a href="/surveys" ...>{% trans "Surveys" %}</a>
+                        {% else %}
+                            <button ... data-te-toggle="modal" data-te-target="#modalDelete">{% trans "Surveys" %}</button>
+                            {% include 'djf_surveys/components/Modal_NotAuth.html' %}
+                        {% endif %}
                     {% endif %}
+                </div>
                 </div>
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="{% url 'organization:profile' user_id=user.id%}" class="py-4 px-2 text-gray-500 hover:border-b-4 hover:border-blue-500 hover:text-blue-500 font-semibold">{% trans "Profile" %}</a>

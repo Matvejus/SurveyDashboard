@@ -1,12 +1,13 @@
+{% load djf_survey_tags %}
+
 <div>
-    
     <div class="flex -space-x-4 hover:space-x-1 float-right">
         <a href="{% url 'djf_surveys:create' survey.slug %}" class="z-20 block p-4 text-purple-700 transition-all bg-purple-100 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
                 type="button">
                 {% include "djf_surveys/buttons/add_button.html" %}
         </a>
 
-        {% if user.is_superuser %}
+        {% if user.is_superuser or user|has_group:"Supervisor" or user|has_group:"Orchestrator" %}
             <a href="{% url 'djf_surveys:admin_forms_survey' survey.slug %}" class="z-20 block p-4 text-blue-700 transition-all bg-blue-100 border-2 border-white rounded-full active:bg-blue-50 hover:scale-110 focus:outline-none focus:ring"
                     type="button">
                 {% include "djf_surveys/buttons/edit_button.html" %}
@@ -19,7 +20,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                 </svg>
             </a>
+        {% endif %}
 
+        {% if request.user|has_group:"Supervisor" %}
             <button class="button-delete z-30 block p-4 text-red-700 transition-all bg-red-100 border-2 border-white rounded-full hover:scale-110 focus:outline-none focus:ring active:bg-red-50"
                     data-te-toggle="modal"
                     data-te-target="#modalDelete"

@@ -37,7 +37,7 @@ def group_required(group_names):
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
+@method_decorator([login_required, group_required(['Supervisor'])], name='dispatch')
 class AdminCreateSurveyView(ContextTitleMixin, CreateView):
     model = Survey
     form_class = SurveyForm
@@ -122,7 +122,7 @@ class AdminSurveyFormView(ContextTitleMixin, FormMixin, DetailView):
 
 #     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
+@method_decorator([login_required, group_required(['Supervisor'])], name='dispatch')
 class AdminDeleteSurveyView(DetailView):
     model = Survey
 
@@ -151,7 +151,7 @@ def group_required(group_names):
 
     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required(['Orchestrator', 'Supervisor'])], name='dispatch')
+@method_decorator([login_required, group_required(['Supervisor'])], name='dispatch')
 class AdminCreateQuestionView(ContextTitleMixin, CreateView):
     template_name = 'djf_surveys/admins/question_form.html'
     success_url = reverse_lazy("djf_surveys:")
@@ -271,7 +271,7 @@ class AdminUpdateQuestionView(ContextTitleMixin, UpdateView):
 
 #     return user_passes_test(check_group)
 
-@method_decorator([login_required, group_required(['Orchestrator','Supervisor'])], name='dispatch')
+@method_decorator([login_required, group_required(['Supervisor'])], name='dispatch')
 class AdminDeleteQuestionView(DetailView):
     model = Question
     survey = None

@@ -8,12 +8,21 @@
 {% block content %}
 <div class="flex py-1 fixed bottom-10 right-10">
     <a href="{% url 'djf_surveys:question_list' survey.slug %}"
-        class="z-20 block p-4 text-blue-100 transition-all bg-blue-700 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
-        data-te-ripple-init
-        data-te-ripple-color="light">
+       class="z-20 block p-4 text-blue-100 transition-all bg-blue-700 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
+       data-te-ripple-init
+       data-te-ripple-color="light">
         {% include "djf_surveys/buttons/add_button.html" with size=6 %}
         <span class="items-center float-right">{% trans 'Add questions' %}</span>
     </a>
+    {% if request.user|has_group:"supervisor" %}
+    <a href="{% url 'djf_surveys:admin_create_question' pk=survey.pk type_field=TYPE_FIELD_VALUE %}" 
+       class="ml-4 z-20 block p-4 text-blue-100 transition-all bg-green-500 border-2 border-white rounded-full active:bg-purple-50 hover:scale-110 focus:outline-none focus:ring"
+       data-te-ripple-init
+       data-te-ripple-color="light">
+        {% include "djf_surveys/buttons/add_button.html" with size=6 %}
+        <span class="items-center float-right">{% trans 'Create Question' %}</span>
+    </a>
+    {% endif %}
 </div>
     {% comment %} <div class="flex py-1 fixed bottom-10 right-10">
         <button

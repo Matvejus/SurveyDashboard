@@ -161,14 +161,14 @@ class Survey(BaseModel):
 class EditField(models.Model):
     id = models.CharField(max_length=40, primary_key=True)
     survey = models.ForeignKey('Survey', on_delete=models.CASCADE, related_name='edit_fields')
-    question = models.ForeignKey('Question', on_delete=models.CASCADE, related_name='edit_fields')
-    level = models.ForeignKey('Level', on_delete=models.CASCADE, related_name='edit_fields')
-    dimension = models.ForeignKey('Dimension', on_delete=models.CASCADE, related_name='edit_fields')
-    subdimension = models.ForeignKey('SubDimension', on_delete=models.CASCADE, related_name='edit_fields')
+    question = models.ForeignKey('Question', on_delete=models.CASCADE, related_name='edit_fields_questions')
+    level = models.ForeignKey('Level', on_delete=models.CASCADE, related_name='level_edit_fields')
+    dimension = models.ForeignKey('Dimension', on_delete=models.CASCADE, related_name='dimension_edit_fields')
+    subdimension = models.ForeignKey('SubDimension', on_delete=models.CASCADE, related_name='subdimension_edit_fields')
     options = models.TextField(_("options"), help_text=_("Options separated by commas. Ex: Option1, Option2"))
 
     def __str__(self):
-        return f"EditField {self.id} for Question: {self.question.label}"
+        return f"EditField {self.id}"
 
 class UserAnswer(BaseModel):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, verbose_name=_("survey"))
