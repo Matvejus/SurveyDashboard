@@ -31,3 +31,21 @@ class InlineChoiceField(forms.HiddenInput):
         choices_count = len(context['widget']['choice_value'])
         context['widget']['extra'] = range(1 + choices_count, self.extra + 1 + choices_count)
         return context
+
+class InlineEditFieldsWidget(forms.Widget):
+    template_name = 'djf_surveys/widgets/inline_edit_fields.html'
+
+    def __init__(self, attrs=None, extra=3):
+        super().__init__(attrs)
+        self.extra = extra
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        if value:
+            context['widget']['edit_values'] = [x.strip() for x in value.split(',')]
+        else:
+            context['widget']['edit_values'] = []
+
+        values_count = len(context['widget']['edit_values'])
+        context['widget']['extra'] = range(1 + values_count, self.extra + 1 + values_count)
+        return context

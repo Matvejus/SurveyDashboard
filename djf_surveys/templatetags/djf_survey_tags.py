@@ -1,4 +1,5 @@
 from django.template import Library
+from django.contrib.auth.models import Group
 from djf_surveys.utils import create_star as utils_create_star
 register = Library()
 
@@ -20,3 +21,8 @@ def get_id_field(field):
 @register.filter(name='create_star')
 def create_star(number, args):
     return utils_create_star(active_star=int(number), id_element=args)
+
+
+@register.filter(name='has_group')
+def has_group(user, group_name):
+    return user.groups.filter(name=group_name).exists()

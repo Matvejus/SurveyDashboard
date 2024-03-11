@@ -1,0 +1,90 @@
+{% load i18n %}
+
+<div id="djf-wrapper-edit-field">
+    <!-- Dynamic Edit Fields will be added here -->
+    {% for value in widget.edit_values %}
+    <div class="relative mb-2 djf-edit-field">
+        <input 
+            type="text" 
+            name="{{ widget.name }}_{{ forloop.counter }}" 
+            value="{{ value }}"
+            class="djf-input-field w-full border border-gray-200 rounded-md mb-4"
+            oninput="updateEditFieldsValue()">
+        <div class="absolute top-2 right-2">
+            <button class="djf-btn-remove-edit-field py-2 px-2 text-white rounded-lg bg-red-500 hover:bg-red-600" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+    <!-- Loop for extra fields if needed -->
+    {% for _ in widget.extra %}
+    <div class="relative mb-2 djf-edit-field">
+        <input 
+            type="text" 
+            name="{{ widget.name }}_extra_{{ forloop.counter0 }}" 
+            class="djf-input-field w-full border border-gray-200 rounded-md mb-4"
+            oninput="updateEditFieldsValue()">
+        <div class="absolute top-2 right-2">
+            <button class="djf-btn-remove-edit-field py-2 px-2 text-white rounded-lg bg-red-500 hover:bg-red-600" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<button class="py-2 px-4 text-white rounded-lg bg-blue-500 hover:bg-blue-600" type="button" id="djf-btn-add-edit-field">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    </svg>
+    Add Field
+</button>
+
+<script>
+    let djfEditFields = [...document.getElementsByClassName("djf-edit-field")];
+    const djfBtnAddEditField = document.getElementById("djf-btn-add-edit-field");
+    const editFieldsWrapper = document.getElementById("djf-wrapper-edit-field");
+    const widgetName = "{{ widget.name }}";
+
+    function updateEditFieldsValue() {
+        // Update all fields then store the value in the hidden field if necessary
+        let values = djfEditFields.map(e => e.querySelector('input').value).filter(v => v !== "");
+        console.log(values);
+        // Example: Update a hidden input field if needed
+        // document.getElementById("id_" + widgetName).value = values.join(",");
+    }
+
+    function removeEditField() {
+        // Attach remove event to all remove buttons
+        document.querySelectorAll(".djf-btn-remove-edit-field").forEach(removeBtn => {
+            removeBtn.addEventListener('click', function() {
+                let fieldCount = djfEditFields.length;
+                if (fieldCount > 1) { // Prevent removing all fields
+                    this.closest('.djf-edit-field').remove();
+                    // Update fields list
+                    djfEditFields = [...document.getElementsByClassName("djf-edit-field")];
+                    updateEditFieldsValue();
+                } else {
+                    alert("At least one field is required.");
+                }
+            });
+        });
+    }
+    removeEditField(); // Call removeEditField to bind the event
+
+    djfBtnAddEditField.addEventListener('click', function() {
+        // Add new field
+        const newNode = djfEditFields[0].cloneNode(true);
+        newNode.querySelector('input').value = ""; // Clear value for the new input
+        newNode.querySelector('input').name = widgetName + "_extra_" + (djfEditFields.length + 1); // Update name for the new input
+        editFieldsWrapper.appendChild(newNode);
+        // Update fields list and re-bind remove event
+        djfEditFields = [...document.getElementsByClassName("djf-edit-field")];
+        removeEditField();
+    });
+</script>
