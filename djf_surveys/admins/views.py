@@ -189,7 +189,7 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
 
         if 'dimension' in form.data:
             dimension_id = form.data.get('dimension')
-            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension = dimension_id)
+            form.fields['subdimension'].queryset = SubDimension.objects.filter(dimension=dimension_id)
 
         if form.is_valid():
             question = form.save(commit=False)
@@ -197,7 +197,7 @@ class AdminCreateQuestionView(ContextTitleMixin, CreateView):
             question.type_field = self.type_field_id
             question.save()
             self.object = question
-            messages.success(self.request, gettext("%(page_action_name)s succeeded.") % dict(page_action_name=capfirst(self.title_page.lower())))
+            messages.success(self.request, _("Save succeeded."))
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
