@@ -1,12 +1,16 @@
 from typing import List, Tuple
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 from django import forms
-from django.db.models.base import Model
-from organization.models import OrgProfile
 from .models import Survey
 from django.db import transaction
 from django.core.validators import MaxLengthValidator
+from django.forms import ModelChoiceField
 from django.forms.models import modelform_factory
+
 
 
 from django.utils.translation import gettext_lazy as _
@@ -111,9 +115,9 @@ class BaseSurveyForm(forms.Form):
                 )
 
             self.fields[field_name].required = question.required
+            self.fields[field_name].edit_field = question.edit_field
             self.fields[field_name].help_text = question.help_text
             self.field_names.append(field_name)
-            self.add_edit_fields(user)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -196,85 +200,127 @@ class EditSurveyForm(BaseSurveyForm):
 
 class QuestionForm(forms.ModelForm):
     edit_field = forms.CharField(
-        widget=InlineEditFieldsWidget(attrs={'class': 'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm'}, extra=3),
+        widget=InlineEditFieldsWidget(attrs={'class': 'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm'}, extra=3, field_type='edit'),
         required=False,
         label="Edit Fields",
     )
 
     class Meta:
         model = Question
-        fields = ['label', 'edit_field', 'key', 'level', 'dimension', 'subdimension', 'help_text', 'required']
+        fields = ['label', 'edit_field', 'level', 'dimension', 'subdimension', 'help_text', 'required']
 
     def __init__(self, *args, **kwargs):
+        logger.debug("Initializing QuestionForm")
         super(QuestionForm, self).__init__(*args, **kwargs)
         self.fields['subdimension'].queryset = SubDimension.objects.none()
 
         if 'dimension' in self.data:
             try:
                 dimension_id = int(self.data.get('dimension'))
-                self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension_id=dimension_id).order_by('id')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty SubDimension queryset
+                self.fields['subdimension'].queryset = SubDimension.objects.filter(dimension=dimension_id).order_by('id')
+                logger.debug(f"Setting subdimension queryset for dimension_id: {dimension_id}")
+            except (ValueError, TypeError) as e:
+                logger.error(f"Error setting subdimension queryset: {e}")
         elif self.instance.pk:
             self.fields['subdimension'].queryset = self.instance.dimension.sub_dimensions.order_by('id')
-        
-    def save(self, commit=True):
-        instance = super(QuestionForm, self).save(commit=False)
-        edit_field_data = self.cleaned_data.get('edit_field')
+            logger.debug("Setting subdimension queryset for existing instance")
 
-        # Example logic for handling edit_field_data
-        # You would need to adjust this logic based on your actual requirements
+    def clean_edit_field(self):
+        data = self.cleaned_data.get('edit_field')
+        logger.debug(f"Cleaning edit_field: {data}")
+        if data:
+            edit_field, created = EditField.objects.get_or_create(name=data.strip())
+            logger.debug(f"EditField {'created' if created else 'retrieved'}: {edit_field}")
+            return edit_field
+        return None
+
+    def save(self, commit=True):
+        logger.debug("Entering QuestionForm save method")
+        instance = super().save(commit=False)
+        
+        edit_field_data = self.cleaned_data.get('edit_field')
+        logger.debug(f"edit_field_data: {edit_field_data}")
         if edit_field_data:
-            # Here you might need to parse edit_field_data, find or create an EditField instance
-            # For demonstration purposes, let's say we create a new EditField instance
-            edit_field_instance, created = EditField.objects.get_or_create(options=edit_field_data)
+            edit_field_instance, created = EditField.objects.get_or_create(name=edit_field_data.strip())
+            logger.debug(f"EditField object {'created' if created else 'retrieved'}: {edit_field_instance}")
             instance.edit_field = edit_field_instance
 
         if commit:
             instance.save()
-            self.save_m2m()  # In case there are many-to-many fields to save
-
+            logger.debug("Instance saved")
+            self._save_m2m()
+            logger.debug("_save_m2m called")
+        else:
+            logger.debug("Commit is False, instance not saved")
+            
         return instance
-    
-    
 
-class QuestionWithChoicesForm(forms.ModelForm):
-    edit_field = forms.CharField(
-        widget=InlineEditFieldsWidget(attrs={'class': 'w-full p-4 pr-12 text-sm border-gray-500 rounded-lg shadow-sm'}, extra=3),
+class QuestionWithChoicesForm(QuestionForm):
+    choices = forms.CharField(
+        widget=InlineChoiceField(attrs={'class': 'w-full p-4 text-sm border-gray-500 rounded-lg shadow-sm'}, extra=3, field_type='choice'),
         required=False,
-        label="Edit Fields",
+        label=_("Choices"),
+        help_text=_("Click the button to add a choice.")
     )
 
-    class Meta:
-        model = Question
-        fields = ('label', 'edit_field', 'key', 'level', 'dimension', 'subdimension', 'choices', 'help_text', 'required')
+    class Meta(QuestionForm.Meta):
+        fields = ['label', 'edit_field', 'level', 'dimension', 'subdimension', 'choices', 'help_text', 'required']
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['choices'].widget = InlineChoiceField()
-        self.fields['choices'].help_text = _("Click Button Add to adding choice")
-        self.fields['subdimension'].queryset = SubDimension.objects.none()
+        logger.debug("Initializing QuestionWithChoicesForm")
+        super(QuestionWithChoicesForm, self).__init__(*args, **kwargs)
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if 'dimension' in cleaned_data:
-            dimension_id = cleaned_data.get('dimension').id
-            SubDimension.objects.filter(dimension=dimension_id).order_by('id')
+    def save(self, commit=True):
+        logger.debug("Entering QuestionWithChoicesForm save method")
+        instance = super().save(commit=False)  # This calls QuestionForm.save internally
+        choices_data = self.cleaned_data.get('choices')
+        logger.debug(f"choices_data: {choices_data}")
+        if choices_data:
+            instance.choices = choices_data.strip()
+            logger.debug("Choices data set on instance")
+        
+        # Note: EditField handling is done by the super().save() call
 
-        elif self.instance.pk:
-            self.fields['subdimension'].queryset = self.instance.dimension.subdimension_set.order_by('id')
-        return cleaned_data
+        if commit:
+            instance.save()
+            logger.debug("Instance saved with choices")
+            self._save_m2m()
+            logger.debug("_save_m2m called for choices form")
+        else:
+            logger.debug("Commit is False, instance not saved with choices")
+            
+        return instance
     
 
 
 class SelectQuestionsForm(forms.ModelForm):
-
-    questions = forms.ModelMultipleChoiceField(queryset=Question.objects.all(), 
-                                    widget = CheckboxSelectMultipleSurvey())
+    def __init__(self, *args, **kwargs):
+        super(SelectQuestionsForm, self).__init__(*args, **kwargs)
+        self.questions_with_edit_fields = [q.id for q in Question.objects.filter(editfield__isnull=False).distinct()]
+        
+        for question in Question.objects.all():
+            field_name = f"edit_field_for_{question.id}"
+            if question.id in self.questions_with_edit_fields:
+                self.fields[field_name] = forms.ModelChoiceField(
+                    queryset=EditField.objects.filter(question=question), 
+                    required=False, 
+                    label="Edit Field"
+                )
 
     class Meta:
         model = Survey
         fields = ['questions']
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if commit:
+            instance.save()
+        self.save_m2m()
+        for question in self.cleaned_data['questions']:
+            edit_field = self.cleaned_data.get(f'edit_field_for_{question.id}', None)
+            # Logic to associate selected EditField with the Question, if applicable
+            # This might involve updating a through model or a related model
+        return instance
 
 
 
@@ -298,16 +344,12 @@ def save_survey_from_form(survey, form_data):
     question_ids = [int(value[0]) for key, value in form_data.items() if key.startswith('question_')]
     selected_questions = Question.objects.filter(id__in=question_ids)
 
-    # Log the selected question IDs for debugging
-    print(f"Selected Question IDs: {question_ids}")
-
     for question in selected_questions:
         survey.questions.add(question)
         # Log each question being added to the survey
 
     # Save the survey object
     survey.save()
-    print(f"Survey '{survey.name}' saved with updated questions: {survey.questions.all()}")
 
 class EditFieldForm(forms.ModelForm):
     class Meta:

@@ -17,35 +17,42 @@ class RatingSurvey(forms.HiddenInput):
     template_name = 'djf_surveys/widgets/star_rating.html'
 
 
-class InlineChoiceField(forms.HiddenInput):
+class InlineEditFieldsWidget(forms.Widget):
     template_name = 'djf_surveys/widgets/inline_choices.html'
     extra = 3
 
-    def get_context(self, name, value, attrs):
-        context = super().get_context(name, value, attrs)
-        if context['widget']['value']:
-            context['widget']['choice_value'] = [x.strip() for x in context['widget']['value'].split(',')] 
-        else:
-            context['widget']['choice_value'] = []
-
-        choices_count = len(context['widget']['choice_value'])
-        context['widget']['extra'] = range(1 + choices_count, self.extra + 1 + choices_count)
-        return context
-
-class InlineEditFieldsWidget(forms.Widget):
-    template_name = 'djf_surveys/widgets/inline_edit_fields.html'
-
-    def __init__(self, attrs=None, extra=3):
+    def __init__(self, attrs=None, extra=3, field_type='edit'):
         super().__init__(attrs)
         self.extra = extra
+        self.field_type = field_type
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
+        context['widget']['field_type'] = self.field_type
         if value:
-            context['widget']['edit_values'] = [x.strip() for x in value.split(',')]
+            context['widget']['values'] = [x.strip() for x in value.split(',')]
         else:
-            context['widget']['edit_values'] = []
-
-        values_count = len(context['widget']['edit_values'])
+            context['widget']['values'] = []
+        values_count = len(context['widget']['values'])
         context['widget']['extra'] = range(1 + values_count, self.extra + 1 + values_count)
+        return context
+
+class InlineChoiceField(forms.Widget):
+    template_name = 'djf_surveys/widgets/inline_choices.html'
+    extra = 3
+
+    def __init__(self, attrs=None, extra=3, field_type='choice'):
+        super().__init__(attrs)
+        self.extra = extra
+        self.field_type = field_type
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget']['field_type'] = self.field_type
+        if value:
+            context['widget']['values'] = [x.strip() for x in value.split(',')]
+        else:
+            context['widget']['values'] = []
+        choices_count = len(context['widget']['values'])
+        context['widget']['extra'] = range(1 + choices_count, self.extra + 1 + choices_count)
         return context

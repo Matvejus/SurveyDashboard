@@ -1,4 +1,4 @@
-import random, string
+import random, string, uuid
 from collections import namedtuple
 
 from django.db import models
@@ -49,7 +49,7 @@ class BaseModel(models.Model):
         ordering = ['created_at']
 
 class EditField(models.Model):
-    id = models.CharField(max_length=40, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     options = models.TextField(_("options"), help_text=_("Options separated by commas. Ex: Option1, Option2"))
 
     def __str__(self):
@@ -103,7 +103,7 @@ class Question(BaseModel):
     key = models.CharField(_("key"), max_length=225, unique=True, null=True, blank=True,
                            help_text=_("Unique key for this question, fill in the blank if you want to use for automatic generation."))
     label = models.CharField(_("label"), max_length=500, help_text=_("Enter your question in here."))
-    edit_field = models.ForeignKey(EditField, on_delete=models.CASCADE, blank=True, related_name='questions')
+    edit_field = models.ForeignKey(EditField, on_delete=models.CASCADE, null=True, blank=True, related_name='questions')
     type_field = models.PositiveSmallIntegerField(_("type of input field"), choices=TYPE_FIELD)
     choices = models.TextField(
         _("choices"),
